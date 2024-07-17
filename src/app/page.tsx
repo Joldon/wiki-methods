@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { fetchAllEntries } from "@/lib/fetchData";
 import { WikiEntry } from "@/lib/types";
-import styles from "@/styles/Home.module.css";
+import styles from "./home.module.css";
 
 export default async function Home() {
   const pages: WikiEntry[] = await fetchAllEntries();
