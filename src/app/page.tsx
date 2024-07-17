@@ -4,6 +4,7 @@ import Link from "next/link";
 import { fetchAllEntries } from "@/lib/fetchData";
 import { WikiEntry } from "@/lib/types";
 import styles from "./home.module.css";
+import Image from "next/image";
 
 export default async function Home() {
   const pages: WikiEntry[] = await fetchAllEntries();
@@ -21,7 +22,12 @@ export default async function Home() {
               )}`}
             >
               <div className={styles.card}>
-                <img src="/placeholder.png" alt={page.title} />
+                <Image
+                  src="/python.png"
+                  alt={page.title}
+                  width={80}
+                  height={80}
+                />
                 <h3>{page.title}</h3>
               </div>
             </Link>
