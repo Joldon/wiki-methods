@@ -71,6 +71,8 @@ src/styles/Home.module.css
 .card:hover {
   transform: scale(1.08); /* Slightly enlarges the card */
   box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.3); /* Increased shadow on hover for depth effect */
+  background-color: rgba(var(--card-rgb), 0.2);
+  /* Slightly lighter or darker on hover */
 }
 
 .card img {

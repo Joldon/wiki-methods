@@ -5,10 +5,10 @@ import { fetchAllEntries } from "@/lib/fetchData";
 import { WikiEntry } from "@/lib/types";
 import styles from "./home.module.css";
 import Image from "next/image";
+import Card from "@/components/card/card";
 
 export default async function Home() {
   const pages: WikiEntry[] = await fetchAllEntries();
-
   return (
     <div className={styles.container}>
       <h1>Wiki Pages</h1>
@@ -23,7 +23,7 @@ export default async function Home() {
             >
               <div className={styles.card}>
                 <Image
-                  src="/python.png"
+                  src="/chart.png"
                   alt={page.title}
                   width={80}
                   height={80}
