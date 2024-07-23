@@ -13,8 +13,11 @@ export default async function WikiPage({ params }: Params) {
 
   return (
     <div className={styles.container}>
-      <h1>{title.replace("_", " ")}</h1>
-      <div dangerouslySetInnerHTML={{ __html: content }} />
+      <h1 className={styles.title}>{title.replace("_", " ")}</h1>
+      <div
+        className={styles.text}
+        dangerouslySetInnerHTML={{ __html: content }}
+      />
     </div>
   );
 }
