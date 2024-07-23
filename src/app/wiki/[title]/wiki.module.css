@@ -1,3 +1,68 @@
 .container {
   padding: 20px;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  font-family: "Arial", sans-serif;
+  font-size: 18px;
+  color: #333;
+  line-height: 1.8; /* Adjusted line height for better text spacing */
+  max-width: 95vw; /* Adjusted to use more of the viewport width */
+  margin: 20px auto;
+  word-wrap: break-word; /* Ensures long words do not overflow */
+}
+
+.title {
+  /* Used for h1 */
+  font-size: 32px;
+  color: #007bff;
+  border-bottom: 2px solid #eee;
+  padding-bottom: 10px;
+  margin-bottom: 20px;
+}
+
+.text {
+  /* Used for paragraphs and general text */
+  margin-bottom: 10px;
+}
+
+.text p,
+.text ul,
+.text ol,
+.text li {
+  /* Adjusting text elements within content */
+  margin-bottom: 15px; /* Increased spacing for clarity */
+}
+
+.text img {
+  /* New style for images within the text content */
+  max-width: 100%; /* Ensures images are responsive and fit the container width */
+  height: auto; /* Maintains aspect ratio */
+  margin: 10px 0; /* Adds vertical space around images */
+}
+/* Remove unused classes if they are not applicable */
+
+.container h1 {
+  font-size: 28px;
+  color: #007bff;
+  border-bottom: 2px solid #eee;
+  padding-bottom: 10px;
+  margin-bottom: 20px;
+}
+
+.container p,
+.container ul,
+.container ol,
+.container li {
+  margin-bottom: 10px;
+}
+
+.container a {
+  color: #007bff;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.container a:hover {
+  color: #0056b3;
 }
