@@ -1,6 +1,7 @@
 import prisma from "@/lib/db";
 import styles from "./posts.module.css";
 import Link from "next/link";
+import { createPost } from "@/lib/action";
 const PostsPage = async () => {
   const posts = await prisma.post.findMany({
     where: { published: true },
@@ -17,7 +18,7 @@ const PostsPage = async () => {
       </ul>
 
       {/* create a form with server action */}
-      <form method="post" action="/api/posts" className={styles.form}>
+      <form method="post" action={createPost} className={styles.form}>
         <h2 className={styles.subheader}>Create a new post</h2>
         <label htmlFor="title">Title</label>
         <input type="text" name="title" id="title" required />
