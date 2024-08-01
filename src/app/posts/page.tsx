@@ -6,9 +6,11 @@ const PostsPage = async () => {
   const posts = await prisma.post.findMany({
     where: { published: true },
   });
+
+  const postsCount = await prisma.post.count();
   return (
     <div className={styles.container}>
-      <h1 className={styles.header}>All Posts ({posts.length})</h1>
+      <h1 className={styles.header}>All Posts ({postsCount})</h1>
       <ul className={styles.ul}>
         {posts.map((post) => (
           <li key={post.id} className={styles.li}>
@@ -20,10 +22,21 @@ const PostsPage = async () => {
       {/* create a form with server action */}
       <form method="post" action={createPost} className={styles.form}>
         <h2 className={styles.subheader}>Create a new post</h2>
-        <label htmlFor="title">Title</label>
-        <input type="text" name="title" id="title" required />
-        <label htmlFor="content">Content</label>
-        <textarea name="content" id="content" required></textarea>
+        {/* <label htmlFor="title">Title</label> */}
+        <input
+          type="text"
+          name="title"
+          id="title"
+          placeholder="Title"
+          required
+        />
+        {/* <label htmlFor="content">Content</label> */}
+        <textarea
+          name="content"
+          id="content"
+          placeholder="Your feedback"
+          required
+        ></textarea>
         <button type="submit">Create post</button>
       </form>
     </div>
