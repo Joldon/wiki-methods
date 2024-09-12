@@ -23,7 +23,7 @@
 }
 
 .form {
-  margin-top: 40px;
+  margin-bottom: 40px;
   padding: 20px;
   border: 1px solid #ccc;
   border-radius: 5px;
@@ -60,26 +60,26 @@
   background-color: #005bb5;
 }
 
-/* .posts-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 20px;
+.postsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
 }
 
-.post-card {
-    background-color: #f5f5f5;
-    padding: 20px;
-    border-radius: 5px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+.postCard {
+  background-color: #f5f5f5;
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.post-title {
-    font-size: 18px;
-    font-weight: bold;
-    margin-bottom: 10px;
+.postTitle {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 10px;
 }
 
-.post-content {
-    font-size: 14px;
-    color: #555;
-} */
+.postContent {
+  font-size: 14px;
+  color: #555;
+}
