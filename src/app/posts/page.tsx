@@ -2,6 +2,7 @@ import prisma from "@/lib/db";
 import styles from "./posts.module.css";
 import Link from "next/link";
 import { createPost } from "@/lib/action";
+import PostCard from "@/components/postCard/postCard";
 
 const PostsPage = async () => {
   const posts = await prisma.post.findMany();
@@ -63,11 +64,11 @@ export default PostsPage;
 //         </div>
 //     );
 // };
-export const PostCard = ({ title, content }) => {
-  return (
-    <div className={styles.postCard}>
-      <h2 className={styles.postTitle}>{title}</h2>
-      <p className={styles.postContent}>{content}</p>
-    </div>
-  );
-};
+// export const PostCard = ({ title, content }) => {
+//   return (
+//     <div className={styles.postCard}>
+//       <h2 className={styles.postTitle}>{title}</h2>
+//       <p className={styles.postContent}>{content}</p>
+//     </div>
+//   );
+// };
