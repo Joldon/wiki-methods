@@ -1,5 +1,6 @@
 "use server";
 
+import { revalidatePath } from "next/cache";
 import prisma from "./db";
 
 export const createPost = async (formData: FormData) => {
@@ -12,6 +13,7 @@ export const createPost = async (formData: FormData) => {
       content: formData.get("content") as string,
     },
   });
+  revalidatePath("/posts");
 };
 
 export const updatePost = async (formData: FormData, id: string) => {
