@@ -3,9 +3,7 @@ import styles from "./posts.module.css";
 import Link from "next/link";
 import { createPost } from "@/lib/action";
 const PostsPage = async () => {
-  const posts = await prisma.post.findMany({
-    where: { published: true },
-  });
+  const posts = await prisma.post.findMany();
 
   const postsCount = await prisma.post.count();
   return (
@@ -37,6 +35,7 @@ const PostsPage = async () => {
           placeholder="Your feedback"
           required
         ></textarea>
+
         <button type="submit">Create post</button>
       </form>
     </div>
