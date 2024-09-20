@@ -19,35 +19,39 @@ const RecommendationTool = () => {
   return (
     <div className={styles.container}>
       <h1>Method Recommendation Tool</h1>
+      <div className={styles.content}>
+        <aside className={styles.sidebar}>
+          <form onSubmit={handleSubmit}>
+            {/* Dynamically render input blocks based on the categories object */}
+            {Object.keys(categories).map((category) => (
+              <CheckboxBlock
+                key={category}
+                title={category.charAt(0).toUpperCase() + category.slice(1)}
+                options={categories[category as keyof typeof categories]}
+              />
+            ))}
 
-      <form onSubmit={handleSubmit}>
-        {/* Dynamically render input blocks based on the categories object */}
-        {Object.keys(categories).map((category) => (
-          <CheckboxBlock
-            key={category}
-            title={category.charAt(0).toUpperCase() + category.slice(1)}
-            options={categories[category as keyof typeof categories]}
-          />
-        ))}
-        <br />
+            <button type="submit" className={styles.submitButton}>
+              Get Recommendations
+            </button>
+          </form>
+        </aside>
 
-        <button type="submit">Get Recommendations</button>
-      </form>
-
-      <div>
-        <h2>Recommended Methods</h2>
-        <ul>
-          {methods.length > 0 ? (
-            methods.map((method) => (
-              <li key={method.method}>
-                <h3>{method.method}</h3>
-                <p>{method.description}</p>
-              </li>
-            ))
-          ) : (
-            <p>No methods match the selected criteria.</p>
-          )}
-        </ul>
+        <main className={styles.mainContent}>
+          <h2>Recommended Methods</h2>
+          <ul className={styles.methodList}>
+            {methods.length > 0 ? (
+              methods.map((method) => (
+                <li key={method.method} className={styles.methodCard}>
+                  <h3>{method.method}</h3>
+                  <p>{method.description}</p>
+                </li>
+              ))
+            ) : (
+              <p>No methods match the selected criteria.</p>
+            )}
+          </ul>
+        </main>
       </div>
     </div>
   );
