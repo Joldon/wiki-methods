@@ -1,0 +1,29 @@
+.container {
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px rgba(0, 0, 0, 0.1);
+  background-color: #f9f9f9;
+}
+
+.title {
+  margin-bottom: 10px;
+  font-size: 1.2em;
+  color: #333;
+}
+
+.options {
+  display: flex;
+  font-display: column;
+}
+
+.option {
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+}
+
+.checkbox {
+  margin-right: 10px;
+}

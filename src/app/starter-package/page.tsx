@@ -2,7 +2,6 @@ import RecommendationTool from "@/components/recommendationTool/recommendationTo
 const StarterPackagePage = () => {
   return (
     <div>
-      StarterPackage
       <RecommendationTool />
     </div>
   );
