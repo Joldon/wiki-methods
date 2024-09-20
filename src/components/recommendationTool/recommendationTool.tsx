@@ -1,7 +1,8 @@
 "use client";
 import { useState } from "react";
 import styles from "./recommendationTool.module.css";
-import { filterMethods, MethodType } from "@/lib/starterData";
+import { filterMethods, MethodType, categories } from "@/lib/starterData";
+import CheckboxBlock from "../checkboxBlock/checkboxBlock";
 
 const RecommendationTool = () => {
   // specify the type of the methods state to be MethodType[]
@@ -20,8 +21,15 @@ const RecommendationTool = () => {
       <h1>Method Recommendation Tool</h1>
 
       <form onSubmit={handleSubmit}>
-        {/* Checkboxes for the criteria */}
-        <div>
+        {/* Dynamically render input blocks based on the categories object */}
+        {Object.keys(categories).map((category) => (
+          <CheckboxBlock
+            key={category}
+            title={category.charAt(0).toUpperCase() + category.slice(1)}
+            options={categories[category as keyof typeof categories]}
+          />
+        ))}
+        {/* <div>
           <h3>Type</h3>
           <label>
             <input type="checkbox" name="quantitative" /> Quantitative
@@ -65,7 +73,7 @@ const RecommendationTool = () => {
           <label>
             <input type="checkbox" name="future" /> Future
           </label>
-        </div>
+        </div> */}
 
         <button type="submit">Get Recommendations</button>
       </form>

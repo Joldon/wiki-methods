@@ -368,14 +368,15 @@ export const starterData: MethodType[] = [
   },
 ];
 
+export const categories = {
+  type: ["quantitative", "qualitative"],
+  reasoning: ["deductive", "inductive"],
+  level: ["individual", "system", "global"],
+  time: ["past", "present", "future"],
+};
+
 export async function filterMethods(formData: FormData) {
   // Define the categories and keys for filters
-  const categories = {
-    type: ["quantitative", "qualitative"],
-    reasoning: ["deductive", "inductive"],
-    level: ["individual", "system", "global"],
-    time: ["past", "present", "future"],
-  };
 
   // Dynamically construct the filters object
   const filters = Object.keys(categories).reduce((acc, category) => {
