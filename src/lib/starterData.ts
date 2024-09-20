@@ -369,46 +369,84 @@ export const starterData: MethodType[] = [
 ];
 
 export async function filterMethods(formData: FormData) {
-  const filters = {
-    type: {
-      quantitative: formData.get("quantitative") === "on",
-      qualitative: formData.get("qualitative") === "on",
-    },
-    reasoning: {
-      deductive: formData.get("deductive") === "on",
-      inductive: formData.get("inductive") === "on",
-    },
-    level: {
-      individual: formData.get("individual") === "on",
-      system: formData.get("system") === "on",
-      global: formData.get("global") === "on",
-    },
-    time: {
-      past: formData.get("past") === "on",
-      present: formData.get("present") === "on",
-      future: formData.get("future") === "on",
-    },
+  // Define the categories and keys for filters
+  const categories = {
+    type: ["quantitative", "qualitative"],
+    reasoning: ["deductive", "inductive"],
+    level: ["individual", "system", "global"],
+    time: ["past", "present", "future"],
   };
 
-  const filteredMethods = starterData.filter((method) => {
-    return (
-      (!filters.type.quantitative ||
-        method.type.quantitative === filters.type.quantitative) &&
-      (!filters.type.qualitative ||
-        method.type.qualitative === filters.type.qualitative) &&
-      (!filters.reasoning.deductive ||
-        method.reasoning.deductive === filters.reasoning.deductive) &&
-      (!filters.reasoning.inductive ||
-        method.reasoning.inductive === filters.reasoning.inductive) &&
-      (!filters.level.individual ||
-        method.level.individual === filters.level.individual) &&
-      (!filters.level.system || method.level.system === filters.level.system) &&
-      (!filters.level.global || method.level.global === filters.level.global) &&
-      (!filters.time.past || method.time.past === filters.time.past) &&
-      (!filters.time.present || method.time.present === filters.time.present) &&
-      (!filters.time.future || method.time.future === filters.time.future)
+  // Dynamically construct the filters object
+  const filters = Object.keys(categories).reduce((acc, category) => {
+    acc[category] = categories[category as keyof typeof categories].reduce(
+      (subAcc, key) => {
+        subAcc[key] = formData.get(key) === "on";
+        return subAcc;
+      },
+      {} as Record<string, boolean>
     );
+    return acc;
+  }, {} as Record<string, Record<string, boolean>>);
+
+  // Filter the methods based on the constructed filters object
+  const filteredMethods = starterData.filter((method: MethodType) => {
+    return Object.keys(filters).every((category) => {
+      return Object.keys(filters[category]).every((key) => {
+        return (
+          !filters[category][key] ||
+          (method[category as keyof MethodType] as Record<string, boolean>)[
+            key
+          ] === filters[category][key]
+        );
+      });
+    });
   });
 
   return filteredMethods;
 }
+
+// export async function filterMethods(formData: FormData) {
+//   const filters = {
+//     type: {
+//       quantitative: formData.get("quantitative") === "on",
+//       qualitative: formData.get("qualitative") === "on",
+//     },
+//     reasoning: {
+//       deductive: formData.get("deductive") === "on",
+//       inductive: formData.get("inductive") === "on",
+//     },
+//     level: {
+//       individual: formData.get("individual") === "on",
+//       system: formData.get("system") === "on",
+//       global: formData.get("global") === "on",
+//     },
+//     time: {
+//       past: formData.get("past") === "on",
+//       present: formData.get("present") === "on",
+//       future: formData.get("future") === "on",
+//     },
+//   };
+
+//   const filteredMethods = starterData.filter((method) => {
+//     return (
+//       (!filters.type.quantitative ||
+//         method.type.quantitative === filters.type.quantitative) &&
+//       (!filters.type.qualitative ||
+//         method.type.qualitative === filters.type.qualitative) &&
+//       (!filters.reasoning.deductive ||
+//         method.reasoning.deductive === filters.reasoning.deductive) &&
+//       (!filters.reasoning.inductive ||
+//         method.reasoning.inductive === filters.reasoning.inductive) &&
+//       (!filters.level.individual ||
+//         method.level.individual === filters.level.individual) &&
+//       (!filters.level.system || method.level.system === filters.level.system) &&
+//       (!filters.level.global || method.level.global === filters.level.global) &&
+//       (!filters.time.past || method.time.past === filters.time.past) &&
+//       (!filters.time.present || method.time.present === filters.time.present) &&
+//       (!filters.time.future || method.time.future === filters.time.future)
+//     );
+//   });
+
+//   return filteredMethods;
+// }
