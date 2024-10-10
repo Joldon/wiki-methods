@@ -3,6 +3,7 @@ import { useState } from "react";
 import styles from "./recommendationTool.module.css";
 import { filterMethods, MethodType, categories } from "@/lib/starterData";
 import CheckboxBlock from "../checkboxBlock/checkboxBlock";
+import Link from "next/link";
 
 const RecommendationTool = () => {
   // specify the type of the methods state to be MethodType[]
@@ -60,8 +61,13 @@ const RecommendationTool = () => {
             {methods.length > 0 ? (
               methods.map((method) => (
                 <li key={method.method} className={styles.methodCard}>
+                  <Link  
+                  href={`/wiki/${encodeURIComponent(
+                      method.method.replace(/ /g, "_")
+                    )}`}>
                   <h3>{method.method}</h3>
                   <p>{method.description}</p>
+                  </Link>
                 </li>
               ))
             ) : (
