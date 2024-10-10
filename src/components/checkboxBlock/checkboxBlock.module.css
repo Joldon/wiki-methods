@@ -16,6 +16,7 @@
 .options {
   display: flex;
   font-display: column;
+  gap: 10px;
 }
 
 .option {
@@ -27,3 +28,4 @@
 .checkbox {
   margin-right: 10px;
 }
+
