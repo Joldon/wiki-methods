@@ -78,3 +78,56 @@
   border-radius: 4px;
   cursor: pointer;
 }
+
+@media (max-width: 1200px) {
+  .content {
+    flex-direction: column;
+    min-width: 0;
+  }
+
+  .sidebar {
+    border-right: none;
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 20px;
+  }
+
+  .mainContent {
+    padding-top: 20px;
+  }
+}
+
+@media (max-width: 768px) {
+  .title {
+    font-size: 2em;
+  }
+
+  .containerIntro {
+    padding: 15px;
+  }
+
+  .introText {
+    padding: 8px;
+  }
+
+  .submitButton {
+    padding: 8px 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .title {
+    font-size: 1.5em;
+  }
+
+  .containerIntro {
+    padding: 10px;
+  }
+
+  .introText {
+    padding: 5px;
+  }
+
+  .submitButton {
+    padding: 6px 12px;
+  }
+}
