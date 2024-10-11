@@ -37,7 +37,7 @@ export const fetchAllEntries = async (): Promise<WikiEntry[]> => {
 // For example, if the original Wiki article is called "Experiments" but in starterData.ts it is called "Experiment"
 // then the API will return an error message instead of the expected data structure
 // if the page does not exist, the API will return an error message instead of the expected data structure
-// In this case, 
+
 export const fetchPageContent = async (title: string): Promise<string> => {
   const BASE_URL = "https://sustainabilitymethods.org/"; // Define the base URL for the wiki to avoid any type errors
   try {
@@ -64,7 +64,8 @@ export const fetchPageContent = async (title: string): Promise<string> => {
     }
   } catch (error) {
     console.error("Error fetching page content:", error); 
-    throw error; // Re-throw the error to be caught by the calling function
+    // throw error; // Re-throw the error to be caught by the calling function
+    return "This page does not exist. Check if the title of this article corresponds to the article's title on the WikiMethods page."; // Return a default message in user friendly interface
   }
 };
 

@@ -32,7 +32,7 @@ const RecommendationTool = () => {
     <p className={styles.introText}><b>How to use the “method recommendation tool.</b><br />
     Below you can see a list of all starter methods if you press the &quot;Get Recommendations&quot; button. 
     Alternatively, you can narrow down the selection to methods that are interesting to you or suitable for your project. 
-    To do so, use the checkboxes to filter methods according to the [[Design Criteria of Methods]].</p>
+    To do so, use the checkboxes to filter methods according to the <a href="https://sustainabilitymethods.org/index.php/Design_Criteria_of_Methods" className={styles.link}>Design Criteria of Methods.</a></p>
 
     </div>
     <div className={styles.container}>
