@@ -23,7 +23,7 @@ export type MethodType = {
 
 export const starterData: MethodType[] = [
   {
-    method: "Survey",
+    method: "Survey Research",
     description:
       "Surveys are highly systematized and structured forms of data gathering through written or oral questioning of humans.",
     type: {
@@ -92,7 +92,7 @@ export const starterData: MethodType[] = [
     },
   },
   {
-    method: "Experiment",
+    method: "Experiments",
     description:
       "Experiments describe the systematic and reproducible design to test specific hypotheses.",
     type: {
@@ -344,7 +344,7 @@ export const starterData: MethodType[] = [
     },
   },
   {
-    method: "GIS",
+    method: "Geographical Information Systems",
     description:
       "Geographical information systems (GIS) subsume all approaches that serve as a data platform and analysis tools for spatial data.",
     type: {
