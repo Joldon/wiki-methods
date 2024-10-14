@@ -37,6 +37,11 @@ src/styles/Home.module.css
 
 /* src/styles/Home.module.css */
 
+
+
+
+/* RIGHT NOW THIS IS USED FOR PAGE.TSX with grid of containers. 
+The below code should be removed together with crads grids page on the new route */
 .container {
   padding: 20px;
 }

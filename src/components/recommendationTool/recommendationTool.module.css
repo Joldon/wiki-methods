@@ -4,6 +4,32 @@
   align-items: center;
   padding: 20px;
 }
+.title {
+  text-align: center;
+  font-size: 2.5em;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.containerIntro {
+  background-color: #f9f9f9;
+  padding: 20px;
+  margin: 20px 0;
+  border-radius: 8px;
+  box-shadow:  0 2px 4px #ccc;
+}
+
+.introText {
+  padding: 10px;
+  /* margin: 10px 0; */
+  line-height: 1.6;
+  color: #555;
+}
+
+.link {
+  color: #007bff !important;
+  text-decoration: underline;
+}
 
 .content {
   display: flex;
@@ -22,6 +48,17 @@
   padding: 20px;
 }
 
+.recommenderTitle {
+  text-align: center;
+  font-size: 2em;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.noMatch {
+  text-align: center;
+}
+
 .methodList {
   list-style: none;
   padding: 0;
@@ -32,7 +69,15 @@
   border-radius: 8px;
   padding: 20px;
   margin-bottom: 20px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 4px #0000001a; /* rgba(0, 0, 0, 0.1); */
+  background-color: #f9f9f9;
+  transition: transform 0.3s ease, box-shadow 0.3s ease; /* Smooth transitions for hover effects */
+}
+
+.methodCard:hover {
+  transform: scale(1.08); /* Slightly enlarges the card */
+  box-shadow: 5px 5px 15px #0000004d; /* Increased shadow on hover for depth effect */
+  background-color: #f9f9f9cc; /* Slightly lighter or darker on hover */
 }
 
 .submitButton {
@@ -43,4 +88,57 @@
   padding: 10px 20px;
   border-radius: 4px;
   cursor: pointer;
+}
+
+@media (max-width: 1200px) {
+  .content {
+    flex-direction: column;
+    min-width: 0;
+  }
+
+  .sidebar {
+    border-right: none;
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 20px;
+  }
+
+  .mainContent {
+    padding-top: 20px;
+  }
+}
+
+@media (max-width: 768px) {
+  .title {
+    font-size: 2em;
+  }
+
+  .containerIntro {
+    padding: 15px;
+  }
+
+  .introText {
+    padding: 8px;
+  }
+
+  .submitButton {
+    padding: 8px 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .title {
+    font-size: 1.5em;
+  }
+
+  .containerIntro {
+    padding: 10px;
+  }
+
+  .introText {
+    padding: 5px;
+  }
+
+  .submitButton {
+    padding: 6px 12px;
+  }
 }
