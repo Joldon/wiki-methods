@@ -71,7 +71,7 @@ const RecommendationTool = () => {
                 </li>
               ))
             ) : (
-              <p>No methods match the selected criteria.</p>
+              <p className={styles.noMatch}>No methods match the selected criteria.</p>
             )}
           </ul>
         </main>

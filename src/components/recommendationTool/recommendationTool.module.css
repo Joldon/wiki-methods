@@ -48,12 +48,16 @@
   padding: 20px;
 }
 
-/* .recommenderTitle {
+.recommenderTitle {
   text-align: center;
   font-size: 2em;
   margin-bottom: 20px;
   color: #333;
-} */
+}
+
+.noMatch {
+  text-align: center;
+}
 
 .methodList {
   list-style: none;
