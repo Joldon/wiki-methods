@@ -29,10 +29,10 @@ const RecommendationTool = () => {
     <p className={styles.introText}>If you are looking for a complete list of all scientific methods featured on this wiki, 
       including more advanced methods, please go to the <a href="https://sustainabilitymethods.org/index.php/Methods" className={styles.link}>Methods</a> page.</p>
 
-    <p className={styles.introText}><b>How to use the “method recommendation tool.</b><br />
+    <p className={styles.introText}><b>How to use the method recommendation tool.</b><br />
     Below you can see a list of all starter methods if you press the &quot;Get Recommendations&quot; button. 
     Alternatively, you can narrow down the selection to methods that are interesting to you or suitable for your project. 
-    To do so, use the checkboxes to filter methods according to the <a href="https://sustainabilitymethods.org/index.php/Design_Criteria_of_Methods" className={styles.link}>Design Criteria of Methods.</a></p>
+    To do so, use the checkboxes to filter methods according to the <a href="https://sustainabilitymethods.org/index.php/Design_Criteria_of_Methods" className={styles.link}>Design Criteria of Methods. </a>If you check multiple boxes only methods that fulfil all of these criteria are displayed.</p>
 
     </div>
     <div className={styles.container}>
