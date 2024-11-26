@@ -41,12 +41,9 @@ const PostsPage = async () => {
         <button type="submit">Create post</button>
       </form>
       <div className={styles.postsGrid}>
-        {/* {posts.map((post) => (
-          <PostCard key={post.id} title={post.title} content={post.content} />
-        ))} */}
         {posts.map((post) => (
           <Link key={post.id} href={`./posts/${post.slug}`}>
-            <PostCard title={post.title} content={post.content} />
+            <PostCard id={post.id} title={post.title} content={post.content} />
           </Link>
         ))}
       </div>
