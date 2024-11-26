@@ -33,4 +33,5 @@ export const deletePost = async (id: string) => {
   const post = await prisma.post.delete({
     where: { id },
   });
+  revalidatePath("/posts");
 };
