@@ -1,7 +1,7 @@
 import prisma from "@/lib/db";
 import styles from "./posts.module.css";
 import Link from "next/link";
-import { createPost } from "@/lib/action";
+import { createPost } from "@/lib/actions";
 import PostCard from "@/components/postCard/postCard";
 
 const PostsPage = async () => {

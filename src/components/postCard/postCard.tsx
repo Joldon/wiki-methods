@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import { deletePost } from "@/lib/action";
+import { deletePost } from "@/lib/actions";
 import styles from "./postCard.module.css";
 
 interface PostCardProps {
