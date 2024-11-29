@@ -11,6 +11,8 @@ export const createPost = async (formData: FormData) => {
       data: {
         title: formData.get("title") as string,
         slug: (formData.get("title") as string)
+          .trim()
+          .replace(/[^a-z0-9\s-]/g, "")
           .replace(/\s+/g, "-")
           .toLowerCase(),
         content: formData.get("content") as string,
