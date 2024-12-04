@@ -3,6 +3,8 @@ import styles from "./posts.module.css";
 import Link from "next/link";
 import { createPost } from "@/lib/actions";
 import PostCard from "@/components/postCard/postCard";
+import { clearScreenDown } from "readline";
+import { NEXT_CACHE_TAG_MAX_LENGTH } from "next/dist/lib/constants";
 
 const PostsPage = async ({
   searchParams,
@@ -22,7 +24,7 @@ const PostsPage = async ({
       <h1 className={styles.header}>All Posts ({postsCount})</h1>
 
       {/* create a form with server action */}
-      <form method="post" action={createPost} className={styles.form}>
+      <form action={createPost} className={styles.form}>
         <h2 className={styles.subheader}>Create a new post</h2>
         {error && <p className={styles.error}>{error}</p>}
         <input
