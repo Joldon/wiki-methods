@@ -45,8 +45,13 @@ export const updatePost = async (formData: FormData, id: string) => {
 };
 
 export const deletePost = async (id: string) => {
-  const post = await prisma.post.delete({
-    where: { id },
-  });
-  revalidatePath("/posts");
+  try {
+    const post = await prisma.post.delete({
+      where: { id },
+    });
+    revalidatePath("/posts");
+    redirect("/posts");
+  } catch (error) {
+    throw error;
+  }
 };
