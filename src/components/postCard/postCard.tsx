@@ -3,11 +3,11 @@ import React, { useState } from "react";
 import { deletePost } from "@/lib/actions";
 import styles from "./postCard.module.css";
 
-interface PostCardProps {
+type PostCardProps = {
   title: string;
   content: string;
   id: string;
-}
+};
 
 const PostCard: React.FC<PostCardProps> = ({ title, content, id }) => {
   const [showDelete, setShowDelete] = useState(false);
