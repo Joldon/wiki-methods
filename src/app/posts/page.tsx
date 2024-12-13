@@ -11,7 +11,14 @@ const PostsPage = async ({
 }: {
   searchParams: { error?: string };
 }) => {
-  const posts = await prisma.post.findMany();
+  const posts = await prisma.post.findMany({
+    select: {
+      id: true,
+      title: true,
+      content: true,
+      slug: true,
+    },
+  });
 
   const postsCount = await prisma.post.count();
   const error =
@@ -46,9 +53,14 @@ const PostsPage = async ({
       </form>
       <div className={styles.postsGrid}>
         {posts.map((post) => (
-          <Link key={post.id} href={`./posts/${post.slug}`}>
-            <PostCard id={post.id} title={post.title} content={post.content} />
-          </Link>
+          <div key={post.id}>
+            <PostCard
+              id={post.id}
+              title={post.title}
+              content={post.content}
+              slug={post.slug}
+            />
+          </div>
         ))}
       </div>
     </div>
