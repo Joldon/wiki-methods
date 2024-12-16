@@ -3,8 +3,7 @@ import styles from "./posts.module.css";
 import Link from "next/link";
 import { createPost } from "@/lib/actions";
 import PostCard from "@/components/postCard/postCard";
-import { clearScreenDown } from "readline";
-import { NEXT_CACHE_TAG_MAX_LENGTH } from "next/dist/lib/constants";
+import SubmitButton from "@/components/submitButton/submitButton";
 
 const PostsPage = async ({
   searchParams,
@@ -49,7 +48,12 @@ const PostsPage = async ({
           required
         ></textarea>
 
-        <button type="submit">Create post</button>
+        {/* <button type="submit">Create post</button>
+         */}
+        <SubmitButton
+          defaultText={"Create Post"}
+          loadingText={"Creating ..."}
+        />
       </form>
       <div className={styles.postsGrid}>
         {posts.map((post) => (
