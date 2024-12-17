@@ -3,7 +3,8 @@ import styles from "./posts.module.css";
 import Link from "next/link";
 import { createPost } from "@/lib/actions";
 import PostCard from "@/components/postCard/postCard";
-import SubmitButton from "@/components/submitButton/submitButton";
+import SubmitButton from "@/components/buttons/submitButton";
+import Button from "@/components/buttons/button";
 
 const PostsPage = async ({
   searchParams,
@@ -50,9 +51,11 @@ const PostsPage = async ({
 
         {/* <button type="submit">Create post</button>
          */}
-        <SubmitButton
+        <Button
+          type="submit"
           defaultText={"Create Post"}
           loadingText={"Creating ..."}
+          variant="primary"
         />
       </form>
       <div className={styles.postsGrid}>

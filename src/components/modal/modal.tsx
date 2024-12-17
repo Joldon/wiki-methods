@@ -1,5 +1,6 @@
 "use client";
 import styles from "./modal.module.css";
+import Button from "../buttons/button";
 
 type ModalProps = {
   isOpen: boolean;
@@ -16,8 +17,20 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, onConfirm }) => {
         <p>Are you sure you want to delete this post?</p>
       </div>
       <div className={styles.buttons}>
-        <button onClick={onClose}>Cancel</button>
-        <button onClick={onConfirm}>Delete</button>
+        {/* <button onClick={onClose}>Cancel</button>
+        <button onClick={onConfirm}>Delete</button> */}
+        <Button
+          defaultText="Cancel"
+          loadingText="Cancelling ..."
+          variant="default"
+          onClick={onClose}
+        />
+        <Button
+          defaultText="Delete"
+          loadingText="Deleting ..."
+          variant="danger"
+          onClick={onConfirm}
+        />
       </div>
     </div>
   );
