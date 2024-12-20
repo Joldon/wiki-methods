@@ -6,7 +6,6 @@ import { deletePost } from "@/lib/actions";
 type ModalProps = {
   isOpen: boolean;
   onClose: () => void;
-  // onConfirm: () => void;
   postId: string;
 };
 
@@ -19,8 +18,6 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, postId }) => {
         <p>Are you sure you want to delete this post?</p>
       </div>
       <div className={styles.buttons}>
-        {/* <button onClick={onClose}>Cancel</button>
-        <button onClick={onConfirm}>Delete</button> */}
         <Button
           defaultText="Cancel"
           loadingText="Cancelling ..."
@@ -30,7 +27,6 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, postId }) => {
         <form
           action={async () => {
             await deletePost(postId);
-            // onClose()
           }}
         >
           <Button
@@ -38,7 +34,6 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, postId }) => {
             defaultText="Delete"
             loadingText="Deleting ..."
             variant="danger"
-            // onClick={onConfirm}
           />
         </form>
       </div>

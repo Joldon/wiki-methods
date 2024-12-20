@@ -11,7 +11,6 @@ type ButtonProps = {
   loadingText: string;
   variant?: ButtonVariant;
   type?: ButtonType;
-  //   onClick?: () => Promise<void>;
   onClick?: () => void;
   disabled?: boolean;
   className?: string;
