@@ -1,14 +1,16 @@
 "use client";
 import styles from "./modal.module.css";
 import Button from "../buttons/button";
+import { deletePost } from "@/lib/actions";
 
 type ModalProps = {
   isOpen: boolean;
   onClose: () => void;
-  onConfirm: () => void;
+  // onConfirm: () => void;
+  postId: string;
 };
 
-const Modal: React.FC<ModalProps> = ({ isOpen, onClose, onConfirm }) => {
+const Modal: React.FC<ModalProps> = ({ isOpen, onClose, postId }) => {
   if (!isOpen) return null;
   return (
     <div className={styles.overlay}>
@@ -25,12 +27,20 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, onConfirm }) => {
           variant="default"
           onClick={onClose}
         />
-        <Button
-          defaultText="Delete"
-          loadingText="Deleting ..."
-          variant="danger"
-          onClick={onConfirm}
-        />
+        <form
+          action={async () => {
+            await deletePost(postId);
+            // onClose()
+          }}
+        >
+          <Button
+            type="submit"
+            defaultText="Delete"
+            loadingText="Deleting ..."
+            variant="danger"
+            // onClick={onConfirm}
+          />
+        </form>
       </div>
     </div>
   );

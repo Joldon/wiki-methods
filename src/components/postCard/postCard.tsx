@@ -57,7 +57,8 @@ const PostCard: React.FC<PostCardProps> = ({ title, content, id, slug }) => {
       <Modal
         isOpen={showModal}
         onClose={() => setShowModal(false)}
-        onConfirm={handleDelete}
+        // onConfirm={handleDelete}
+        postId={id}
       />
     </>
   );
