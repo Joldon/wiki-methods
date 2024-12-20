@@ -1,9 +1,7 @@
 import prisma from "@/lib/db";
 import styles from "./posts.module.css";
-import Link from "next/link";
 import { createPost } from "@/lib/actions";
 import PostCard from "@/components/postCard/postCard";
-import SubmitButton from "@/components/buttons/submitButton";
 import Button from "@/components/buttons/button";
 
 const PostsPage = async ({
