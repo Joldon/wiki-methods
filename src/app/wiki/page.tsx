@@ -7,7 +7,7 @@ import styles from "./wikis.module.css";
 import Image from "next/image";
 import Card from "@/components/card/card";
 
-export default async function Home() {
+export default async function WikisPage() {
   const pages: WikiEntry[] = await fetchAllEntries();
   return (
     <div className={styles.container}>
