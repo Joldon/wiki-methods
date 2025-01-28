@@ -42,7 +42,8 @@ const ForceDirectedGraph: React.FC<ForceDirectedGraphProps> = ({
       .forceSimulation(nodes)
       .force(
         "link",
-        d3.forceLink(links).id((d: unknown) => d.id)
+        // d3.forceLink(links).id((d: any) => d.id)
+        d3.forceLink(links).id((d) => (d as Node).id) // looks as better solution
       )
       .force("charge", d3.forceManyBody())
       .force("center", d3.forceCenter(width / 2, height / 2))
