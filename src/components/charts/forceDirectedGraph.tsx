@@ -1,27 +1,29 @@
+"use client";
+
 import * as d3 from "d3";
 import React, { useRef, useEffect } from "react";
 
-interface Node {
-  id: string;
-  group: number;
+export type Node = {
+  id: string | number;
+  group: number | string;
   x?: number;
   y?: number;
   fx?: number | null;
   fy?: number | null;
-}
+};
 
-interface Link {
+export type Link = {
   source: string | Node;
   target: string | Node;
   value: number;
-}
+};
 
-interface ForceDirectedGraphProps {
+type ForceDirectedGraphProps = {
   nodes: Node[];
   links: Link[];
   width?: number;
   height?: number;
-}
+};
 
 const ForceDirectedGraph: React.FC<ForceDirectedGraphProps> = ({
   nodes,
@@ -40,7 +42,7 @@ const ForceDirectedGraph: React.FC<ForceDirectedGraphProps> = ({
       .forceSimulation(nodes)
       .force(
         "link",
-        d3.forceLink(links).id((d: any) => d.id)
+        d3.forceLink(links).id((d: unknown) => d.id)
       )
       .force("charge", d3.forceManyBody())
       .force("center", d3.forceCenter(width / 2, height / 2))
@@ -84,10 +86,10 @@ const ForceDirectedGraph: React.FC<ForceDirectedGraphProps> = ({
 
     function ticked() {
       link
-        .attr("x1", (d: any) => (d.source as Node).x)
-        .attr("y1", (d: any) => (d.source as Node).y)
-        .attr("x2", (d: any) => (d.target as Node).x)
-        .attr("y2", (d: any) => (d.target as Node).y);
+        .attr("x1", (d: Link) => (d.source as Node).x!) // .x! - The x property access with a ! non-null assertion operator tells TypeScript that even though x might be considered potentially undefined, we're certain it will have a value at runtime.
+        .attr("y1", (d: Link) => (d.source as Node).y!)
+        .attr("x2", (d: Link) => (d.target as Node).x!)
+        .attr("y2", (d: Link) => (d.target as Node).y!);
 
       node.attr("cx", (d: Node) => d.x!).attr("cy", (d: Node) => d.y!);
     }
