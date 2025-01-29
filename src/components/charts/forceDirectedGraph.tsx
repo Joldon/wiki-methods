@@ -86,14 +86,11 @@ const ForceDirectedGraph: React.FC<ForceDirectedGraphProps> = ({
       .append("line")
       .attr("stroke-width", (d: Link) => Math.sqrt(d.value));
 
-    // To make this more maintainable, you could consider:
-    // const getNodeColor = (node: Node): string => {
-    //     return color(node.group.toString()) as string;
-    //   }
+    // To make this more maintainable :
+    const getNodeColor = (node: Node): string => {
+      return color(node.group.toString()) as string;
+    };
 
-    // Then use it as:
-    //   .attr("fill", getNodeColor)
-    // This would make the color logic more testable and easier to modify later.
     const node = svg
       .append("g")
       .selectAll("circle")
@@ -101,7 +98,8 @@ const ForceDirectedGraph: React.FC<ForceDirectedGraphProps> = ({
       .enter()
       .append("circle")
       .attr("r", 8)
-      .attr("fill", (d: Node) => color(d.group.toString()) as string)
+      // .attr("fill", (d: Node) => color(d.group.toString()) as string)
+      .attr("fill", getNodeColor)
       .call(
         d3
           .drag<SVGCircleElement, Node>()
