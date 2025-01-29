@@ -142,15 +142,19 @@ const ForceDirectedGraph: React.FC<ForceDirectedGraphProps> = ({
       .text((d) => d.id.toString());
 
     function ticked() {
-      // const getCoord = (coord: number | undefined) => coord ?? 0;
+      const getCoord = (coord: number | undefined) => coord ?? 0;
       link
-        .attr("x1", (d: Link) => (d.source as Node).x!) // ! tells TypeScript that x/y will definitely have values
-        .attr("y1", (d: Link) => (d.source as Node).y!)
-        .attr("x2", (d: Link) => (d.target as Node).x!)
-        .attr("y2", (d: Link) => (d.target as Node).y!);
+        .attr("x1", (d: Link) => getCoord((d.source as Node).x)) //  tells TypeScript that x/y will definitely have values
+        .attr("y1", (d: Link) => getCoord((d.source as Node).y))
+        .attr("x2", (d: Link) => getCoord((d.target as Node).x))
+        .attr("y2", (d: Link) => getCoord((d.target as Node).y));
 
-      node.attr("cx", (d: Node) => d.x!).attr("cy", (d: Node) => d.y!);
-      labels.attr("x", (d: Node) => d.x!).attr("y", (d: Node) => d.y!);
+      node
+        .attr("cx", (d: Node) => getCoord(d.x))
+        .attr("cy", (d: Node) => getCoord(d.y));
+      labels
+        .attr("x", (d: Node) => getCoord(d.x))
+        .attr("y", (d: Node) => getCoord(d.y));
     }
 
     function dragstarted(event: d3.D3DragEvent<SVGCircleElement, Node, Node>) {
