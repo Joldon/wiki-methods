@@ -1,7 +1,8 @@
 "use client";
 
 import * as d3 from "d3";
-import React, { useRef, useEffect } from "react";
+import React, { useRef, useEffect, useState } from "react";
+import { useFloating, FloatingPortal, offset, shift } from "@floating-ui/react";
 
 export type Node = {
   id: string | number;
@@ -32,6 +33,22 @@ const ForceDirectedGraph: React.FC<ForceDirectedGraphProps> = ({
   height = 600,
 }) => {
   const svgRef = useRef<SVGSVGElement | null>(null);
+  const [tooltipData, setTooltipData] = useState<{
+    show: boolean;
+    content: string;
+    x: number;
+    y: number;
+  }>({
+    show: false,
+    content: "",
+    x: 0,
+    y: 0,
+  });
+
+  const { refs, floatingStyles, update } = useFloating({
+    placement: "right",
+    middleware: [offset(10), shift()],
+  });
 
   useEffect(() => {
     if (!svgRef.current) return;
@@ -43,15 +60,20 @@ const ForceDirectedGraph: React.FC<ForceDirectedGraphProps> = ({
       .force(
         "link",
         // d3.forceLink(links).id((d: any) => d.id)
-        d3.forceLink(links).id((d) => (d as Node).id) // looks as better solution
+        d3
+          .forceLink(links)
+          .id((d) => (d as Node).id)
+          .distance(120)
+        // looks as better solution
       )
-      .force("charge", d3.forceManyBody())
+      .force("charge", d3.forceManyBody().strength(-300))
       .force("center", d3.forceCenter(width / 2, height / 2))
       .on("tick", ticked);
 
     const svg = d3.select(svgRef.current);
 
     svg.selectAll("*").remove(); // Clear previous elements
+    // This cleanup prevents duplicate elements when the component re-renders
 
     // Add links
     const link = svg
@@ -64,16 +86,21 @@ const ForceDirectedGraph: React.FC<ForceDirectedGraphProps> = ({
       .append("line")
       .attr("stroke-width", (d: Link) => Math.sqrt(d.value));
 
-    // Add nodes
+    // To make this more maintainable, you could consider:
+    // const getNodeColor = (node: Node): string => {
+    //     return color(node.group.toString()) as string;
+    //   }
+
+    // Then use it as:
+    //   .attr("fill", getNodeColor)
+    // This would make the color logic more testable and easier to modify later.
     const node = svg
       .append("g")
-      .attr("stroke", "#fff")
-      .attr("stroke-width", 1.5)
       .selectAll("circle")
       .data(nodes)
       .enter()
       .append("circle")
-      .attr("r", 5)
+      .attr("r", 8)
       .attr("fill", (d: Node) => color(d.group.toString()) as string)
       .call(
         d3
@@ -81,18 +108,49 @@ const ForceDirectedGraph: React.FC<ForceDirectedGraphProps> = ({
           .on("start", dragstarted)
           .on("drag", dragged)
           .on("end", dragended)
-      );
+      )
+      .on("mouseover", (event, d: Node) => {
+        setTooltipData({
+          show: true,
+          content: `${d.id} (${d.group})`,
+          x: event.pageX,
+          y: event.pageY,
+        });
+        update();
+      })
+      .on("mouseout", () => {
+        setTooltipData((prev) => ({ ...prev, show: false }));
+      });
 
-    node.append("title").text((d: Node) => d.id);
+    // node.append("title").text((d: Node) => d.id);
+    // the above line shows a title(id) and group name on hover
+
+    // Add node labels
+    const labels = svg
+      .append("g")
+      .selectAll("text")
+      .data(nodes)
+      .enter()
+      .append("text")
+      .attr("dy", -10)
+      .attr("text-anchor", "middle")
+      .style("fill", "#333")
+      .style("font-size", "12px")
+      .style("paint-order", "stroke")
+      .style("stroke", "white")
+      .style("stroke-width", "3px")
+      .text((d) => d.id.toString());
 
     function ticked() {
+      // const getCoord = (coord: number | undefined) => coord ?? 0;
       link
-        .attr("x1", (d: Link) => (d.source as Node).x!) // .x! - The x property access with a ! non-null assertion operator tells TypeScript that even though x might be considered potentially undefined, we're certain it will have a value at runtime.
+        .attr("x1", (d: Link) => (d.source as Node).x!) // ! tells TypeScript that x/y will definitely have values
         .attr("y1", (d: Link) => (d.source as Node).y!)
         .attr("x2", (d: Link) => (d.target as Node).x!)
         .attr("y2", (d: Link) => (d.target as Node).y!);
 
       node.attr("cx", (d: Node) => d.x!).attr("cy", (d: Node) => d.y!);
+      labels.attr("x", (d: Node) => d.x!).attr("y", (d: Node) => d.y!);
     }
 
     function dragstarted(event: d3.D3DragEvent<SVGCircleElement, Node, Node>) {
@@ -115,15 +173,40 @@ const ForceDirectedGraph: React.FC<ForceDirectedGraphProps> = ({
     return () => {
       simulation.stop();
     };
-  }, [nodes, links, width, height]);
+  }, [nodes, links, width, height, update]);
 
   return (
-    <svg
-      ref={svgRef}
-      width={width}
-      height={height}
-      style={{ maxWidth: "100%", height: "auto" }}
-    />
+    <div style={{ position: "relative" }}>
+      <svg
+        ref={svgRef}
+        width={width}
+        height={height}
+        style={{ maxWidth: "100%", height: "auto" }}
+      />
+      <FloatingPortal>
+        {tooltipData.show && (
+          <div
+            ref={refs.setFloating}
+            style={{
+              ...floatingStyles,
+              position: "absolute",
+              backgroundColor: "white",
+              padding: "8px",
+              border: "1px solid #ddd",
+              borderRadius: "4px",
+              fontSize: "12px",
+
+              boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
+              zIndex: 1000,
+              top: tooltipData.y,
+              left: tooltipData.x,
+            }}
+          >
+            {tooltipData.content}
+          </div>
+        )}
+      </FloatingPortal>
+    </div>
   );
 };
 
