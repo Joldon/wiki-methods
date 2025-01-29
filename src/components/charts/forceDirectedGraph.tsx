@@ -2,7 +2,13 @@
 
 import * as d3 from "d3";
 import React, { useRef, useEffect, useState } from "react";
-import { useFloating, FloatingPortal, offset, shift } from "@floating-ui/react";
+import {
+  useFloating,
+  FloatingPortal,
+  offset,
+  shift,
+  flip,
+} from "@floating-ui/react";
 
 export type Node = {
   id: string | number;
@@ -45,9 +51,9 @@ const ForceDirectedGraph: React.FC<ForceDirectedGraphProps> = ({
     y: 0,
   });
 
-  const { refs, floatingStyles, update } = useFloating({
+  const { refs, floatingStyles } = useFloating({
     placement: "right",
-    middleware: [offset(10), shift()],
+    middleware: [offset(10), flip(), shift()],
   });
 
   useEffect(() => {
@@ -114,7 +120,6 @@ const ForceDirectedGraph: React.FC<ForceDirectedGraphProps> = ({
           x: event.pageX,
           y: event.pageY,
         });
-        update();
       })
       .on("mouseout", () => {
         setTooltipData((prev) => ({ ...prev, show: false }));
@@ -175,7 +180,7 @@ const ForceDirectedGraph: React.FC<ForceDirectedGraphProps> = ({
     return () => {
       simulation.stop();
     };
-  }, [nodes, links, width, height, update]);
+  }, [nodes, links, width, height]);
 
   return (
     <div style={{ position: "relative" }}>
