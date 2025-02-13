@@ -40,10 +40,10 @@ const DirectedTree: React.FC<ForceDirectedTreeProps> = ({
         d3
           .forceLink(links)
           .id((d) => d.id)
-          .distance(0)
+          .distance(10) // distance between nodes
           .strength(1)
       )
-      .force("charge", d3.forceManyBody().strength(-50))
+      .force("charge", d3.forceManyBody().strength(-100)) // node repulsion
       .force("x", d3.forceX())
       .force("y", d3.forceY());
 
@@ -84,6 +84,7 @@ const DirectedTree: React.FC<ForceDirectedTreeProps> = ({
       .append("g")
       .attr("stroke", "#999")
       .attr("stroke-opacity", 0.6)
+      .attr("stroke-width", 2)
       .selectAll("line")
       .data(links)
       .join("line");
@@ -93,13 +94,13 @@ const DirectedTree: React.FC<ForceDirectedTreeProps> = ({
       .append("g")
       .attr("fill", "#fff")
       .attr("stroke", "#000")
-      .attr("stroke-width", 1.5)
+      .attr("stroke-width", 2) // stroke width
       .selectAll("circle")
       .data(nodes)
       .join("circle")
-      .attr("fill", (d) => (d.children ? null : "#000"))
-      .attr("stroke", (d) => (d.children ? null : "#fff"))
-      .attr("r", 3.5)
+      .attr("fill", (d) => (d.children ? "#69b3a2" : "#ff7f50"))
+      //   .attr("stroke", (d) => (d.children ? null : "#fff")) // stroke color
+      .attr("r", (d) => (d.children ? 6 : 4)) // node radius
       .call(drag(simulation) as any);
 
     // Add titles (tooltips) to nodes
