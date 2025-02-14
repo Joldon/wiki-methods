@@ -1,18 +1,33 @@
 "use client";
 
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import * as d3 from "d3";
+import { hierarchy } from "d3";
 
-interface TreeNode {
+export interface TreeNode<T extends { name: string }>
+  extends d3.SimulationNodeDatum {
   name: string;
-  children?: TreeNode[];
+  children?: TreeNode<T>[];
+  id: string;
+  data: T;
 }
+// export interface TreeNode {
+//   name: string;
+//   children?: TreeNode[];
+// }
 
-interface ForceDirectedTreeProps {
-  data: TreeNode;
+type TooltipData = {
+  x: number;
+  y: number;
+  name: string;
+  show: boolean;
+};
+
+export type ForceDirectedTreeProps = {
+  data: TreeNode<{ name: string }>;
   width?: number;
   height?: number;
-}
+};
 
 const DirectedTree: React.FC<ForceDirectedTreeProps> = ({
   data,
@@ -20,6 +35,12 @@ const DirectedTree: React.FC<ForceDirectedTreeProps> = ({
   height = 600,
 }) => {
   const svgRef = useRef<SVGSVGElement>(null);
+  const [tooltip, setTooltip] = useState<TooltipData>({
+    x: 0,
+    y: 0,
+    name: "",
+    show: false,
+  });
 
   useEffect(() => {
     if (!svgRef.current) return;
@@ -28,7 +49,7 @@ const DirectedTree: React.FC<ForceDirectedTreeProps> = ({
     d3.select(svgRef.current).selectAll("*").remove();
 
     // Create the hierarchical data structure
-    const root = d3.hierarchy(data);
+    const root = hierarchy(data);
     const links = root.links();
     const nodes = root.descendants();
 
@@ -39,7 +60,7 @@ const DirectedTree: React.FC<ForceDirectedTreeProps> = ({
         "link",
         d3
           .forceLink(links)
-          .id((d) => d.id)
+          .id((d: unknown) => (d as TreeNode<{ name: string }>).id)
           .distance(10) // distance between nodes
           .strength(1)
       )
@@ -101,7 +122,40 @@ const DirectedTree: React.FC<ForceDirectedTreeProps> = ({
       .attr("fill", (d) => (d.children ? "#69b3a2" : "#ff7f50"))
       //   .attr("stroke", (d) => (d.children ? null : "#fff")) // stroke color
       .attr("r", (d) => (d.children ? 6 : 4)) // node radius
-      .call(drag(simulation) as any);
+      .call(drag(simulation) as any)
+
+      // add mouseover event
+      .on("mouseover", (event: MouseEvent, d: any) => {
+        const svgBounds = svgRef.current!.getBoundingClientRect();
+        const mouseX = event.clientX - svgBounds.left;
+        const mouseY = event.clientY - svgBounds.top;
+
+        setTooltip({
+          x: mouseX,
+          y: mouseY,
+          name: d.data.name,
+          show: true,
+        });
+      })
+
+      // add mouseout event
+      .on("mouseout", () => {
+        setTooltip((prev) => ({ ...prev, show: false }));
+      })
+      // optional: add mousemove event
+      .on("mousemove", (event: MouseEvent) => {
+        if (tooltip.show) {
+          const svgBounds = svgRef.current!.getBoundingClientRect();
+          const mouseX = event.clientX - svgBounds.left;
+          const mouseY = event.clientY - svgBounds.top;
+
+          setTooltip((prev) => ({
+            ...prev,
+            x: mouseX,
+            y: mouseY,
+          }));
+        }
+      });
 
     // Add titles (tooltips) to nodes
     node.append("title").text((d) => d.data.name);
@@ -123,7 +177,31 @@ const DirectedTree: React.FC<ForceDirectedTreeProps> = ({
     };
   }, [data, width, height]);
 
-  return <svg ref={svgRef} width={width} height={height} />;
+  return (
+    <div style={{ position: "relative" }}>
+      <svg ref={svgRef} width={width} height={height} />;
+      {tooltip.show && (
+        <div
+          style={{
+            position: "absolute",
+            top: tooltip.y - 40, // Offset to show above the cursor
+            left: tooltip.x + 10, // Offset to show right of the cursor
+            background: "rgba(0, 0, 0, 0.8)",
+            color: "white",
+            padding: "8px 12px",
+            borderRadius: "4px",
+            fontSize: "14px",
+            pointerEvents: "none",
+            zIndex: 100,
+            transition: "all 0.2s ease",
+            boxShadow: "0 2px 4px rgba(0, 0, 0, 0.2)",
+          }}
+        >
+          {tooltip.name}
+        </div>
+      )}
+    </div>
+  );
 };
 
 export default DirectedTree;
