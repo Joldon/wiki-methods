@@ -163,12 +163,14 @@ const DirectedTree: React.FC<ForceDirectedTreeProps> = ({
     // Update positions on simulation tick
     simulation.on("tick", () => {
       link
-        .attr("x1", (d) => d.source.x)
-        .attr("y1", (d) => d.source.y)
-        .attr("x2", (d) => d.target.x)
-        .attr("y2", (d) => d.target.y);
+        .attr("x1", (d) => (d.source.x !== undefined ? d.source.x : 0))
+        .attr("y1", (d) => (d.source.y !== undefined ? d.source.y : 0))
+        .attr("x2", (d) => (d.target.x !== undefined ? d.target.x : 0))
+        .attr("y2", (d) => (d.target.y !== undefined ? d.target.y : 0));
 
-      node.attr("cx", (d) => d.x).attr("cy", (d) => d.y);
+      node
+        .attr("cx", (d) => (d.x !== undefined ? d.x : 0))
+        .attr("cy", (d) => (d.y !== undefined ? d.y : 0));
     });
 
     // Cleanup function
@@ -205,147 +207,3 @@ const DirectedTree: React.FC<ForceDirectedTreeProps> = ({
 };
 
 export default DirectedTree;
-
-// import React, { useEffect, useRef, useState } from "react";
-// import * as d3 from "d3";
-
-// interface TreeNode {
-//   name: string;
-//   children?: TreeNode[];
-// }
-
-// interface Node extends d3.SimulationNodeDatum {
-//   id: string;
-//   name: string;
-//   radius: number;
-//   color: string;
-// }
-
-// interface Link extends d3.SimulationLinkDatum<Node> {
-//   source: Node;
-//   target: Node;
-// }
-
-// interface ForceDirectedTreeProps {
-//   data: TreeNode;
-//   width?: number;
-//   height?: number;
-// }
-
-// const DirectedTree: React.FC<ForceDirectedTreeProps> = ({
-//   data,
-//   width = 928,
-//   height = 600,
-// }) => {
-//   const svgRef = useRef<SVGSVGElement>(null);
-//   const [nodes, setNodes] = useState<Node[]>([]);
-//   const [links, setLinks] = useState<Link[]>([]);
-
-//   useEffect(() => {
-//     if (!svgRef.current) return;
-
-//     // Create hierarchical data structure
-//     const root = d3.hierarchy(data);
-
-//     // Create nodes array with additional properties
-//     const nodesData: Node[] = root.descendants().map((d) => ({
-//       id: `node-${d.data.name}`,
-//       name: d.data.name,
-//       radius: d.depth === 0 ? 15 : 10,
-//       color: d.depth === 0 ? "#ff4444" : "#4444ff",
-//       x: width / 2 + Math.random() * 100,
-//       y: height / 2 + Math.random() * 100,
-//     }));
-
-//     // Create links array
-//     const linksData: Link[] = root.links().map((l) => ({
-//       source: nodesData.find((n) => n.name === l.source.data.name)!,
-//       target: nodesData.find((n) => n.name === l.target.data.name)!,
-//     }));
-
-//     setNodes(nodesData);
-//     setLinks(linksData);
-
-//     // Create force simulation
-//     const simulation = d3
-//       .forceSimulation<Node>(nodesData)
-//       .force(
-//         "link",
-//         d3
-//           .forceLink<Node, Link>(linksData)
-//           .id((d) => d.id)
-//           .distance(100)
-//           .strength(1)
-//       )
-//       .force("charge", d3.forceManyBody().strength(-400))
-//       .force("center", d3.forceCenter(width / 2, height / 2))
-//       .force(
-//         "collision",
-//         d3.forceCollide().radius((d) => (d.radius || 0) + 10)
-//       );
-
-//     // Update node positions on each tick
-//     simulation.on("tick", () => {
-//       setNodes([...nodesData]);
-//       setLinks([...linksData]);
-//     });
-
-//     return () => {
-//       simulation.stop();
-//     };
-//   }, [data, width, height]);
-
-//   return (
-//     <svg
-//       ref={svgRef}
-//       width={width}
-//       height={height}
-//       viewBox={`0 0 ${width} ${height}`}
-//       style={{ maxWidth: "100%", height: "auto" }}
-//     >
-//       <g>
-//         {/* Draw links */}
-//         {links.map((link, i) => (
-//           <line
-//             key={`link-${i}`}
-//             x1={link.source.x}
-//             y1={link.source.y}
-//             x2={link.target.x}
-//             y2={link.target.y}
-//             stroke="#999"
-//             strokeOpacity={0.6}
-//             strokeWidth={1.5}
-//           />
-//         ))}
-
-//         {/* Draw nodes */}
-//         {nodes.map((node) => (
-//           <g
-//             key={node.id}
-//             transform={`translate(${node.x || 0},${node.y || 0})`}
-//           >
-//             <circle
-//               r={node.radius}
-//               fill={node.color}
-//               stroke="#fff"
-//               strokeWidth={1.5}
-//             />
-//             <text
-//               dy=".31em"
-//               x={node.radius + 5}
-//               textAnchor="start"
-//               style={{
-//                 fontSize: "12px",
-//                 fontFamily: "sans-serif",
-//               }}
-//             >
-//               {node.name}
-//             </text>
-//           </g>
-//         ))}
-//       </g>
-//     </svg>
-//   );
-// };
-
-// export default DirectedTree;
