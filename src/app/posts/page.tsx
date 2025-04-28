@@ -4,6 +4,7 @@ import { createPost } from "@/lib/actions";
 import PostCard from "@/components/postCard/postCard";
 import Button from "@/components/buttons/button";
 import Link from "next/link";
+import FilterDropdown from "@/components/filterDropdown/filterDropdown";
 
 const PostsPage = async ({
   searchParams,
@@ -12,6 +13,19 @@ const PostsPage = async ({
 }) => {
   // Exctract wiki parameter from URL
   const wikiFilter = searchParams.wiki;
+
+  const uniqueWikiArticles = await prisma.post.findMany({
+    where: {
+      wikiArticle: {
+        not: null,
+      },
+    },
+    distinct: ["wikiArticle"],
+    select: {
+      wikiArticle: true,
+    },
+  });
+
   const posts = await prisma.post.findMany({
     where: wikiFilter
       ? {
@@ -45,6 +59,11 @@ const PostsPage = async ({
           ? `Feedback for ${wikiFilter.replace(/_/g, " ")} (${postsCount})`
           : `All Posts (${postsCount})`}
       </h1>
+
+      <FilterDropdown
+        uniqueWikiArticles={uniqueWikiArticles}
+        currentFilter={wikiFilter}
+      />
 
       {/*"Show all posts" link when filter is active  */}
       {wikiFilter && (
