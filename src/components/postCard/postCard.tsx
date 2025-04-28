@@ -48,7 +48,7 @@ const PostCard: React.FC<PostCardProps> = ({
             <p className={styles.wikiReference}>
               <span>Article: </span>
               <Link
-                href={`/wiki/${encodeURIComponent(wikiArticle)}`}
+                href={`/posts?wiki=${encodeURIComponent(wikiArticle)}`} //added /post?
                 onClick={(e) => e.stopPropagation()}
               >
                 {wikiArticle.replace(/_/g, " ")}
