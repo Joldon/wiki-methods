@@ -57,3 +57,21 @@
   margin-bottom: 14px;
   font-size: 14px;
 }
+
+.filterMessage {
+  margin-bottom: 20px;
+  padding: 10px;
+  background-color: #f0f8ff;
+  border-radius: 4px;
+}
+
+.clearFilterLink {
+  color: #007bff;
+  text-decoration: none;
+}
+
+.clearFilterLink:hover {
+  text-decoration: underline;
+  color: #0056b3;
+  font-size: 0.875rem;
+}

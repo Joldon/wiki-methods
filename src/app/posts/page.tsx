@@ -3,22 +3,36 @@ import styles from "./posts.module.css";
 import { createPost } from "@/lib/actions";
 import PostCard from "@/components/postCard/postCard";
 import Button from "@/components/buttons/button";
+import Link from "next/link";
 
 const PostsPage = async ({
   searchParams,
 }: {
-  searchParams: { error?: string };
+  searchParams: { error?: string; wiki?: string };
 }) => {
+  // Exctract wiki parameter from URL
+  const wikiFilter = searchParams.wiki;
   const posts = await prisma.post.findMany({
+    where: wikiFilter
+      ? {
+          wikiArticle: wikiFilter,
+        }
+      : undefined,
     select: {
       id: true,
       title: true,
       content: true,
       slug: true,
+      wikiArticle: true,
+    },
+    orderBy: {
+      createdAt: "desc",
     },
   });
 
-  const postsCount = await prisma.post.count();
+  const postsCount = await prisma.post.count(
+    wikiFilter ? { where: { wikiArticle: wikiFilter } } : undefined
+  );
   const error =
     searchParams.error === "duplicate-title"
       ? "A post with this title already exists. Please choose a different title."
@@ -26,7 +40,20 @@ const PostsPage = async ({
 
   return (
     <div className={styles.container}>
-      <h1 className={styles.header}>All Posts ({postsCount})</h1>
+      <h1 className={styles.header}>
+        {wikiFilter
+          ? `Feedback for ${wikiFilter.replace(/_/g, " ")} (${postsCount})`
+          : `All Posts (${postsCount})`}
+      </h1>
+
+      {/*"Show all posts" link when filter is active  */}
+      {wikiFilter && (
+        <div className={styles.filterMessage}>
+          <Link href="/posts" className={styles.clearFilterLink}>
+            Show all posts
+          </Link>
+        </div>
+      )}
 
       {/* create a form with server action */}
       <form action={createPost} className={styles.form}>
@@ -47,6 +74,10 @@ const PostsPage = async ({
           required
         ></textarea>
 
+        {/* hidden input to associate post with wiki article */}
+        {wikiFilter && (
+          <input type="hidden" name="wikiArticle" value={wikiFilter} />
+        )}
         {/* <button type="submit">Create post</button>
          */}
         <Button
@@ -64,6 +95,7 @@ const PostsPage = async ({
               title={post.title}
               content={post.content}
               slug={post.slug}
+              wikiArticle={post.wikiArticle || undefined}
             />
           </div>
         ))}

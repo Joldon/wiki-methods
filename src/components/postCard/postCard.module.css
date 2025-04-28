@@ -32,3 +32,24 @@
 .postCard:hover .deleteButton {
   display: block;
 }
+
+.wikiReference {
+  font-size: 12px;
+  color: #666;
+  margin-bottom: bold;
+}
+
+.wikiReference span {
+  font-weight: bold;
+}
+
+.wikiReference a,
+.wikiReference :gloabl(a) {
+  color: #007bff;
+  text-decoration: underline;
+}
+
+.wikiReference a,
+.wikiReference :gloabl(a:hover) {
+  color: #0056b3;
+}

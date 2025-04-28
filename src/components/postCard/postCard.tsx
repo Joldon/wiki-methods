@@ -10,9 +10,16 @@ type PostCardProps = {
   content: string;
   id: string;
   slug: string;
+  wikiArticle?: string;
 };
 
-const PostCard: React.FC<PostCardProps> = ({ title, content, id, slug }) => {
+const PostCard: React.FC<PostCardProps> = ({
+  title,
+  content,
+  id,
+  slug,
+  wikiArticle,
+}) => {
   const [showDelete, setShowDelete] = useState(false);
   const [showModal, setShowModal] = useState(false);
 
@@ -36,6 +43,19 @@ const PostCard: React.FC<PostCardProps> = ({ title, content, id, slug }) => {
           onMouseLeave={() => setShowDelete(false)}
         >
           <h2 className={styles.postTitle}>{title}</h2>
+          {/* Displays wiki article reference if available */}
+          {wikiArticle && (
+            <p className={styles.wikiReference}>
+              <span>Article: </span>
+              <Link
+                href={`/wiki/${encodeURIComponent(wikiArticle)}`}
+                onClick={(e) => e.stopPropagation()}
+              >
+                {wikiArticle.replace(/_/g, " ")}
+              </Link>
+            </p>
+          )}
+
           <p className={styles.postContent}>
             {content && `${content.slice(0, 35)}...`}
           </p>
