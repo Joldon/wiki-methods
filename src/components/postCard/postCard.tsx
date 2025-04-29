@@ -23,11 +23,6 @@ const PostCard: React.FC<PostCardProps> = ({
   const [showDelete, setShowDelete] = useState(false);
   const [showModal, setShowModal] = useState(false);
 
-  const handleDelete = async () => {
-    setShowModal(false);
-    await deletePost(id);
-  };
-
   const handleModalOpen = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
