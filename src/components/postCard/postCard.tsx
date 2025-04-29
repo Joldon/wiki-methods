@@ -36,44 +36,46 @@ const PostCard: React.FC<PostCardProps> = ({
 
   return (
     <>
-      <Link href={`./posts/${slug}`}>
-        <div
-          className={styles.postCard}
-          onMouseEnter={() => setShowDelete(true)}
-          onMouseLeave={() => setShowDelete(false)}
-        >
+      <div
+        content={styles.postCardContainer}
+        className={styles.postCard}
+        onMouseEnter={() => setShowDelete(true)}
+        onMouseLeave={() => setShowDelete(false)}
+      >
+        <Link href={`./posts/${slug}`} className={styles.titleLink}>
           <h2 className={styles.postTitle}>{title}</h2>
-          {/* Displays wiki article reference if available */}
-          {wikiArticle && (
-            <p className={styles.wikiReference}>
-              <span>Article: </span>
-              <Link
-                href={`/posts?wiki=${encodeURIComponent(wikiArticle)}`} //added /post?
-                onClick={(e) => e.stopPropagation()}
-              >
-                {wikiArticle.replace(/_/g, " ")}
-              </Link>
-            </p>
-          )}
-
-          <p className={styles.postContent}>
-            {content && `${content.slice(0, 35)}...`}
+        </Link>
+        {/* Displays wiki article reference if available */}
+        {wikiArticle && (
+          <p className={styles.wikiReference}>
+            <span>Article: </span>
+            <Link
+              href={`/posts?wiki=${encodeURIComponent(wikiArticle)}`} //added /post?
+              onClick={(e) => e.stopPropagation()}
+            >
+              {wikiArticle.replace(/_/g, " ")}
+            </Link>
           </p>
-          {showDelete && (
-            <button className={styles.deleteButton} onClick={handleModalOpen}>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 24 24"
-                width="24"
-                height="24"
-                fill="currentColor"
-              >
-                <path d="M3 6h18v2H3V6zm2 3h14v13H5V9zm3 2v9h2v-9H8zm4 0v9h2v-9h-2zm4 0v9h2v-9h-2zM9 4V2h6v2h5v2H4V4h5z" />
-              </svg>
-            </button>
-          )}
-        </div>
-      </Link>
+        )}
+
+        <p className={styles.postContent}>
+          {content && `${content.slice(0, 35)}...`}
+        </p>
+        {showDelete && (
+          <button className={styles.deleteButton} onClick={handleModalOpen}>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              width="24"
+              height="24"
+              fill="currentColor"
+            >
+              <path d="M3 6h18v2H3V6zm2 3h14v13H5V9zm3 2v9h2v-9H8zm4 0v9h2v-9h-2zm4 0v9h2v-9h-2zM9 4V2h6v2h5v2H4V4h5z" />
+            </svg>
+          </button>
+        )}
+      </div>
+
       <Modal
         isOpen={showModal}
         onClose={() => setShowModal(false)}
