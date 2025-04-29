@@ -1,0 +1,23 @@
+.filterContainer {
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.filterContainer label {
+  font-weight: 500;
+}
+
+.filterContainer select {
+  padding: 8px 12px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  background-color: white;
+  min-width: 200px;
+  cursor: pointer;
+}
+
+.filterContainer select:hover {
+  background-color: #007bff;
+}
