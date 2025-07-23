@@ -31,19 +31,26 @@ export const createPost = async (
 
     revalidatePath("/posts");
 
+    // Server-side redirect with success parameter
+    redirect("/posts?success=created");
     // Return success state and let the component handle redirect
-    return { success: "Post created successfully!" };
+    // return { success: "Post created successfully!" };
   } catch (error) {
     if (
       error instanceof PrismaClientKnownRequestError &&
       error.code === "P2002"
     ) {
-      return {
-        error:
-          "A post with this title already exists. Please choose a different title.",
-      };
+      //   return {
+      //     error:
+      //       "A post with this title already exists. Please choose a different title.",
+      //   };
+      // }
+      // return { error: "Failed to create post. Please try again." };
+      // Redirect with error parameter
+      redirect("/posts?error=duplicate-title");
     }
-    return { error: "Failed to create post. Please try again." };
+    // Redirect with generic error
+    redirect("/posts?error=failed");
   }
 };
 
