@@ -1,10 +1,7 @@
 import prisma from "@/lib/db";
 import styles from "./posts.module.css";
-import { createPost } from "@/lib/actions";
-import PostCard from "@/components/postCard/postCard";
-import Button from "@/components/buttons/button";
 import Link from "next/link";
-import FilterDropdown from "@/components/filterDropdown/filterDropdown";
+import PostsDashboard from "@/components/dashboard/postsDashboard";
 
 const PostsPage = async ({
   searchParams,
@@ -60,11 +57,6 @@ const PostsPage = async ({
           : `All Posts (${postsCount})`}
       </h1>
 
-      <FilterDropdown
-        uniqueWikiArticles={uniqueWikiArticles}
-        currentFilter={wikiFilter}
-      />
-
       {/*"Show all posts" link when filter is active  */}
       {wikiFilter && (
         <div className={styles.filterMessage}>
@@ -74,51 +66,14 @@ const PostsPage = async ({
         </div>
       )}
 
-      {/* create a form with server action */}
-      <form action={createPost} className={styles.form}>
-        <h2 className={styles.subheader}>Create a new post</h2>
-        {error && <p className={styles.error}>{error}</p>}
-        <input
-          type="text"
-          name="title"
-          id="title"
-          placeholder="Title"
-          required
-        />
-
-        <textarea
-          name="content"
-          id="content"
-          placeholder="Your feedback"
-          required
-        ></textarea>
-
-        {/* hidden input to associate post with wiki article */}
-        {wikiFilter && (
-          <input type="hidden" name="wikiArticle" value={wikiFilter} />
-        )}
-        {/* <button type="submit">Create post</button>
-         */}
-        <Button
-          type="submit"
-          defaultText={"Create Post"}
-          loadingText={"Creating ..."}
-          variant="primary"
-        />
-      </form>
-      <div className={styles.postsGrid}>
-        {posts.map((post) => (
-          <div key={post.id}>
-            <PostCard
-              id={post.id}
-              title={post.title}
-              content={post.content}
-              slug={post.slug}
-              wikiArticle={post.wikiArticle || undefined}
-            />
-          </div>
-        ))}
-      </div>
+      <PostsDashboard
+        posts={posts.map((post) => ({
+          ...post,
+          wikiArticle: post.wikiArticle ?? undefined, // Converts null to undefined
+        }))}
+        uniqueWikiArticles={uniqueWikiArticles}
+        currentFilter={wikiFilter}
+      />
     </div>
   );
 };

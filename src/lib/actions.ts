@@ -6,7 +6,15 @@ import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
 import prisma from "./db";
 import { Post } from "@prisma/client";
 
-export const createPost = async (formData: FormData) => {
+export type FormState = {
+  error?: string;
+  success?: string;
+};
+
+export const createPost = async (
+  prevState: FormState,
+  formData: FormData
+): Promise<FormState> => {
   try {
     const post: Post = await prisma.post.create({
       data: {
@@ -17,20 +25,25 @@ export const createPost = async (formData: FormData) => {
           .replace(/\s+/g, "-")
           .toLowerCase(),
         content: formData.get("content") as string,
-        // This line to save the wikiArticle field
         wikiArticle: (formData.get("wikiArticle") as string) || null,
       },
     });
+
     revalidatePath("/posts");
-    redirect("/posts");
+
+    // Return success state and let the component handle redirect
+    return { success: "Post created successfully!" };
   } catch (error) {
     if (
       error instanceof PrismaClientKnownRequestError &&
       error.code === "P2002"
     ) {
-      redirect("/posts?error=duplicate-title");
+      return {
+        error:
+          "A post with this title already exists. Please choose a different title.",
+      };
     }
-    throw error;
+    return { error: "Failed to create post. Please try again." };
   }
 };
 
