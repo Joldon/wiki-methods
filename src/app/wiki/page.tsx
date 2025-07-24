@@ -5,7 +5,6 @@ import { fetchAllEntries } from "@/lib/fetchData";
 import { WikiEntry } from "@/lib/types";
 import styles from "./wikis.module.css";
 import Image from "next/image";
-import Card from "@/components/card/card";
 
 export default async function WikisPage() {
   const pages: WikiEntry[] = await fetchAllEntries();

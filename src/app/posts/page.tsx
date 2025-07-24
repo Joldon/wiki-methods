@@ -6,7 +6,7 @@ import PostsDashboard from "@/components/dashboard/postsDashboard";
 const PostsPage = async ({
   searchParams,
 }: {
-  searchParams: { error?: string; wiki?: string };
+  searchParams: { error?: string; success?: string; wiki?: string };
 }) => {
   // Exctract wiki parameter from URL
   const wikiFilter = searchParams.wiki;
@@ -44,9 +44,16 @@ const PostsPage = async ({
   const postsCount = await prisma.post.count(
     wikiFilter ? { where: { wikiArticle: wikiFilter } } : undefined
   );
-  const error =
+
+  const successMessage =
+    searchParams.success === "created"
+      ? "Post created successfully!"
+      : undefined;
+  const errorMessage =
     searchParams.error === "duplicate-title"
       ? "A post with this title already exists. Please choose a different title."
+      : searchParams.error === "failed"
+      ? "Failed to create post. Please try again"
       : null;
 
   return (
@@ -56,7 +63,12 @@ const PostsPage = async ({
           ? `Feedback for ${wikiFilter.replace(/_/g, " ")} (${postsCount})`
           : `All Posts (${postsCount})`}
       </h1>
-
+      {successMessage && (
+        <div className={styles.successMessage}>{successMessage}</div>
+      )}
+      {errorMessage && (
+        <div className={styles.errorMessage}>{errorMessage}</div>
+      )}
       {/*"Show all posts" link when filter is active  */}
       {wikiFilter && (
         <div className={styles.filterMessage}>
