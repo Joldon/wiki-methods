@@ -24,11 +24,6 @@ const PostsDashboard = ({
 }: PostsDashboardProps) => {
   return (
     <div className={styles.dashboardContainer}>
-      <h1 className={styles.header}>
-        {currentFilter
-          ? `Feedback for ${currentFilter.replace(/_/g, " ")} (${posts.length})`
-          : `All Posts (${posts.length})`}
-      </h1>
       <FilterDropdown
         uniqueWikiArticles={uniqueWikiArticles}
         currentFilter={currentFilter}
