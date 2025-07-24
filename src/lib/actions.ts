@@ -17,20 +17,29 @@ export const createPost = async (formData: FormData) => {
           .replace(/\s+/g, "-")
           .toLowerCase(),
         content: formData.get("content") as string,
-        // This line to save the wikiArticle field
         wikiArticle: (formData.get("wikiArticle") as string) || null,
       },
     });
+
     revalidatePath("/posts");
-    redirect("/posts");
+
+    // Server-side redirect with success parameter
+    redirect("/posts?success=created");
   } catch (error) {
+    // Check if it's a Next.js redirect error - if so, re-throw it
+    if (error && typeof error === "object" && "digest" in error) {
+      throw error; // Next.js handles the redirect
+    }
+    // Handle actual Prisma errors
     if (
       error instanceof PrismaClientKnownRequestError &&
       error.code === "P2002"
     ) {
       redirect("/posts?error=duplicate-title");
     }
-    throw error;
+
+    // Redirect with generic error
+    redirect("/posts?error=failed");
   }
 };
 
