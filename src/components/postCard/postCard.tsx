@@ -32,21 +32,21 @@ const PostCard: React.FC<PostCardProps> = ({
   return (
     <>
       <div
-        content={styles.postCardContainer}
-        className={styles.postCard}
+        className={`${styles.postCardContainer} ${styles.postCard}`}
         onMouseEnter={() => setShowDelete(true)}
         onMouseLeave={() => setShowDelete(false)}
       >
-        <Link href={`./posts/${slug}`} className={styles.titleLink}>
-          <h2 className={styles.postTitle}>{title}</h2>
-        </Link>
+        <h2 className={styles.postTitle}>
+          <Link href={`./posts/${slug}`} className={styles.titleLink}>
+            {title}
+          </Link>
+        </h2>
         {/* Displays wiki article reference if available */}
         {wikiArticle && (
           <p className={styles.wikiReference}>
             <span>Article: </span>
             <Link
               href={`/posts?wiki=${encodeURIComponent(wikiArticle)}`} //added /post?
-              onClick={(e) => e.stopPropagation()}
             >
               {wikiArticle.replace(/_/g, " ")}
             </Link>
