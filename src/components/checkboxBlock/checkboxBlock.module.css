@@ -15,7 +15,7 @@
 
 .options {
   display: flex;
-  font-display: column;
+  flex-direction: column;
   gap: 10px;
 }
 
