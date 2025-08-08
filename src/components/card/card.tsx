@@ -16,8 +16,11 @@ const Card: React.FC<CardProps> = ({ title, pageId, summary, imageUrl }) => {
       <div className={styles.content}>
         <h3 className={styles.title}>{title}</h3>
         <p className={styles.summary}>{summary}</p>
-        <Link href={`/wiki/${encodeURIComponent(title.replace(/ /g, "_"))} `}>
-          <a className={styles.link}>Read More</a>
+        <Link
+          href={`/wiki/${encodeURIComponent(title.replace(/ /g, "_"))} `}
+          className={styles.link}
+        >
+          Read More
         </Link>
       </div>
     </div>

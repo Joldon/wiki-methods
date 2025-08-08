@@ -6,7 +6,7 @@
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   padding: 20px;
-  transition: transform 0.3 ease, box-shadow 0.3s ease;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .container:hover {
@@ -27,7 +27,7 @@
 .title {
   font-size: 18px;
   margin: 10px 0;
-  color: --var(--primary-color, #333); /*  fallback color  */
+  color: var(--primary-color, #333); /*  fallback color  */
 }
 
 .summary {
@@ -37,7 +37,7 @@
 }
 
 .link {
-  background-color: --var(--primary-color, #007bff); /*  fallback color  */
+  background-color: var(--primary-color, #007bff); /*  fallback color  */
   color: white;
   padding: 8px 16px;
   border-radius: 4px;
@@ -46,5 +46,5 @@
 }
 
 .link:hover {
-  background-color: --var(--hover-color, #0056b3); /*  fallback color  */
+  background-color: var(--hover-color, #0056b3); /*  fallback color  */
 }
