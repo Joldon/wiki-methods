@@ -9,28 +9,9 @@ import {
   shift,
   flip,
 } from "@floating-ui/react";
+import type { Node, Link, ForceDirectedGraphProps } from "../chartTypes";
 
-export type Node = {
-  id: string | number;
-  group: number | string;
-  x?: number;
-  y?: number;
-  fx?: number | null;
-  fy?: number | null;
-};
-
-export type Link = {
-  source: string | Node;
-  target: string | Node;
-  value: number;
-};
-
-type ForceDirectedGraphProps = {
-  nodes: Node[];
-  links: Link[];
-  width?: number;
-  height?: number;
-};
+// types moved into types.ts file here in this folder
 
 const ForceDirectedGraph: React.FC<ForceDirectedGraphProps> = ({
   nodes,
@@ -57,12 +38,16 @@ const ForceDirectedGraph: React.FC<ForceDirectedGraphProps> = ({
     y: 0,
   });
 
+  // const [isClient, setIsClient] = useState(false);
+
   const { refs, floatingStyles } = useFloating({
     placement: "right",
     middleware: [offset(10), flip(), shift()],
   });
 
+  // Remove client-side detection that causes hydration errors
   useEffect(() => {
+    // if (!svgRef.current || !isClient) return;
     if (!svgRef.current) return;
 
     const color = d3.scaleOrdinal(d3.schemeCategory10);
@@ -237,7 +222,21 @@ const ForceDirectedGraph: React.FC<ForceDirectedGraphProps> = ({
     return () => {
       simulation.stop();
     };
-  }, [nodes, links, width, height]);
+  }, [
+    nodes,
+    links,
+    width,
+    height,
+    margin.left,
+    margin.top,
+    innerWidth,
+    innerHeight,
+    // isClient,
+  ]);
+
+  // if (!isClient) {
+  //   return null;
+  // }
 
   return (
     <div style={{ position: "relative" }}>

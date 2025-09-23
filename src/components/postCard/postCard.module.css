@@ -1,5 +1,11 @@
 .postCardContainer {
   cursor: pointer;
+  /* new line */
+  transition: transform 0.2s ease;
+}
+
+.postCardContainer:hover {
+  transform: translateY(-2px);
 }
 
 .postCard {
@@ -40,7 +46,7 @@
 .wikiReference {
   font-size: 12px;
   color: #666;
-  margin-bottom: bold;
+  margin-bottom: 5px;
 }
 
 .wikiReference span {
@@ -61,4 +67,8 @@
 .titleLink {
   text-decoration: none;
   color: inherit;
+  display: block;
+}
+.titleLink:hover {
+  color: #0056b3;
 }

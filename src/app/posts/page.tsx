@@ -6,10 +6,11 @@ import PostsDashboard from "@/components/dashboard/postsDashboard";
 const PostsPage = async ({
   searchParams,
 }: {
-  searchParams: { error?: string; success?: string; wiki?: string };
+  searchParams: Promise<{ error?: string; success?: string; wiki?: string }>;
 }) => {
-  // Exctract wiki parameter from URL
-  const wikiFilter = searchParams.wiki;
+  // Extract wiki parameters from URL (Next.js 15 requires awaiting searchParams)
+  const params = await searchParams;
+  const wikiFilter = params.wiki;
 
   const uniqueWikiArticles = await prisma.post.findMany({
     where: {
@@ -46,13 +47,11 @@ const PostsPage = async ({
   );
 
   const successMessage =
-    searchParams.success === "created"
-      ? "Post created successfully!"
-      : undefined;
+    params.success === "created" ? "Post created successfully!" : undefined;
   const errorMessage =
-    searchParams.error === "duplicate-title"
+    params.error === "duplicate-title"
       ? "A post with this title already exists. Please choose a different title."
-      : searchParams.error === "failed"
+      : params.error === "failed"
       ? "Failed to create post. Please try again"
       : null;
 

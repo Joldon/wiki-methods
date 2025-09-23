@@ -1,5 +1,4 @@
 // src/app/page.tsx
-"use server";
 import Link from "next/link";
 import { fetchAllEntries } from "@/lib/fetchData";
 import { WikiEntry } from "@/lib/types";

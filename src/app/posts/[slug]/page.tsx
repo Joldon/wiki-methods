@@ -5,9 +5,10 @@ interface Params {
   slug: string;
 }
 
-const Post = async ({ params }: { params: Params }) => {
+const Post = async ({ params }: { params: Promise<Params> }) => {
+  const { slug } = await params;
   const post = await prisma.post.findUnique({
-    where: { slug: params.slug },
+    where: { slug },
   });
 
   return (

@@ -3,31 +3,11 @@
 import React, { useEffect, useRef, useState } from "react";
 import * as d3 from "d3";
 import { hierarchy } from "d3";
-
-export interface TreeNode<T extends { name: string }>
-  extends d3.SimulationNodeDatum {
-  name: string;
-  children?: TreeNode<T>[];
-  id: string;
-  data: T;
-}
-// export interface TreeNode {
-//   name: string;
-//   children?: TreeNode[];
-// }
-
-type TooltipData = {
-  x: number;
-  y: number;
-  name: string;
-  show: boolean;
-};
-
-export type ForceDirectedTreeProps = {
-  data: TreeNode<{ name: string }>;
-  width?: number;
-  height?: number;
-};
+import type {
+  TreeNode,
+  ForceDirectedTreeProps,
+  TooltipData,
+} from "../chartTypes";
 
 const DirectedTree: React.FC<ForceDirectedTreeProps> = ({
   data,
@@ -60,7 +40,11 @@ const DirectedTree: React.FC<ForceDirectedTreeProps> = ({
         "link",
         d3
           .forceLink(links)
-          .id((d: unknown) => (d as TreeNode<{ name: string }>).id)
+          .id(
+            (d: unknown) =>
+              (d as TreeNode<{ name: string }>).id ||
+              (d as TreeNode<{ name: string }>).name
+          )
           .distance(10) // distance between nodes
           .strength(1)
       )
@@ -177,11 +161,12 @@ const DirectedTree: React.FC<ForceDirectedTreeProps> = ({
     return () => {
       simulation.stop();
     };
-  }, [data, width, height]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [data, width, height]); // tooltip.show is intentionally excluded as it shouldn't trigger re-render
 
   return (
     <div style={{ position: "relative" }}>
-      <svg ref={svgRef} width={width} height={height} />;
+      <svg ref={svgRef} width={width} height={height} />
       {tooltip.show && (
         <div
           style={{
