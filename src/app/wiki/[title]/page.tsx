@@ -6,8 +6,12 @@ type Params = {
   title: string;
 };
 
-export default async function WikiPage({ params }: { params: Params }) {
-  const { title } = params;
+export default async function WikiPage({
+  params,
+}: {
+  params: Promise<Params>;
+}) {
+  const { title } = await params;
   const content = await fetchPageContent(title);
 
   return (
