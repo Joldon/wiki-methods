@@ -2,13 +2,11 @@ import { fetchPageContent } from "@/lib/fetchData";
 import styles from "./wiki.module.css";
 import Link from "next/link";
 
-interface Params {
-  params: {
-    title: string;
-  };
-}
+type Params = {
+  title: string;
+};
 
-export default async function WikiPage({ params }: Params) {
+export default async function WikiPage({ params }: { params: Params }) {
   const { title } = params;
   const content = await fetchPageContent(title);
 
