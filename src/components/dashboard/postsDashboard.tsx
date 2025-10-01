@@ -1,6 +1,5 @@
 import FilterDropdown from "../filterDropdown/filterDropdown";
 import PostCard from "../postCard/postCard";
-import PostForm from "../form/postForm";
 import styles from "./dashboard.module.css";
 
 type Post = {
@@ -28,8 +27,6 @@ const PostsDashboard = ({
         uniqueWikiArticles={uniqueWikiArticles}
         currentFilter={currentFilter}
       />
-
-      <PostForm wikiArticle={currentFilter} />
 
       <div className={styles.postsGrid}>
         {posts.length > 0 ? (
