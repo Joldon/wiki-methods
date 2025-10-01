@@ -18,9 +18,10 @@ export default async function WikiPage({
     <div className={styles.container}>
       <h1 className={styles.title}>{title.replace("_", " ")}</h1>
       {/* feedback button that links to posts page */}
+
       <div className={styles.feedbackContainer}>
         <Link
-          href={`/posts?wiki=${encodeURIComponent(title)}`}
+          href={`/posts/new?wiki=${encodeURIComponent(title)}`}
           className={styles.feedbackButton}
         >
           Provide Feedback on this Article
