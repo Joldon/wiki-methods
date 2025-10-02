@@ -1,3 +1,136 @@
+/* Card link wrapper - makes entire card clickable */
+.cardLink {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
+
+/* Article badge */
+.articleBadge {
+  display: inline;
+  font-size: 1rem;
+  color: #007bff;
+  text-decoration: underline;
+  cursor: pointer;
+  margin-bottom: 12px;
+  transition: color 0.2s;
+}
+
+.articleBadge:hover {
+  color: #0056b3;
+  text-decoration: underline;
+}
+
+/* Meta info */
+.metaInfo {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  font-size: 0.95rem;
+  color: #888;
+  margin-bottom: 8px;
+}
+
+.date {
+  font-size: 0.95em;
+  color: #888;
+}
+
+/* card actions container */
+.cardActions {
+  display: flex;
+  gap: 12px;
+  padding-top: 16px;
+  border-top: 1px solid #f3f4f6;
+  margin-top: auto;
+}
+
+/* primary button */
+.btnPrimary {
+  padding: 10px 20px;
+  background: #007bff;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-weight: 600;
+  transition: all 0.2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.9rem;
+}
+
+.btnPrimary:hover {
+  background: #0056b3;
+  transform: translate(-1px);
+}
+
+/* Secondary Button { */
+.btnSecondary {
+  padding: 10px 20px;
+  background: transparent;
+  color: #007bff;
+  border: 2px solid #007bff;
+  border-radius: 6px;
+  font-weight: 600;
+  transition: all 0.2s;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.9rem;
+}
+
+.btnSecondary:hover {
+  background: #007bff;
+  color: white;
+}
+
+/* Arrow animation */
+.arrow {
+  transition: transform 0.2s;
+  display: inline-block;
+}
+
+.btnPrimary:hover .arrow {
+  transform: translate(4px);
+}
+
+/* responsive desing */
+@media (max-width: 768px) {
+  .postCard {
+    padding: 20px;
+  }
+  .postTitle {
+    font-size: 1.1rem;
+  }
+  .cardActions {
+    flex-direction: column;
+  }
+  .btnPrimary,
+  .btnSecondary {
+    width: 100%;
+    justify-content: center;
+  }
+  .deleteButton {
+    top: 12px;
+    right: 12px;
+  }
+}
+
+@media (max-width: 400px) {
+  .postCard {
+    padding: 16px;
+  }
+  .postTitle {
+    font-size: 1rem;
+    padding-right: 32px;
+  }
+  .postContent {
+    font-size: 0.875rem;
+  }
+}
+
 .postCardContainer {
   cursor: pointer;
   /* new line */
@@ -6,6 +139,8 @@
 
 .postCardContainer:hover {
   transform: translateY(-2px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+  border: 2px solid #007bff;
 }
 
 .postCard {
@@ -13,7 +148,9 @@
   padding: 20px;
   border-radius: 5px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  position: relative; /* Add this to position the delete button */
+  position: relative;
+  border: 2px solid transparent;
+  transition: border-color 0.2s;
 }
 
 .postTitle {
