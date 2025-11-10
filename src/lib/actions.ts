@@ -8,6 +8,8 @@ import { Post } from "@prisma/client";
 
 export const createPost = async (formData: FormData) => {
   try {
+    const wikiArticle = formData.get("wikiArticle") as string | null;
+
     const post: Post = await prisma.post.create({
       data: {
         title: formData.get("title") as string,
@@ -17,14 +19,20 @@ export const createPost = async (formData: FormData) => {
           .replace(/\s+/g, "-")
           .toLowerCase(),
         content: formData.get("content") as string,
-        wikiArticle: (formData.get("wikiArticle") as string) || null,
+        wikiArticle: wikiArticle || null,
       },
     });
 
     revalidatePath("/posts");
 
-    // Server-side redirect with success parameter
-    redirect("/posts?success=created");
+    // Redirect to relevant wiki page if wikiArticle is present
+    if (wikiArticle) {
+      redirect(
+        `/wiki/${encodeURIComponent(wikiArticle)}?success=feedback-created`
+      );
+    } else {
+      redirect("/posts?success=created");
+    }
   } catch (error) {
     // Check if it's a Next.js redirect error - if so, re-throw it
     if (error && typeof error === "object" && "digest" in error) {
@@ -35,11 +43,23 @@ export const createPost = async (formData: FormData) => {
       error instanceof PrismaClientKnownRequestError &&
       error.code === "P2002"
     ) {
-      redirect("/posts?error=duplicate-title");
+      const wikiArticle = formData.get("wikiArticle") as string | null;
+      if (wikiArticle) {
+        redirect(
+          `/wiki/${encodeURIComponent(wikiArticle)}?error=duplicate-title`
+        );
+      } else {
+        redirect("/posts?error=duplicate-title");
+      }
     }
 
     // Redirect with generic error
-    redirect("/posts?error=failed");
+    const wikiArticle = formData.get("wikiArticle") as string | null;
+    if (wikiArticle) {
+      redirect(`/wiki/${encodeURIComponent(wikiArticle)}?error=failed`);
+    } else {
+      redirect("/posts?error=failed");
+    }
   }
 };
 

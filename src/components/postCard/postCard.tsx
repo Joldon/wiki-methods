@@ -29,47 +29,89 @@ const PostCard: React.FC<PostCardProps> = ({
     setShowModal(true);
   };
 
+  // Helper for secondary actions
+  const handleSecondaryClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+  };
+
   return (
     <>
-      <div
+      <article
         className={`${styles.postCardContainer} ${styles.postCard}`}
         onMouseEnter={() => setShowDelete(true)}
         onMouseLeave={() => setShowDelete(false)}
+        tabIndex={0}
+        role="button"
+        aria-label={`Open post: ${title}`}
+        onClick={() => window.location.assign(`/posts/${slug}`)}
+        style={{ cursor: "pointer" }}
       >
-        <h2 className={styles.postTitle}>
-          <Link href={`./posts/${slug}`} className={styles.titleLink}>
-            {title}
-          </Link>
-        </h2>
-        {/* Displays wiki article reference if available */}
-        {wikiArticle && (
-          <p className={styles.wikiReference}>
-            <span>Article: </span>
-            <Link
-              href={`/posts?wiki=${encodeURIComponent(wikiArticle)}`} //added /post?
-            >
-              {wikiArticle.replace(/_/g, " ")}
-            </Link>
-          </p>
-        )}
-
-        <p className={styles.postContent}>
-          {content && `${content.slice(0, 35)}...`}
-        </p>
+        {/* Delete button (trash icon) */}
         {showDelete && (
-          <button className={styles.deleteButton} onClick={handleModalOpen}>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 24 24"
-              width="24"
-              height="24"
-              fill="currentColor"
-            >
-              <path d="M3 6h18v2H3V6zm2 3h14v13H5V9zm3 2v9h2v-9H8zm4 0v9h2v-9h-2zm4 0v9h2v-9h-2zM9 4V2h6v2h5v2H4V4h5z" />
-            </svg>
+          <button
+            className={styles.deleteButton}
+            onClick={(e) => {
+              handleModalOpen(e);
+            }}
+            aria-label="Delete post"
+          >
+            <span className={styles.icon} aria-hidden="true">
+              🗑️
+            </span>
           </button>
         )}
-      </div>
+
+        {/* Post title */}
+        <h3 className={styles.postTitle}>{title}</h3>
+
+        {/* Wiki article badge */}
+        {wikiArticle && (
+          <span>
+            <span style={{ fontWeight: 600, marginRight: 4 }}>Article: </span>
+            <Link
+              href={`/wiki/${encodeURIComponent(wikiArticle)}`}
+              className={styles.articleBadge}
+              onClick={handleSecondaryClick}
+              aria-label={`Go to article: ${wikiArticle.replace(/_/g, " ")}`}
+            >
+              <span>{wikiArticle.replace(/_/g, " ")}</span>
+            </Link>
+          </span>
+        )}
+
+        {/* Content preview */}
+        <p className={styles.postContent}>
+          {content && `${content.slice(0, 120)}...`}
+        </p>
+
+        {/* Meta info */}
+        <div className={styles.metaInfo}>
+          <span className={styles.date} aria-label="Date">
+            {new Date().toLocaleDateString()}
+          </span>
+        </div>
+
+        {/* Action buttons */}
+        <div className={styles.cardActions}>
+          <span className={styles.btnPrimary} aria-label="Read more">
+            Read More <span className={styles.arrow}>→</span>
+          </span>
+          {wikiArticle && (
+            <Link
+              href={`/posts?wiki=${encodeURIComponent(wikiArticle)}`}
+              className={styles.btnSecondary}
+              onClick={handleSecondaryClick}
+              aria-label={`Show all feedback for ${wikiArticle.replace(
+                /_/g,
+                " "
+              )}`}
+            >
+              <span className={styles.icon}>🔗</span>
+              <span>All Feedback</span>
+            </Link>
+          )}
+        </div>
+      </article>
 
       <Modal
         isOpen={showModal}

@@ -1,0 +1,1049 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Version 2: Balanced Academic - Wiki Methods</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont,
+          "Segoe UI", sans-serif;
+        color: #0f172a;
+        background: #ffffff;
+      }
+
+      /* Navigation */
+      nav {
+        position: sticky;
+        top: 0;
+        background: white;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        z-index: 1000;
+        padding: 16px 32px;
+      }
+
+      .nav-container {
+        max-width: 1280px;
+        margin: 0 auto;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .logo {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        font-size: 22px;
+        font-weight: 700;
+        color: #0f766e;
+      }
+
+      .logo-mark {
+        width: 36px;
+        height: 36px;
+        background: linear-gradient(135deg, #0f766e, #7c3aed);
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 20px;
+      }
+
+      .nav-menu {
+        display: flex;
+        gap: 40px;
+        list-style: none;
+      }
+
+      .nav-menu a {
+        text-decoration: none;
+        color: #475569;
+        font-weight: 600;
+        font-size: 15px;
+        transition: color 0.2s;
+        position: relative;
+      }
+
+      .nav-menu a:hover {
+        color: #0f766e;
+      }
+
+      .nav-right {
+        display: flex;
+        gap: 20px;
+        align-items: center;
+      }
+
+      .search-bar {
+        padding: 8px 16px 8px 40px;
+        border: 1px solid #e2e8f0;
+        border-radius: 8px;
+        font-size: 14px;
+        width: 220px;
+        background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23475569'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z'%3E%3C/path%3E%3C/svg%3E")
+          no-repeat 12px center;
+        background-size: 18px;
+      }
+
+      .btn-nav {
+        padding: 10px 24px;
+        background: #0f766e;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-weight: 600;
+        font-size: 14px;
+        cursor: pointer;
+        transition: all 0.2s;
+      }
+
+      .btn-nav:hover {
+        background: #0d6660;
+        transform: translateY(-1px);
+      }
+
+      /* Hero Section */
+      .hero {
+        max-width: 1280px;
+        margin: 0 auto;
+        padding: 80px 32px;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 60px;
+        align-items: center;
+      }
+
+      .hero-left {
+        padding-right: 40px;
+      }
+
+      .badge {
+        display: inline-block;
+        padding: 6px 14px;
+        background: #eff6ff;
+        color: #0f766e;
+        border-radius: 20px;
+        font-size: 13px;
+        font-weight: 600;
+        margin-bottom: 24px;
+      }
+
+      .hero h1 {
+        font-size: 52px;
+        font-weight: 700;
+        letter-spacing: -0.01em;
+        margin-bottom: 20px;
+        line-height: 1.15;
+        color: #0f172a;
+      }
+
+      .hero p {
+        font-size: 18px;
+        color: #475569;
+        line-height: 1.7;
+        margin-bottom: 32px;
+      }
+
+      .hero-cta {
+        display: flex;
+        gap: 16px;
+        align-items: center;
+        margin-bottom: 32px;
+      }
+
+      .btn-hero-primary {
+        padding: 14px 32px;
+        background: #0f766e;
+        color: white;
+        border: none;
+        border-radius: 10px;
+        font-weight: 600;
+        font-size: 16px;
+        cursor: pointer;
+        transition: all 0.3s;
+      }
+
+      .btn-hero-primary:hover {
+        background: #0d6660;
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(15, 118, 110, 0.3);
+      }
+
+      .hero-link {
+        color: #0f766e;
+        text-decoration: none;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+
+      .stats-bar {
+        display: flex;
+        gap: 32px;
+        padding-top: 24px;
+        border-top: 1px solid #e2e8f0;
+      }
+
+      .stat {
+        font-size: 14px;
+        color: #64748b;
+      }
+
+      .stat strong {
+        color: #0f172a;
+        font-weight: 700;
+      }
+
+      .hero-right {
+        background: #f8fafc;
+        border-radius: 20px;
+        padding: 40px;
+        border: 2px solid #e2e8f0;
+        position: relative;
+        min-height: 500px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .viz-embed {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        color: #94a3b8;
+      }
+
+      .viz-placeholder-svg {
+        width: 280px;
+        height: 280px;
+        opacity: 0.4;
+      }
+
+      .category-tag {
+        position: absolute;
+        padding: 8px 16px;
+        background: white;
+        border-radius: 8px;
+        font-size: 13px;
+        font-weight: 600;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        animation: float 3s ease-in-out infinite;
+      }
+
+      .tag-1 {
+        top: 10%;
+        left: 10%;
+        color: #0f766e;
+        animation-delay: 0s;
+      }
+      .tag-2 {
+        top: 20%;
+        right: 10%;
+        color: #7c3aed;
+        animation-delay: 0.5s;
+      }
+      .tag-3 {
+        bottom: 25%;
+        left: 15%;
+        color: #ec4899;
+        animation-delay: 1s;
+      }
+      .tag-4 {
+        bottom: 15%;
+        right: 15%;
+        color: #0f766e;
+        animation-delay: 1.5s;
+      }
+
+      @keyframes float {
+        0%,
+        100% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(-10px);
+        }
+      }
+
+      /* Category Navigation */
+      .category-section {
+        padding: 80px 32px;
+        background: #f8fafc;
+      }
+
+      .category-container {
+        max-width: 1280px;
+        margin: 0 auto;
+      }
+
+      .section-title {
+        text-align: center;
+        font-size: 36px;
+        font-weight: 700;
+        margin-bottom: 48px;
+        color: #0f172a;
+      }
+
+      .category-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 24px;
+      }
+
+      .category-card {
+        background: white;
+        border-radius: 16px;
+        padding: 32px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        border: 2px solid transparent;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .category-card::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: linear-gradient(90deg, #0f766e, #7c3aed);
+        transform: scaleX(0);
+        transition: transform 0.3s;
+      }
+
+      .category-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+        border-color: #0f766e;
+      }
+
+      .category-card:hover::before {
+        transform: scaleX(1);
+      }
+
+      .category-icon {
+        font-size: 36px;
+        margin-bottom: 16px;
+      }
+
+      .category-card h3 {
+        font-size: 22px;
+        font-weight: 700;
+        margin-bottom: 8px;
+        color: #0f172a;
+      }
+
+      .method-count {
+        color: #0f766e;
+        font-size: 14px;
+        font-weight: 600;
+        margin-bottom: 16px;
+      }
+
+      .hover-preview {
+        display: none;
+        margin-top: 16px;
+        padding-top: 16px;
+        border-top: 1px solid #e2e8f0;
+      }
+
+      .category-card:hover .hover-preview {
+        display: block;
+      }
+
+      .preview-method {
+        font-size: 13px;
+        color: #64748b;
+        margin-bottom: 6px;
+      }
+
+      /* Trending Section */
+      .trending-section {
+        padding: 80px 32px;
+        background: white;
+      }
+
+      .trending-container {
+        max-width: 1280px;
+        margin: 0 auto;
+      }
+
+      .trending-timeline {
+        display: flex;
+        gap: 20px;
+        overflow-x: auto;
+        padding: 20px 0;
+      }
+
+      .trending-card {
+        min-width: 260px;
+        background: #f8fafc;
+        border-radius: 12px;
+        padding: 20px;
+        border: 2px solid #e2e8f0;
+        cursor: pointer;
+        transition: all 0.2s;
+        position: relative;
+      }
+
+      .trending-card:hover {
+        transform: translateY(-4px);
+        border-color: #0f766e;
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.08);
+      }
+
+      .trending-badge {
+        position: absolute;
+        top: -10px;
+        right: 20px;
+        background: #ec4899;
+        color: white;
+        padding: 4px 12px;
+        border-radius: 12px;
+        font-size: 11px;
+        font-weight: 700;
+      }
+
+      .trending-card h4 {
+        font-size: 16px;
+        font-weight: 600;
+        margin-bottom: 8px;
+        color: #0f172a;
+      }
+
+      .view-count {
+        font-size: 12px;
+        color: #64748b;
+      }
+
+      /* How It Works */
+      .how-it-works {
+        padding: 80px 32px;
+        background: #f8fafc;
+      }
+
+      .works-container {
+        max-width: 1000px;
+        margin: 0 auto;
+      }
+
+      .steps {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 48px;
+      }
+
+      .step {
+        flex: 1;
+        text-align: center;
+        position: relative;
+      }
+
+      .step-number {
+        width: 60px;
+        height: 60px;
+        background: linear-gradient(135deg, #0f766e, #7c3aed);
+        color: white;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 24px;
+        font-weight: 700;
+        margin: 0 auto 20px;
+      }
+
+      .step h3 {
+        font-size: 18px;
+        font-weight: 700;
+        margin-bottom: 12px;
+        color: #0f172a;
+      }
+
+      .step p {
+        font-size: 14px;
+        color: #64748b;
+        line-height: 1.6;
+      }
+
+      .arrow {
+        font-size: 32px;
+        color: #cbd5e1;
+        margin: 0 20px;
+      }
+
+      /* Recommender CTA */
+      .recommender-cta {
+        margin: 80px 32px;
+        background: linear-gradient(135deg, #0f766e, #7c3aed);
+        border-radius: 20px;
+        overflow: hidden;
+      }
+
+      .recommender-content {
+        max-width: 1280px;
+        margin: 0 auto;
+        padding: 60px;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 60px;
+        align-items: center;
+      }
+
+      .recommender-left {
+        color: white;
+      }
+
+      .recommender-left h2 {
+        font-size: 36px;
+        font-weight: 700;
+        margin-bottom: 16px;
+      }
+
+      .recommender-left p {
+        font-size: 18px;
+        opacity: 0.9;
+        line-height: 1.6;
+      }
+
+      .recommender-right {
+        text-align: right;
+      }
+
+      .btn-recommender {
+        padding: 16px 40px;
+        background: white;
+        color: #0f766e;
+        border: none;
+        border-radius: 12px;
+        font-weight: 700;
+        font-size: 18px;
+        cursor: pointer;
+        transition: all 0.3s;
+      }
+
+      .btn-recommender:hover {
+        transform: scale(1.05);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+      }
+
+      /* Latest Contributions */
+      .contributions {
+        padding: 80px 32px;
+        background: white;
+      }
+
+      .contributions-container {
+        max-width: 1280px;
+        margin: 0 auto;
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        gap: 40px;
+      }
+
+      .feedback-posts {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+      }
+
+      .post-card {
+        background: #f8fafc;
+        padding: 24px;
+        border-radius: 12px;
+        border: 1px solid #e2e8f0;
+      }
+
+      .post-card h4 {
+        font-size: 16px;
+        font-weight: 600;
+        margin-bottom: 8px;
+        color: #0f172a;
+      }
+
+      .post-meta {
+        font-size: 12px;
+        color: #64748b;
+        margin-bottom: 12px;
+      }
+
+      .post-card p {
+        font-size: 14px;
+        color: #475569;
+        line-height: 1.6;
+      }
+
+      .community-stats {
+        background: linear-gradient(135deg, #eff6ff, #f5f3ff);
+        padding: 32px;
+        border-radius: 16px;
+        border: 2px solid #e2e8f0;
+      }
+
+      .community-stats h3 {
+        font-size: 20px;
+        font-weight: 700;
+        margin-bottom: 24px;
+        color: #0f172a;
+      }
+
+      .stat-item {
+        margin-bottom: 20px;
+      }
+
+      .stat-label {
+        font-size: 13px;
+        color: #64748b;
+        margin-bottom: 6px;
+      }
+
+      .stat-value {
+        font-size: 28px;
+        font-weight: 700;
+        color: #0f766e;
+      }
+
+      .btn-community {
+        width: 100%;
+        padding: 12px;
+        background: #0f766e;
+        color: white;
+        border: none;
+        border-radius: 10px;
+        font-weight: 600;
+        cursor: pointer;
+        margin-top: 24px;
+      }
+
+      /* Footer */
+      footer {
+        background: #0f172a;
+        color: white;
+        padding: 60px 32px 40px;
+      }
+
+      .footer-content {
+        max-width: 1280px;
+        margin: 0 auto;
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 40px;
+        margin-bottom: 40px;
+      }
+
+      .footer-column h4 {
+        font-size: 16px;
+        font-weight: 600;
+        margin-bottom: 20px;
+      }
+
+      .footer-column ul {
+        list-style: none;
+      }
+
+      .footer-column li {
+        margin-bottom: 12px;
+      }
+
+      .footer-column a {
+        color: #94a3b8;
+        text-decoration: none;
+        font-size: 14px;
+        transition: color 0.2s;
+      }
+
+      .footer-column a:hover {
+        color: white;
+      }
+
+      .footer-bottom {
+        max-width: 1280px;
+        margin: 0 auto;
+        padding-top: 40px;
+        border-top: 1px solid #334155;
+        text-align: center;
+        color: #94a3b8;
+        font-size: 14px;
+      }
+
+      @media (max-width: 768px) {
+        .hero {
+          grid-template-columns: 1fr;
+        }
+
+        .category-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .steps {
+          flex-direction: column;
+        }
+
+        .arrow {
+          transform: rotate(90deg);
+          margin: 20px 0;
+        }
+
+        .recommender-content {
+          grid-template-columns: 1fr;
+        }
+
+        .contributions-container {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Navigation -->
+    <nav>
+      <div class="nav-container">
+        <div class="logo">
+          <div class="logo-mark">📚</div>
+          <span>Wiki·Methods</span>
+        </div>
+        <ul class="nav-menu">
+          <li><a href="#">Methods</a></li>
+          <li><a href="#">Landscapes</a></li>
+          <li><a href="#">Courses</a></li>
+          <li><a href="#">About</a></li>
+        </ul>
+        <div class="nav-right">
+          <input
+            type="text"
+            class="search-bar"
+            placeholder="Search methods..."
+          />
+          <button class="btn-nav">Login</button>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+      <div class="hero-left">
+        <span class="badge">Research Methods Database</span>
+        <h1>Your Guide to Sustainability Research Methods</h1>
+        <p>
+          Comprehensive, expert-curated collection of research methodologies
+          with interactive visualizations and practical guidance for
+          sustainability science.
+        </p>
+        <div class="hero-cta">
+          <button class="btn-hero-primary">Explore Methods</button>
+          <a href="#" class="hero-link">
+            How it works
+            <svg
+              width="16"
+              height="16"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M9 5l7 7-7 7"
+              ></path>
+            </svg>
+          </a>
+        </div>
+        <div class="stats-bar">
+          <div class="stat"><strong>150+</strong> Methods</div>
+          <div class="stat"><strong>12</strong> Categories</div>
+          <div class="stat"><strong>1000+</strong> Researchers</div>
+        </div>
+      </div>
+      <div class="hero-right">
+        <div class="viz-embed">
+          <svg class="viz-placeholder-svg" viewBox="0 0 200 200" fill="none">
+            <circle
+              cx="100"
+              cy="100"
+              r="50"
+              stroke="#0F766E"
+              stroke-width="2"
+              opacity="0.3"
+            />
+            <circle cx="100" cy="100" r="30" fill="#0F766E" opacity="0.2" />
+            <circle cx="70" cy="70" r="15" fill="#7C3AED" opacity="0.4" />
+            <circle cx="130" cy="70" r="15" fill="#EC4899" opacity="0.4" />
+            <circle cx="70" cy="130" r="15" fill="#0F766E" opacity="0.4" />
+            <circle cx="130" cy="130" r="15" fill="#7C3AED" opacity="0.4" />
+          </svg>
+        </div>
+        <span class="category-tag tag-1">Ethnographic</span>
+        <span class="category-tag tag-2">Quantitative</span>
+        <span class="category-tag tag-3">Mixed</span>
+        <span class="category-tag tag-4">Experimental</span>
+      </div>
+    </section>
+
+    <!-- Category Navigation -->
+    <section class="category-section">
+      <div class="category-container">
+        <h2 class="section-title">Explore by Category</h2>
+        <div class="category-grid">
+          <div class="category-card">
+            <div class="category-icon">👥</div>
+            <h3>Ethnographic Methods</h3>
+            <p class="method-count">24 Methods</p>
+            <div class="hover-preview">
+              <div class="preview-method">• Participant Observation</div>
+              <div class="preview-method">• In-depth Interviews</div>
+              <div class="preview-method">• Digital Ethnography</div>
+            </div>
+          </div>
+          <div class="category-card">
+            <div class="category-icon">📊</div>
+            <h3>Quantitative Methods</h3>
+            <p class="method-count">32 Methods</p>
+            <div class="hover-preview">
+              <div class="preview-method">• Survey Research</div>
+              <div class="preview-method">• Statistical Analysis</div>
+              <div class="preview-method">• Regression Models</div>
+            </div>
+          </div>
+          <div class="category-card">
+            <div class="category-icon">🔀</div>
+            <h3>Mixed Methods</h3>
+            <p class="method-count">18 Methods</p>
+            <div class="hover-preview">
+              <div class="preview-method">• Sequential Design</div>
+              <div class="preview-method">• Concurrent Design</div>
+              <div class="preview-method">• Social Network Analysis</div>
+            </div>
+          </div>
+          <div class="category-card">
+            <div class="category-icon">🧪</div>
+            <h3>Experimental</h3>
+            <p class="method-count">16 Methods</p>
+            <div class="hover-preview">
+              <div class="preview-method">• Field Experiments</div>
+              <div class="preview-method">• Lab Experiments</div>
+              <div class="preview-method">• Quasi-Experiments</div>
+            </div>
+          </div>
+          <div class="category-card">
+            <div class="category-icon">📝</div>
+            <h3>Survey Research</h3>
+            <p class="method-count">14 Methods</p>
+            <div class="hover-preview">
+              <div class="preview-method">• Questionnaire Design</div>
+              <div class="preview-method">• Online Surveys</div>
+              <div class="preview-method">• Sampling Strategies</div>
+            </div>
+          </div>
+          <div class="category-card">
+            <div class="category-icon">📚</div>
+            <h3>Case Studies</h3>
+            <p class="method-count">12 Methods</p>
+            <div class="hover-preview">
+              <div class="preview-method">• Single Case Analysis</div>
+              <div class="preview-method">• Comparative Studies</div>
+              <div class="preview-method">• Longitudinal Studies</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Trending This Week -->
+    <section class="trending-section">
+      <div class="trending-container">
+        <h2 class="section-title">Trending This Week</h2>
+        <div class="trending-timeline">
+          <div class="trending-card">
+            <span class="trending-badge">🔥 Trending</span>
+            <h4>Life Cycle Analysis</h4>
+            <p class="view-count">1,245 views</p>
+          </div>
+          <div class="trending-card">
+            <span class="trending-badge">🔥 Trending</span>
+            <h4>Scenario Planning</h4>
+            <p class="view-count">987 views</p>
+          </div>
+          <div class="trending-card">
+            <span class="trending-badge">🔥 Trending</span>
+            <h4>Content Analysis</h4>
+            <p class="view-count">856 views</p>
+          </div>
+          <div class="trending-card">
+            <span class="trending-badge">🔥 Trending</span>
+            <h4>GIS Methods</h4>
+            <p class="view-count">743 views</p>
+          </div>
+          <div class="trending-card">
+            <span class="trending-badge">🔥 Trending</span>
+            <h4>Walking Exercise</h4>
+            <p class="view-count">612 views</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- How It Works -->
+    <section class="how-it-works">
+      <div class="works-container">
+        <h2 class="section-title">How It Works</h2>
+        <div class="steps">
+          <div class="step">
+            <div class="step-number">1</div>
+            <h3>Browse or Search</h3>
+            <p>
+              Explore our comprehensive database of research methods or search
+              for specific approaches
+            </p>
+          </div>
+          <div class="arrow">→</div>
+          <div class="step">
+            <div class="step-number">2</div>
+            <h3>Learn & Compare</h3>
+            <p>
+              Deep dive into method details, see visualizations, and compare
+              different approaches
+            </p>
+          </div>
+          <div class="arrow">→</div>
+          <div class="step">
+            <div class="step-number">3</div>
+            <h3>Apply & Contribute</h3>
+            <p>
+              Use the method in your research and share your experiences with
+              the community
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Recommender CTA -->
+    <section class="recommender-cta">
+      <div class="recommender-content">
+        <div class="recommender-left">
+          <h2>Not sure where to start?</h2>
+          <p>
+            Our intelligent recommender helps you find the perfect research
+            method based on your project requirements, experience level, and
+            research goals.
+          </p>
+        </div>
+        <div class="recommender-right">
+          <button class="btn-recommender">Try Method Recommender</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Latest Contributions -->
+    <section class="contributions">
+      <div class="contributions-container">
+        <div class="feedback-posts">
+          <h2 class="section-title" style="text-align: left">
+            Latest Contributions
+          </h2>
+          <div class="post-card">
+            <h4>Excellent guide to ethnographic fieldwork</h4>
+            <p class="post-meta">Sarah Martinez • 2 days ago • Ethnography</p>
+            <p>
+              This method page provided clear, practical guidance for my
+              community-based research project...
+            </p>
+          </div>
+          <div class="post-card">
+            <h4>Survey design tips were invaluable</h4>
+            <p class="post-meta">James Chen • 3 days ago • Survey Research</p>
+            <p>
+              The questionnaire design section helped me avoid common pitfalls
+              in my sustainability survey...
+            </p>
+          </div>
+          <div class="post-card">
+            <h4>Great visualization of method relationships</h4>
+            <p class="post-meta">Maria Garcia • 5 days ago • Landscapes</p>
+            <p>
+              The interactive network graphs really helped me understand how
+              different methods connect...
+            </p>
+          </div>
+        </div>
+        <div class="community-stats">
+          <h3>Community Stats</h3>
+          <div class="stat-item">
+            <div class="stat-label">Active Researchers</div>
+            <div class="stat-value">1,247</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-label">Contributions</div>
+            <div class="stat-value">3,842</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-label">Methods Reviewed</div>
+            <div class="stat-value">156</div>
+          </div>
+          <button class="btn-community">Join Community</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+      <div class="footer-content">
+        <div class="footer-column">
+          <h4>About</h4>
+          <ul>
+            <li><a href="#">Our Mission</a></li>
+            <li><a href="#">Team</a></li>
+            <li><a href="#">Partners</a></li>
+            <li><a href="#">Contact</a></li>
+          </ul>
+        </div>
+        <div class="footer-column">
+          <h4>Resources</h4>
+          <ul>
+            <li><a href="#">All Methods</a></li>
+            <li><a href="#">Starter Package</a></li>
+            <li><a href="#">Landscapes</a></li>
+            <li><a href="#">Courses</a></li>
+          </ul>
+        </div>
+        <div class="footer-column">
+          <h4>Community</h4>
+          <ul>
+            <li><a href="#">Contribute</a></li>
+            <li><a href="#">Feedback</a></li>
+            <li><a href="#">Forum</a></li>
+            <li><a href="#">Guidelines</a></li>
+          </ul>
+        </div>
+        <div class="footer-column">
+          <h4>Connect</h4>
+          <ul>
+            <li><a href="#">Twitter</a></li>
+            <li><a href="#">GitHub</a></li>
+            <li><a href="#">LinkedIn</a></li>
+            <li><a href="#">Newsletter</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>© 2025 Wiki·Methods. Advancing sustainability research together.</p>
+      </div>
+    </footer>
+  </body>
+</html>
