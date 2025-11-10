@@ -16,6 +16,20 @@ Next.js 15 application replicating the Sustainability Methods Wiki with modern d
   - Browser APIs (localStorage, window, document)
 - **Server Actions** for ALL mutations - see pattern in `lib/actions.ts`
 
+## Server Action Patterns
+
+✅ ALWAYS use for mutations:
+
+- Form submissions (createPost, updatePost, deletePost)
+- Database operations
+- File operations
+
+❌ NEVER use Client Components for:
+
+- Simple data display
+- Static content rendering
+- Wiki content parsing
+
 ### Database & External APIs
 
 - **Prisma singleton pattern**: Import `prisma` from `@/lib/db.ts` (handles dev/prod instances)
@@ -71,6 +85,12 @@ export default function PostForm({ wikiArticle }: PostFormProps) {
   );
 }
 ```
+
+## Chart Components
+
+- ALWAYS use "use client" for D3.js visualizations
+- ALWAYS include cleanup in useEffect
+- ALWAYS use proper TypeScript types from chartTypes.ts
 
 ### D3.js Visualization Pattern
 
@@ -178,3 +198,9 @@ Academic research methods and sustainability content from MediaWiki source. User
 ---
 
 **Domain**: Academic sustainability research methods. Users are researchers and students exploring methodology connections through interactive visualizations and collaborative feedback.
+
+## Wiki-Methods Terminology
+
+- "Methods" = Academic research methods (not HTTP methods)
+- "Wiki content" = Content from sustainabilitymethods.org
+- "Starter data" = Beginner-friendly method recommendations
