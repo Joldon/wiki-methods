@@ -8,6 +8,7 @@ type Post = {
   content: string;
   slug: string;
   wikiArticle?: string;
+  createdAt?: Date | string;
 };
 
 export type PostsDashboardProps = {
@@ -38,6 +39,7 @@ const PostsDashboard = ({
                 content={post.content}
                 slug={post.slug}
                 wikiArticle={post.wikiArticle || undefined}
+                createdAt={post.createdAt}
               />
             </div>
           ))

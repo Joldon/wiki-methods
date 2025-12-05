@@ -66,7 +66,8 @@
 }
 
 /* Uncomment below to enable automatic dark mode based on system preference */
-@media (prefers-color-scheme: light) {
+/* use the below code to implement dark mode switch later */
+/* @media (prefers-color-scheme: dark) {
   :root {
     --color-primary: #fafafa;
     --color-secondary: #3b82f6;
@@ -87,7 +88,7 @@
     --card-rgb: 39, 39, 42;
     --card-border-rgb: 63, 63, 70;
   }
-}
+} */
 
 /* ========================================
    BASE STYLES
