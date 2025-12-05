@@ -12,16 +12,16 @@
   z-index: 10;
   background: var(--color-surface);
   border: 1px solid var(--color-border);
-  border-radius: var(--radius-sm); /* no such variable - check */
+  border-radius: var(--radius-sm);
   padding: 6px 8px;
   cursor: pointer;
   opacity: 0.9;
-  transition: all 0.2s;
+  transition: all var(--transition-fast);
 }
 
 .deleteButton:hover {
-  background: #fee2e2;
-  border-color: #ef4444;
+  background: var(--color-error-light);
+  border-color: var(--color-error);
 }
 
 .postTitle {
@@ -134,9 +134,7 @@
   padding: 4px 10px;
   background: var(--color-surface);
   border: 1px solid var(--color-border);
-  border-radius: var(
-    --radius-lg
-  ); /* there are no global radius varibales. Either create them or asign a different value*/
+  border-radius: var(--radius-lg);
   color: var(--color-text-primary);
   text-decoration: none;
   transition: all var(--transition-base);
@@ -225,21 +223,8 @@
   color: var(--color-text-secondary);
 }
 
-.deleteButton {
-  background: none;
-  border: none;
-  color: red;
-  cursor: pointer;
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  font-size: 1.2em;
-  display: none;
-}
-
-.postCard:hover .deleteButton {
-  display: block;
-}
+/* Delete button visibility is controlled via React state (showDelete) */
+/* The button uses absolute positioning defined at the top of this file */
 
 .wikiReference {
   font-size: 12px;
