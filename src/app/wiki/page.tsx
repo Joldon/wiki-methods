@@ -21,7 +21,7 @@ export default async function WikisPage() {
             >
               <div className={styles.card}>
                 <Image
-                  src="/chart.png"
+                  src="/logo.png"
                   alt={page.title}
                   width={80}
                   height={80}
