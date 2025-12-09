@@ -1,5 +1,5 @@
 // Quick prototype: Balanced Academic
-"use client";
+
 export default function V2Academic() {
   return (
     <iframe

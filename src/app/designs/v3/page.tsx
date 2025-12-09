@@ -1,5 +1,5 @@
 // Quick prototype: Clean Minimalist
-"use client";
+
 export default function V3Minimal() {
   return (
     <iframe
