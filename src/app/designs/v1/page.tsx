@@ -1,5 +1,5 @@
 // Quick prototype: Visual Immersive
-"use client";
+
 export default function V1Visual() {
   return (
     <iframe

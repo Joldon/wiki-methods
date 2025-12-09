@@ -37,7 +37,7 @@
 .filterMessage {
   margin-bottom: 20px;
   padding: 10px;
-  background-color: #f0f8ff;
+  background-color: var(--color-surface);
   border-radius: 4px;
 }
 

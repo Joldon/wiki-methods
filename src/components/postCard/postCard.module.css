@@ -1,24 +1,67 @@
-/* Card link wrapper - makes entire card clickable */
-.cardLink {
-  text-decoration: none;
-  color: inherit;
-  display: block;
+/* Card link wrapper - positions delete button relative to card */
+.postCardWrapper {
+  position: relative;
+  height: 100%;
+}
+
+/* Delete button - absolute positioned over card */
+.deleteButton {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 10;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  padding: 6px 8px;
+  cursor: pointer;
+  opacity: 0.9;
+  transition: all var(--transition-fast);
+}
+
+.deleteButton:hover {
+  background: var(--color-error-light);
+  border-color: var(--color-error);
+}
+
+.postTitle {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+  color: var(--color-text-primary);
+}
+
+/* badge container */
+.badgeContainer {
+  margin-bottom: 0.75rem;
+  font-size: 0.9rem;
+}
+
+.badgeLabel {
+  font-weight: 600;
+  color: var(--color-text-secondary);
 }
 
 /* Article badge */
 .articleBadge {
   display: inline;
-  font-size: 1rem;
-  color: #007bff;
+  font-size: 0.9rem;
+  color: var(--color-secondary);
   text-decoration: underline;
   cursor: pointer;
-  margin-bottom: 12px;
   transition: color 0.2s;
 }
 
 .articleBadge:hover {
-  color: #0056b3;
-  text-decoration: underline;
+  color: var(--color-primary);
+}
+
+/* Content preview */
+.postContent {
+  font-size: 0.95rem;
+  color: var(--color-text-secondary);
+  line-height: 1.6;
+  margin-bottom: 0.75rem;
 }
 
 /* Meta info */
@@ -26,27 +69,24 @@
   display: flex;
   gap: 1rem;
   align-items: center;
-  font-size: 0.95rem;
-  color: #888;
-  margin-bottom: 8px;
+  font-size: 0.9rem;
+  color: var(--color-text-tertiary);
 }
 
 .date {
-  font-size: 0.95em;
-  color: #888;
+  font-size: 0.9em;
+  color: var(--color-text-tertiary);
 }
 
 /* card actions container */
 .cardActions {
   display: flex;
   gap: 12px;
-  padding-top: 16px;
-  border-top: 1px solid #f3f4f6;
-  margin-top: auto;
+  flex-wrap: wrap;
 }
 
 /* primary button */
-.btnPrimary {
+/* .btnPrimary {
   padding: 10px 20px;
   background: #007bff;
   color: white;
@@ -66,7 +106,7 @@
 }
 
 /* Secondary Button { */
-.btnSecondary {
+/* .btnSecondary {
   padding: 10px 20px;
   background: transparent;
   color: #007bff;
@@ -84,6 +124,26 @@
 .btnSecondary:hover {
   background: #007bff;
   color: white;
+} */
+
+/* Bento-style card tag */
+.cardTag {
+  display: inline-block;
+  font-size: var(--font-size-xs);
+  font-weight: 600;
+  padding: 4px 10px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  color: var(--color-text-primary);
+  text-decoration: none;
+  transition: all var(--transition-base);
+}
+
+.cardTag:hover {
+  background: var(--color-primary);
+  color: var(--color-surface);
+  border-color: var(--color-primary);
 }
 
 /* Arrow animation */
@@ -133,7 +193,6 @@
 
 .postCardContainer {
   cursor: pointer;
-  /* new line */
   transition: transform 0.2s ease;
 }
 
@@ -144,7 +203,7 @@
 }
 
 .postCard {
-  background-color: #f5f5f5;
+  background-color: var(--color-surface);
   padding: 20px;
   border-radius: 5px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -161,28 +220,15 @@
 
 .postContent {
   font-size: 14px;
-  color: #555;
+  color: var(--color-text-secondary);
 }
 
-.deleteButton {
-  background: none;
-  border: none;
-  color: red;
-  cursor: pointer;
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  font-size: 1.2em;
-  display: none;
-}
-
-.postCard:hover .deleteButton {
-  display: block;
-}
+/* Delete button visibility is controlled via React state (showDelete) */
+/* The button uses absolute positioning defined at the top of this file */
 
 .wikiReference {
   font-size: 12px;
-  color: #666;
+  color: var(--color-text-secondary);
   margin-bottom: 5px;
 }
 
@@ -207,5 +253,5 @@
   display: block;
 }
 .titleLink:hover {
-  color: #0056b3;
+  color: var(--color-secondary);
 }

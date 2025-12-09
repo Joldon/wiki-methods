@@ -1,6 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import { deletePost } from "@/lib/actions";
+import Card from "../card/card";
 import styles from "./postCard.module.css";
 import Modal from "../modal/modal";
 import Link from "next/link";
@@ -11,6 +12,7 @@ type PostCardProps = {
   id: string;
   slug: string;
   wikiArticle?: string;
+  createdAt?: Date | string; // accept date from database
 };
 
 const PostCard: React.FC<PostCardProps> = ({
@@ -19,7 +21,16 @@ const PostCard: React.FC<PostCardProps> = ({
   id,
   slug,
   wikiArticle,
+  createdAt,
 }) => {
+  // Format date safely - only format if we have a real date from the database
+  const formattedDate = createdAt
+    ? new Date(createdAt).toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "short",
+        day: "numeric",
+      })
+    : null;
   const [showDelete, setShowDelete] = useState(false);
   const [showModal, setShowModal] = useState(false);
 
@@ -29,31 +40,20 @@ const PostCard: React.FC<PostCardProps> = ({
     setShowModal(true);
   };
 
-  // Helper for secondary actions
-  const handleSecondaryClick = (e: React.MouseEvent) => {
-    e.stopPropagation();
-  };
-
   return (
     <>
+      {/* Wrapper for hover detection (delete button visibility) */}
       <article
-        className={`${styles.postCardContainer} ${styles.postCard}`}
+        className={`${styles.postCardWrapper}`}
         onMouseEnter={() => setShowDelete(true)}
         onMouseLeave={() => setShowDelete(false)}
-        tabIndex={0}
-        role="button"
-        aria-label={`Open post: ${title}`}
-        onClick={() => window.location.assign(`/posts/${slug}`)}
-        style={{ cursor: "pointer" }}
       >
-        {/* Delete button (trash icon) */}
+        {/* Delete button - positioned absolute */}
         {showDelete && (
           <button
             className={styles.deleteButton}
-            onClick={(e) => {
-              handleModalOpen(e);
-            }}
-            aria-label="Delete post"
+            onClick={handleModalOpen}
+            aria-label="Delete Post"
           >
             <span className={styles.icon} aria-hidden="true">
               🗑️
@@ -61,56 +61,61 @@ const PostCard: React.FC<PostCardProps> = ({
           </button>
         )}
 
-        {/* Post title */}
-        <h3 className={styles.postTitle}>{title}</h3>
-
-        {/* Wiki article badge */}
-        {wikiArticle && (
-          <span>
-            <span style={{ fontWeight: 600, marginRight: 4 }}>Article: </span>
-            <Link
-              href={`/wiki/${encodeURIComponent(wikiArticle)}`}
-              className={styles.articleBadge}
-              onClick={handleSecondaryClick}
-              aria-label={`Go to article: ${wikiArticle.replace(/_/g, " ")}`}
-            >
-              <span>{wikiArticle.replace(/_/g, " ")}</span>
+        {/* Card without href prop to avoid nested <a> tags. We still use `interactive  for hover effects*/}
+        <Card
+          variant="default"
+          interactive
+          footer={
+            // Footer slot for action
+            <div className={styles.cardActions}>
+              {/* Bento-style tag buttons */}
+              <Link href={`/posts/${slug}`} className={styles.cardTag}>
+                Read More →
+              </Link>
+              {wikiArticle && (
+                <Link
+                  href={`/posts?wiki=${encodeURIComponent(wikiArticle)}`}
+                  className={styles.cardTag}
+                >
+                  All Feedback
+                </Link>
+              )}
+            </div>
+          }
+        >
+          {/* Post title - clickable link to the post */}
+          <h3 className={styles.postTitle}>
+            <Link href={`/posts/${slug}`} className={styles.titleLink}>
+              {title}
             </Link>
-          </span>
-        )}
+          </h3>
 
-        {/* Content preview */}
-        <p className={styles.postContent}>
-          {content && `${content.slice(0, 120)}...`}
-        </p>
-
-        {/* Meta info */}
-        <div className={styles.metaInfo}>
-          <span className={styles.date} aria-label="Date">
-            {new Date().toLocaleDateString()}
-          </span>
-        </div>
-
-        {/* Action buttons */}
-        <div className={styles.cardActions}>
-          <span className={styles.btnPrimary} aria-label="Read more">
-            Read More <span className={styles.arrow}>→</span>
-          </span>
+          {/* Wiki article badge */}
           {wikiArticle && (
-            <Link
-              href={`/posts?wiki=${encodeURIComponent(wikiArticle)}`}
-              className={styles.btnSecondary}
-              onClick={handleSecondaryClick}
-              aria-label={`Show all feedback for ${wikiArticle.replace(
-                /_/g,
-                " "
-              )}`}
-            >
-              <span className={styles.icon}>🔗</span>
-              <span>All Feedback</span>
-            </Link>
+            <div className={styles.badgeContainer}>
+              <span className={styles.badgeLabel}>Article: </span>
+              <Link
+                href={`/wiki/${encodeURIComponent(wikiArticle)}`}
+                className={styles.articleBadge}
+              >
+                {wikiArticle.replace(/_/g, " ")}
+              </Link>
+            </div>
           )}
-        </div>
+          {/* Content preview */}
+          <p className={styles.postContent}>
+            {content && `${content.slice(0, 120)}...`}
+          </p>
+
+          {/* Meta info */}
+          {formattedDate && (
+            <div className={styles.metaInfo}>
+              <span className={styles.date} aria-label="Date">
+                {formattedDate}
+              </span>
+            </div>
+          )}
+        </Card>
       </article>
 
       <Modal

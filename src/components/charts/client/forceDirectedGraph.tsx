@@ -176,11 +176,9 @@ const ForceDirectedGraph: React.FC<ForceDirectedGraphProps> = ({
       .append("text")
       .attr("dy", -10)
       .attr("text-anchor", "middle")
-      .style("fill", "#333")
+      .style("fill", "var(--color-text-primary)")
       .style("font-size", "12px")
-      .style("paint-order", "stroke")
-      .style("stroke", "white")
-      .style("stroke-width", "3px")
+      .style("font-weight", "500")
       .text((d) => d.id.toString());
 
     function ticked() {
@@ -247,7 +245,7 @@ const ForceDirectedGraph: React.FC<ForceDirectedGraphProps> = ({
         style={{
           maxWidth: "100%",
           height: "auto",
-          border: "1px solid #ddd",
+          border: "1px solid var(--color-border)",
           overflow: "visible",
         }}
       />
@@ -258,9 +256,10 @@ const ForceDirectedGraph: React.FC<ForceDirectedGraphProps> = ({
             style={{
               ...floatingStyles,
               position: "absolute",
-              backgroundColor: "white",
+              backgroundColor: "var(--color-surface)",
+              color: "var(--color-text-primary)",
               padding: "8px",
-              border: "1px solid #ddd",
+              border: "1px solid var(--color-border)",
               borderRadius: "4px",
               fontSize: "12px",
 

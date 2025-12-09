@@ -36,6 +36,7 @@ const PostsPage = async ({
       content: true,
       slug: true,
       wikiArticle: true,
+      createdAt: true,
     },
     orderBy: {
       createdAt: "desc",

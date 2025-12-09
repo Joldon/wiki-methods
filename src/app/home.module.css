@@ -1,45 +1,3 @@
-src/styles/Home.module.css
-
-/* .container {
-  padding: 20px;
-}
-
-.card-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 20px;
-}
-
-.card {
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  padding: 20px;
-  text-align: center;
-  text-decoration: none;
-  color: inherit;
-  cursor: pointer;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;  */
-  /* Ensures content is spaced evenly */
-  /* height: 100%;  */
-  /* Makes all cards of equal height */
-/* } */
-
-/* .card img { */
-  /* width: 80px;  */
-  /* Sets a fixed width for the image */
-  /* height: 80px;  */
-  /* Sets a fixed height for the image */
-  /* object-fit: cover;  */
-  /* Ensures the image covers the set area without distorting aspect ratio */
-/* } */
-
-/* src/styles/Home.module.css */
-
-
-
-
 /* RIGHT NOW THIS IS USED FOR PAGE.TSX with grid of containers. 
 The below code should be removed together with crads grids page on the new route */
 .container {
@@ -54,10 +12,10 @@ The below code should be removed together with crads grids page on the new route
 
 .card {
   background-color: rgb(
-    var(--card-rgb)
+    var(--color-surface)
   ); /* Card background color from global styles */
-  border: 1px solid rgba(var(--card-border-rgb), 0.5); /* Lighter border from global styles */
-  border-radius: var(--border-radius); /* Using global style for consistency */
+  border: 1px solid var(--color-border); /* Using global style for consistency */
+  border-radius: var(--radius-md); /* Using global style for consistency */
   padding: 20px;
   text-align: center;
   text-decoration: none;
@@ -76,7 +34,7 @@ The below code should be removed together with crads grids page on the new route
 .card:hover {
   transform: scale(1.08); /* Slightly enlarges the card */
   box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.3); /* Increased shadow on hover for depth effect */
-  background-color: rgba(var(--card-rgb), 0.2);
+  background-color: var(--color-background);
   /* Slightly lighter or darker on hover */
 }
 

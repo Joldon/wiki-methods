@@ -8,22 +8,22 @@
   text-align: center;
   font-size: 2.5em;
   margin-bottom: 20px;
-  color: #333;
+  color: var(--color-text-primary);
 }
 
 .containerIntro {
-  background-color: #f9f9f9;
+  background-color: var(--color-surface);
   padding: 20px;
   margin: 20px 0;
   border-radius: 8px;
-  box-shadow:  0 2px 4px #ccc;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
 }
 
 .introText {
   padding: 10px;
   /* margin: 10px 0; */
   line-height: 1.6;
-  color: #555;
+  color: var(--color-text-secondary);
 }
 
 .link {
@@ -40,7 +40,7 @@
 .sidebar {
   flex: 1;
   padding: 20px;
-  border-right: 1px solid #ccc;
+  border-right: 1px solid var(--color-border);
 }
 
 .mainContent {
@@ -52,7 +52,7 @@
   text-align: center;
   font-size: 2em;
   margin-bottom: 20px;
-  color: #333;
+  color: var(--color-text-primary);
 }
 
 .noMatch {
@@ -65,19 +65,21 @@
 }
 
 .methodCard {
-  border: 1px solid #ccc;
+  border: 1px solid var(--color-border);
   border-radius: 8px;
   padding: 20px;
   margin-bottom: 20px;
-  box-shadow: 0 2px 4px #0000001a; /* rgba(0, 0, 0, 0.1); */
-  background-color: #f9f9f9;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  background-color: var(--color-surface);
   transition: transform 0.3s ease, box-shadow 0.3s ease; /* Smooth transitions for hover effects */
 }
 
 .methodCard:hover {
   transform: scale(1.08); /* Slightly enlarges the card */
-  box-shadow: 5px 5px 15px #0000004d; /* Increased shadow on hover for depth effect */
-  background-color: #f9f9f9cc; /* Slightly lighter or darker on hover */
+  box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.3); /* Increased shadow on hover for depth effect */
+  background-color: var(
+    --color-surface
+  ); /* Slightly lighter or darker on hover */
 }
 
 .submitButton {

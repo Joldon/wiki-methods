@@ -2,10 +2,10 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #f5f5f5;
-  border-radius: 4px;
-  border: 1px solid #e0e0e0;
-  color: #666;
+  background: var(--color-surface);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-border);
+  color: var(--color-text-secondary);
   font-size: 14px;
   flex-direction: column;
 }
@@ -22,14 +22,14 @@
   width: 2rem;
   height: 2rem;
   margin-bottom: 0.5rem;
-  color: #e5e7eb;
-  fill: #2563eb;
+  color: var(--color-text-tertiary);
+  fill: var(--color-secondary);
   animation: spin 1s linear infinite;
 }
 
 @media (prefers-color-scheme: dark) {
   .chartSpinner {
-    color: #4b5563;
+    color: var(--color-text-secondary);
   }
 }
 
