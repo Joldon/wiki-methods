@@ -2,23 +2,38 @@
 
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
+import { PrismaClientKnownRequestError } from "@prisma/client/runtime/client";
 import prisma from "./db";
-import { Post } from "@prisma/client";
+import type { Post } from "../../prisma/generated/prisma/client";
 
 export const createPost = async (formData: FormData) => {
   try {
     const wikiArticle = formData.get("wikiArticle") as string | null;
+    const title = formData.get("title") as string;
+    const content = formData.get("content") as string;
+
+    // generate base slug
+    let slug = title
+      .trim()
+      .replace(/[^a-z0-9\s-]/g, "")
+      .replace(/\s+/g, "-")
+      .toLowerCase();
+
+    // check if slug already exists and append timestamp if it does
+    const existingPost = await prisma.post.findUnique({
+      where: { slug },
+    });
+
+    if (existingPost) {
+      // append timestamp to make slug unique
+      slug = `${slug}-${Date.now()}`;
+    }
 
     const post: Post = await prisma.post.create({
       data: {
-        title: formData.get("title") as string,
-        slug: (formData.get("title") as string)
-          .trim()
-          .replace(/[^a-z0-9\s-]/g, "")
-          .replace(/\s+/g, "-")
-          .toLowerCase(),
-        content: formData.get("content") as string,
+        title,
+        slug,
+        content,
         wikiArticle: wikiArticle || null,
       },
     });
@@ -41,7 +56,7 @@ export const createPost = async (formData: FormData) => {
     // Handle actual Prisma errors
     if (
       error instanceof PrismaClientKnownRequestError &&
-      error.code === "P2002"
+      (error as PrismaClientKnownRequestError).code === "P2002"
     ) {
       const wikiArticle = formData.get("wikiArticle") as string | null;
       if (wikiArticle) {
