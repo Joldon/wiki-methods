@@ -35,7 +35,8 @@ Next.js 15 application replicating the Sustainability Methods Wiki with modern d
 - **Prisma singleton pattern**: Import `prisma` from `@/lib/db.ts` (handles dev/prod instances)
 - **MediaWiki integration**: Use `fetchPageContent()` and `fetchAllEntries()` from `@/lib/fetchData.ts`
 - **Image proxy**: Next.js rewrites `/images/*` to external wiki domain (see `next.config.mjs`)
-- **Type safety**: Use Prisma-generated types `import { Post, User } from "@prisma/client"`
+- **Type safety**: Use Prisma-generated types `import { Post, User } from "@generated/prisma/client.js"`
+- **Prisma errors**: Import error types from `@prisma/client/runtime/client`
 
 ## Component Patterns
 
@@ -150,7 +151,7 @@ Academic research methods and sustainability content from MediaWiki source. User
 - **Start Development**: `npm run dev --turbopack` (uses Turbopack for faster builds)
 - **Database Setup**: `npx prisma generate` (auto-runs on `npm install`)
 - **Schema Changes**: Use `npx prisma db push` for development
-- **Type Generation**: Prisma types auto-generated, import from `@prisma/client`
+- **Type Generation**: Prisma types auto-generated in `prisma/generated/prisma/`, import from `@generated/prisma/client.js`
 
 ## Coding Guidelines
 
