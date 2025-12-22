@@ -1,0 +1,106 @@
+.hero {
+  margin-top: var(--spacing-3xl); /* 64px */
+  padding: var(--spacing-4xl) var(--spacing-xl); /* 160px 40px */
+  text-align: center;
+  min-width: 1200px;
+
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.heroTag {
+  display: inline-block;
+  font-size: var(--font-size-xs);
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--color-text-secondary);
+  margin-bottom: var(--spacing-xl);
+}
+
+.heroTitle {
+  font-size: var(--font-size-3xl);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+  margin-bottom: var(--spacing-lg);
+  color: var(--color-primary);
+}
+
+.heroSubheading {
+  font-size: var(--font-size-lg);
+  color: var(--color-text-secondary);
+  max-width: 600px;
+  margin: 0 auto var(--spacing-2xl);
+  line-height: 1.7;
+}
+.heroCta {
+  margin-bottom: var(--spacing-3xl); /* 80px ≈ 64px, closest is spacing-3xl */
+}
+
+.btnExplore {
+  padding: var(--spacing-md) var(--spacing-2xl); /* 16px 48px */
+  background: var(--color-primary);
+  color: white;
+  border: none;
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  font-size: var(--font-size-base);
+  cursor: pointer;
+  transition: all var(--transition-base);
+
+  box-shadow: 0 4px 12px var(--color-primary), 0.15; /* If you want to use the primary color variable */
+}
+
+.btnExplore:hover {
+  transform: translateY(-2px);
+
+  box-shadow: 0 8px 20px var(--color-primary), 0.25;
+}
+
+.btnExplore:active {
+  transform: scale(0.98);
+}
+
+.heroIllustration {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: var(--spacing-xl);
+}
+
+.connectionLines {
+  width: 100%;
+  height: auto;
+
+  columns: var(--color-primary);
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .hero {
+    padding: var(--spacing-3xl) var(--spacing-lg); /* 120px ≈ 96px (spacing-4xl) or 64px (spacing-3xl) */
+    margin-top: var(--spacing-3xl); /* 64px */
+  }
+  .heroTag {
+    font-size: 10px;
+    margin-bottom: var(--spacing-lg);
+  }
+  .heroTitle {
+    font-size: var(--font-size-3xl); /* 40px */
+    margin-bottom: var(--spacing-md);
+  }
+  .heroSubheading {
+    font-size: var(--font-size-base);
+    margin-bottom: var(--spacing-xl);
+  }
+  .heroCta {
+    margin-bottom: var(--spacing-2xl); /* 60px ≈ 48px (spacing-2xl) */
+  }
+  .btnExplore {
+    padding: var(--spacing-sm) var(--spacing-xl); /* 14px ≈ 8px (spacing-sm), 36px ≈ 32px (spacing-xl) */
+    font-size: var(--font-size-sm); /* 14px */
+  }
+  .heroIllustration {
+    padding: var(--spacing-lg);
+  }
+}
