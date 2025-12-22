@@ -1,0 +1,61 @@
+.valueProp {
+  padding: var(--spacing-4xl) var(--spacing-2xl); /* ~96px 32px */
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.valueCards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--spacing-3xl); /* 64px */
+}
+
+.valueCard {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.iconWrapper {
+  margin-bottom: var(--spacing-lg);
+  color: var(--color-primary);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.valueIcon {
+  width: 48px;
+  height: 48px;
+}
+
+.cardTitle {
+  font-size: var(--font-size-xl);
+  font-weight: 600;
+  margin-bottom: var(--spacing-md);
+  color: var(--color-primary);
+}
+
+.cardDescription {
+  font-size: var(--font-size-base);
+  color: var(--color-text-secondary);
+  line-height: 1.7;
+  max-width: 300px; /* Prevent text from getting too wide */
+  margin: 0 auto;
+}
+
+@media (max-width: 768px) {
+  .valueProp {
+    padding: var(--spacing-3xl);
+  }
+
+  .valueCards {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-2xl);
+  }
+
+  .valueCard {
+    padding: var(--spacing-md);
+  }
+}
