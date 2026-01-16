@@ -21,12 +21,16 @@
 }
 
 .interactive:hover {
-  transform: translate(-4px);
+  transform: translateY(-4px);
   border-color: var(--color-text-primary); /* darker color on hover*/
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
 }
 
-/* VARIANTS: Size/padding adjustments */
+.interactive:active {
+  transform: translateY(-2px);
+}
+
+/* CARD VARIANTS: Size/padding adjustments */
 .featured {
   background: linear-gradient(
     135deg,
@@ -37,22 +41,123 @@
 }
 
 .compact {
-  padding: var(--spacing-lg);
+  padding: var(--spacing-md);
+  border-radius: var(--radius-md);
 }
 
-/* SLOTS: Internal layout */
+/* SLOTS: Card Internal layout */
 .header {
   margin-bottom: var(--spacing-md);
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-xs);
 }
 
 .body {
   flex: 1; /* Push footer to bottom */
   display: flex;
   flex-direction: column;
+  gap: var(--spacing-sm);
 }
 
 .footer {
   margin-top: auto; /* Stick to bottom */
   padding-top: var(--spacing-md);
   border-top: 1px solid var(--color-border);
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-sm);
+}
+
+/*  COMMON CARD CONTENT ELEMENTS */
+/* Card titles can be overridden locally */
+.card :global(h3),
+.card :global(h4) {
+  font-weight: 600;
+  color: var(--color-text-primary);
+  margin: 0 0 var(--spacing-xs) 0;
+  line-height: 1.3;
+}
+
+.card :global(h3) {
+  font-size: var(--font-size-lg);
+}
+
+.card :global(h4) {
+  font-size: var(--font-size-base);
+}
+
+.card :global(p) {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* REUSABLE TAG COMPONENT
+   Use with Card header slot */
+
+.tag {
+  display: inline-block;
+  padding: var(--spacing-xs) 10px;
+  font-size: var(--font-size-xs);
+  font-weight: 600;
+  color: var(--color-text-secondary);
+  background: var(--color-background);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+}
+
+/* tag variants */
+.tagPrimary {
+  background: var(--color-primary);
+  color: var(--color-surface);
+  border-color: var(--color-primary);
+}
+
+.tagSecondary {
+  background: var(--color-secondary);
+  color: var(--color-surface);
+  border-color: var(--color-secondary);
+}
+
+.tagAccent {
+  background: var(--color-accent);
+  color: var(--color-surface);
+  border-color: var(--color-accent);
+}
+
+/* Interactive tag (clickable) */
+.tagLink {
+  cursor: pointer;
+  transition: all var(--transition-base);
+}
+
+.tagLink:hover {
+  background: var(--color-primary);
+  color: var(--color-surface);
+  border-color: var(--color-primary);
+  transform: translateY(-1px);
+}
+
+/*  RESPONSIVE BEHAVIOR */
+@media (max-width: 768px) {
+  .card {
+    padding: var(--spacing-md);
+  }
+
+  .featured {
+    padding: var(--spacing-xl);
+  }
+
+  .card :global(h3) {
+    font-size: var(--font-size-base);
+  }
+
+  .card :global(h4) {
+    font-size: var(--font-size-sm);
+  }
 }
