@@ -8,8 +8,12 @@ export type FeaturedMethod = {
   tag: string;
 };
 
+//UTILITY FUNCTIONS
+
 // Helper to convert method name to slug
-const toSlug = (name: string) => name.replace(/\s+/g, "_");
+const toSlug = (title: string) => title.replace(/\s+/g, "_");
+
+const capitalize = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
 
 // Helper to get a random item from an array
 const getRandomItem = <T>(arr: T[]) =>
@@ -30,22 +34,6 @@ const getMethodTag = (method: MethodType): string => {
       .filter(([, v]) => v)
       .map(([k]) => k)
   );
-
-  // Collect all true properties as potential tags
-  //   const potentialTags = [
-  //     ...Object.entries(type)
-  //       .filter(([, v]) => v)
-  //       .map(([k]) => k),
-  //     ...Object.entries(reasoning)
-  //       .filter(([, v]) => v)
-  //       .map(([k]) => k),
-  //     ...Object.entries(level)
-  //       .filter(([, v]) => v)
-  //       .map(([k]) => k),
-  //     ...Object.entries(time)
-  //       .filter(([, v]) => v)
-  //       .map(([k]) => k),
-  //   ];
 
   // Capitalize and return a random tag, or default to "Method"
   const tag = getRandomItem(potentialTags) || "Method";
