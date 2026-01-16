@@ -2,7 +2,7 @@
 
 import { useState, useMemo } from "react";
 import Link from "next/link";
-import Card from "@/components/card/card";
+import Card, { cardTagStyles } from "@/components/card/card";
 import Button from "@/components/buttons/button";
 import type { WikiEntry } from "@/lib/types";
 import { starterData, type MethodType } from "@/lib/starterData";
@@ -42,7 +42,7 @@ const TABS: TabConfig[] = [
 const METHODS_PER_PAGE = 8;
 const MAX_HOMEPAGE_METHODS = 24;
 
-type Props = {
+type BrowserProps = {
   methods: WikiEntry[];
   dataFallback: boolean;
 };
@@ -51,7 +51,10 @@ type Props = {
  * Client Component - Handles interactive features (tabs, pagination)
  * Receives pre-fetched data from Server Component parent
  */
-export default function MethodBrowserClient({ methods, dataFallback }: Props) {
+export default function MethodBrowserClient({
+  methods,
+  dataFallback,
+}: BrowserProps) {
   const [activeTab, setActiveTab] = useState<TabType>("type");
   const [visibleCount, setVisibleCount] = useState(METHODS_PER_PAGE);
 
@@ -201,7 +204,7 @@ export default function MethodBrowserClient({ methods, dataFallback }: Props) {
               className={styles.methodCard}
               header={
                 <div className={styles.cardHeader}>
-                  <span className={styles.tag}>{tag}</span>
+                  <span className={cardTagStyles.tag}>{tag}</span>
                 </div>
               }
             >

@@ -105,65 +105,15 @@
   margin-bottom: var(--spacing-2xl);
 }
 
-.methodCard {
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-md);
-  padding: var(--spacing-lg);
-  transition: all var(--transition-base);
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-md);
-  min-height: 140px;
-}
-
-.methodCard:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-  border-color: var(--color-primary);
-}
-
+/* Card header - method browser specific layout */
 .cardHeader {
   display: flex;
   justify-content: flex-start;
   align-items: center;
-  margin-bottom: var(--spacing-xs);
 }
 
-/* Tag Container */
-.tagContainer {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--spacing-xs);
-  margin-bottom: var(--spacing-sm);
-}
-
-.tag {
-  display: inline-block;
-  padding: var(--spacing-xs) var(--spacing-sm);
-  font-size: var(--font-size-xs);
-  font-weight: 600;
-  color: var(--color-text-secondary);
-  background: var(--color-background);
-  border-radius: var(--radius-sm);
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-/* Method Content */
-.methodTitle {
-  font-size: var(--font-size-base);
-  font-weight: 600;
-  color: var(--color-text-primary);
-  margin: 0 0 var(--spacing-sm) 0;
-  line-height: 1.4;
-}
-
+/* Method description override (optional, inherits from Card by default) */
 .methodDescription {
-  font-size: var(--font-size-sm);
-  color: var(--color-text-secondary);
-  line-height: 1.6;
-  margin: 0;
   flex-grow: 1;
 }
 
@@ -269,19 +219,6 @@
     margin-bottom: var(--spacing-xl);
   }
 
-  .methodCard {
-    padding: var(--spacing-md);
-    min-height: auto;
-  }
-
-  .methodTitle {
-    font-size: var(--font-size-base);
-  }
-
-  .methodDescription {
-    font-size: var(--font-size-xs);
-  }
-
   .loadMoreButton,
   .viewAllButton {
     width: 100%;
@@ -302,11 +239,6 @@
 @media (max-width: 480px) {
   .container {
     padding: var(--spacing-2xl) var(--spacing-md);
-  }
-
-  .tag {
-    font-size: 10px;
-    padding: 3px 8px;
   }
 
   .fallbackNotice {
