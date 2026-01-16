@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import { deletePost } from "@/lib/actions";
-import Card from "../card/card";
+import Card, { cardTagStyles } from "../card/card";
 import styles from "./postCard.module.css";
 import Modal from "../modal/modal";
 import Link from "next/link";
@@ -69,13 +69,16 @@ const PostCard: React.FC<PostCardProps> = ({
             // Footer slot for action
             <div className={styles.cardActions}>
               {/* Bento-style tag buttons */}
-              <Link href={`/posts/${slug}`} className={styles.cardTag}>
+              <Link
+                href={`/posts/${slug}`}
+                className={`${cardTagStyles.tag} ${cardTagStyles.tagLink}`}
+              >
                 Read More →
               </Link>
               {wikiArticle && (
                 <Link
                   href={`/posts?wiki=${encodeURIComponent(wikiArticle)}`}
-                  className={styles.cardTag}
+                  className={`${cardTagStyles.tag} ${cardTagStyles.tagLink}`}
                 >
                   All Feedback
                 </Link>

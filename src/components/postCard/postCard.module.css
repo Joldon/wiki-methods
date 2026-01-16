@@ -126,26 +126,6 @@
   color: white;
 } */
 
-/* Bento-style card tag */
-.cardTag {
-  display: inline-block;
-  font-size: var(--font-size-xs);
-  font-weight: 600;
-  padding: 4px 10px;
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-lg);
-  color: var(--color-text-primary);
-  text-decoration: none;
-  transition: all var(--transition-base);
-}
-
-.cardTag:hover {
-  background: var(--color-primary);
-  color: var(--color-surface);
-  border-color: var(--color-primary);
-}
-
 /* Arrow animation */
 .arrow {
   transition: transform 0.2s;
