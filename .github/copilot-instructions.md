@@ -141,6 +141,9 @@ export const createPost = async (formData: FormData) => {
 - Import order: React → Next.js → External → Internal → Styles
 - PascalCase components, descriptive names
 - Proper error handling with user-friendly messages
+- Consistent async/await usage according to Next.js 15 best practices.
+
+  **Modern JavaScript**: Avoid legacy constructs such as `for` loops for array processing. Always use ES6+ higher-order array methods (`map`, `filter`, `reduce`, `sort`, etc.) for iteration, transformation, and filtering. This ensures code is concise, readable, and maintainable.
 
 ## Domain Context
 

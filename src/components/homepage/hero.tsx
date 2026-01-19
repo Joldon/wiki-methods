@@ -6,7 +6,7 @@ const Hero = () => {
   return (
     <section className={styles.hero}>
       <span className={styles.heroTag}>Knowledge Base</span>
-      <h1 className={styles.heroTitle}>Reserch Methods, Simplified</h1>
+      <h1 className={styles.heroTitle}>Research Methods, Simplified</h1>
       <p className={styles.heroSubheading}>
         A curated collection of research methodologies for social sciences
       </p>

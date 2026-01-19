@@ -66,4 +66,13 @@ const Card: React.FC<CardProps> = ({
   );
 };
 
+// Export tag styles for reuse
+export const cardTagStyles = {
+  tag: styles.tag,
+  tagPrimary: styles.tagPrimary,
+  tagSecondary: styles.tagSecondary,
+  tagAccent: styles.tagAccent,
+  tagLink: styles.tagLink,
+};
+
 export default Card;
