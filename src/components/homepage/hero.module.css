@@ -2,8 +2,8 @@
   margin-top: var(--spacing-3xl); /* 64px */
   padding: var(--spacing-4xl) var(--spacing-xl); /* 160px 40px */
   text-align: center;
-  min-width: 1200px;
-
+  max-width: 1200px;
+  width: 100%;
   margin-left: auto;
   margin-right: auto;
 }
@@ -49,13 +49,17 @@
   cursor: pointer;
   transition: all var(--transition-base);
 
-  box-shadow: 0 4px 12px var(--color-primary), 0.15; /* If you want to use the primary color variable */
+  box-shadow:
+    0 4px 12px var(--color-primary),
+    0.15; /* If you want to use the primary color variable */
 }
 
 .btnExplore:hover {
   transform: translateY(-2px);
 
-  box-shadow: 0 8px 20px var(--color-primary), 0.25;
+  box-shadow:
+    0 8px 20px var(--color-primary),
+    0.25;
 }
 
 .btnExplore:active {

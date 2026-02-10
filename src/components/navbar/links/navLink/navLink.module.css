@@ -1,0 +1,44 @@
+/* NAVIGATION LINK ITEM */
+.container {
+  padding: var(--spacing-sm) var(--spacing-lg);
+  font-size: var(--font-size-base);
+  font-weight: 500;
+  color: var(--color-text-secondary);
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: var(--radius-md);
+  transition: all var(--transition-base);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+}
+
+.container:hover {
+  color: var(--color-primary);
+  background: var(--color-background);
+  border-color: var(--color-border);
+}
+
+/* Active state - similar to method browser tabs */
+.active {
+  color: var(--color-surface);
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+}
+
+.active:hover {
+  color: var(--color-surface);
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+  opacity: 0.9;
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  .container {
+    width: 100%;
+    justify-content: center;
+    padding: var(--spacing-md) var(--spacing-lg);
+  }
+}

@@ -1,0 +1,46 @@
+/*  NAVBAR - Fixed Navigation Bar */
+
+.nav {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  background: var(--color-surface);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--color-border);
+  z-index: 1000;
+  height: 64px;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 var(--spacing-xl);
+  height: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo {
+  font-size: 17px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  color: var(--color-primary);
+  transition: opacity var(--transition-base);
+}
+
+.logo:hover {
+  opacity: 0.7;
+}
+
+/*   RESPONSIVE */
+@media (max-width: 768px) {
+  .container {
+    padding: 0 var(--spacing-lg);
+  }
+
+  .menuToggle {
+    display: flex;
+  }
+}
