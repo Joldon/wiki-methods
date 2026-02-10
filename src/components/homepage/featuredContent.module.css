@@ -104,8 +104,9 @@
 
   .spanLarge,
   .spanWide {
-    grid-column: span1;
+    grid-column: span 1;
     grid-row: auto;
+    min-height: auto;
   }
 
   .cardTitleLarge {
