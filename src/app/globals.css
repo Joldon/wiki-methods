@@ -37,8 +37,8 @@
   --spacing-4xl: 96px;
 
   /* Typography */
-  --font-family-base: "Inter Tight", -apple-system, BlinkMacSystemFont,
-    "Segoe UI", sans-serif;
+  --font-family-base:
+    "Inter Tight", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   --font-size-xs: 11px;
   --font-size-sm: 13px;
   --font-size-base: 15px;
@@ -61,7 +61,8 @@
   /* Legacy variables (for backward compatibility) */
   --max-width: 1100px;
   --border-radius: 12px;
-  --font-mono: ui-monospace, Menlo, Monaco, "Cascadia Mono", "Segoe UI Mono",
+  --font-mono:
+    ui-monospace, Menlo, Monaco, "Cascadia Mono", "Segoe UI Mono",
     "Roboto Mono", "Oxygen Mono", "Ubuntu Monospace", "Source Code Pro",
     "Fira Mono", "Droid Sans Mono", "Courier New", monospace;
 
