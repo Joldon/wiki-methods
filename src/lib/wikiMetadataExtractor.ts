@@ -67,7 +67,7 @@ const IMAGE_CODE_MAP: Readonly<Record<string, keyof DesignCriteriaFields>> = {
 };
 
 // Pages to skip during sync (meta-pages, not articles)
-export const EXCLUDED_PAGES = new Set([
+export const EXCLUDED_PAGES: ReadonlySet<string> = new Set([
   "Main_Page",
   "Methods",
   "All_Entries",
@@ -91,29 +91,6 @@ const createEmptyDesignCriteriaFields = (): DesignCriteriaFields => ({
   past: false,
   present: false,
   future: false,
-});
-
-//  UI helper: MethodArticle -> nested shape for MethodBrowserClient
-/**
- * Converts a stored Prisma MethodArticle into the nested design criteria
- * shape expected by MethodBrowserClient / starterData MethodType.
- */
-export const extractDesignCriteria = (article: MethodArticle) => ({
-  type: {
-    quantitative: article.quantitative,
-    qualitative: article.qualitative,
-  },
-  reasoning: { deductive: article.deductive, inductive: article.inductive },
-  level: {
-    individual: article.individual,
-    system: article.system,
-    global: article.global,
-  },
-  time: {
-    past: article.past,
-    present: article.present,
-    future: article.future,
-  },
 });
 
 //  Strategy 1: MediaWiki API categories
@@ -253,7 +230,29 @@ export const extractDescription = (html: string): string | null => {
  * 1. MediaWiki API categories (structured, most reliable)
  * 2. Image filename parsing (fast, unambiguous)
  * 3. Bold text parsing (last resort)
+ *
+ * articleType rule: any article where design criteria are found by any strategy
+ * is classified as METHOD. The normativity boolean flag independently records
+ * whether the page also belongs to the "Normativity of Methods" category.
  */
+
+// Internal helper — assembles the return value for Strategy 2 and Strategy 3.
+// Keeps articleType logic in one place and eliminates duplicated return blocks.
+
+const buildFallbackMetadata = (
+  description: string | null,
+  criteria: DesignCriteriaFields,
+  categoryData: Pick<ExtractedMetadata, "normativity" | "wikiCategories">,
+): ExtractedMetadata => ({
+  description,
+  ...criteria,
+  normativity: categoryData.normativity,
+  // Criteria were found — this is a METHOD regardless of what categories inferred.
+  // normativity: true is preserved above as a separate orthogonal flag.
+  articleType: "METHOD",
+  wikiCategories: categoryData.wikiCategories,
+});
+
 export const extractArticleMetadata = (
   html: string,
   wikiCategories: Array<{ ns: number; title: string }>,
@@ -273,34 +272,20 @@ export const extractArticleMetadata = (
   // Strategy 2: Image filename
   const imageDesignCriteria = extractFromImageFilename(html);
   if (imageDesignCriteria) {
-    return {
+    return buildFallbackMetadata(
       description,
-      ...imageDesignCriteria,
-      normativity: categoryData.normativity,
-      articleType:
-        categoryData.articleType === "OTHER"
-          ? "METHOD"
-          : categoryData.articleType, // if image exists, likely a method
-      wikiCategories: categoryData.wikiCategories,
-    };
+      imageDesignCriteria,
+      categoryData,
+    );
   }
 
   // Strategy 3: Bold text fallback
   const boldDesignCriteria = extractFromBoldText(html);
   if (boldDesignCriteria) {
-    return {
-      description,
-      ...boldDesignCriteria,
-      normativity: categoryData.normativity,
-      articleType:
-        categoryData.articleType === "OTHER"
-          ? "METHOD"
-          : categoryData.articleType, // if categorization exists, likely a method
-      wikiCategories: categoryData.wikiCategories,
-    };
+    return buildFallbackMetadata(description, boldDesignCriteria, categoryData);
   }
 
-  // No design criteria found
+  // No design criteria found by any strategy
   return {
     description,
     ...createEmptyDesignCriteriaFields(),
