@@ -1,6 +1,6 @@
 import type { MethodArticle, Prisma } from "@generated/prisma/browser";
 import prisma from "./db";
-import { fetchPageContent } from "./fetchData";
+import { fetchPageContentStrict } from "./fetchData";
 import {
   extractArticleMetadata,
   EXCLUDED_PAGES,
@@ -72,7 +72,7 @@ const fetchPageCategories = async (
   const url =
     `${API_URL}?action=query&titles=${encodeURIComponent(title)}` +
     `&prop=categories&cllimit=max&format=json`;
-  const res = await fetch(url);
+  const res = await fetch(url, { cache: "no-store" }); // Disable caching to ensure we get the most up-to-date categories, especially during sync
   if (!res.ok) throw new Error(`MediaWiki API error: ${res.status}`);
   const data = await res.json();
 
@@ -135,12 +135,11 @@ export const syncWiki = async (): Promise<{
       const acc = await accPromise; // wait for previous iteration to complete
       try {
         // Fetch content and categories concurrently for the same page.
-        // NOTE: fetchPageContent (from fetchData.ts) swallows errors and returns
-        // a fallback string instead of throwing. In that edge case,
-        // extractArticleMetadata will produce an "OTHER"-typed record with no criteria.
-        // Consider having fetchPageContent re-throw in a sync context.
+        // fetchPageContentStrict throws on failure so this page is counted
+        // as an error rather than silently upserting placeholder metadata.
+
         const [html, categories] = await Promise.all([
-          fetchPageContent(page.title),
+          fetchPageContentStrict(page.title),
           fetchPageCategories(page.title),
         ]);
 
