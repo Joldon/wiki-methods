@@ -30,52 +30,51 @@ export const fetchAllEntries = async (): Promise<WikiEntry[]> => {
 //   return data.parse.text["*"];
 // };
 
-// new version of fetchPageContent that checks for data.parse and data.parse.text before accessing data.parse.text["*"]
-// This prevents the code from breaking if the expected properties are not present
-// For example, if the original Wiki article is called "Experiments" but in starterData.ts it is called "Experiment"
-// then the API will return an error message instead of the expected data structure
-// if the page does not exist, the API will return an error message instead of the expected data structure
-
-export const fetchPageContent = async (title: string): Promise<string> => {
-  const BASE_URL = "https://sustainabilitymethods.org/"; // Define the base URL for the wiki to avoid any type errors
-  try {
-    const response = await fetch(
-      `${API_URL}?action=parse&page=${title}&format=json`,
+// Internal core - shared by both public exports
+// Throws on any failure. No catch block
+const fetchPageContentCore = async (title: string): Promise<string> => {
+  const BASE_URL = "https://sustainabilitymethods.org/";
+  const response = await fetch(
+    `${API_URL}?action=parse&page=${encodeURIComponent(title)}&format=json`,
+  );
+  if (!response.ok) {
+    throw new Error(`HTTP error! Status: ${response.status} `);
+  }
+  const data: WikiContent = await response.json();
+  if (!data.parse?.text) {
+    throw new Error(
+      "Unexpected response structure. Check if the wiki page exists.",
     );
-    if (!response.ok) {
-      throw new Error(`HTTP error! Status: ${response.status}`);
-    }
-    const data: WikiContent = await response.json();
-    if (data.parse && data.parse.text) {
-      // Check if the expected properties are present
-      let content = data.parse.text["*"];
+  }
+  let content = data.parse.text["*"];
+  content = content.replace(/src="\/images\//g, `src="${BASE_URL}images/`);
+  content = content.replace(
+    /srcset="\/images\//g,
+    `srcset="${BASE_URL}images/`,
+  );
+  return content;
+};
 
-      // Adjust relative URLs to be fully qualified URLs
-      content = content.replace(/src="\/images\//g, `src="${BASE_URL}images/`); // Replace src="/images/ with src="https://sustainabilitymethods.org/images/
-      content = content.replace(
-        /srcset="\/images\//g,
-        `srcset="${BASE_URL}images/`, // Replace srcset="/images/ with srcset="https://sustainabilitymethods.org/images/
-      );
-
-      return content;
-    } else {
-      throw new Error(
-        "Unexpected response structure. Check if the wiki page exists.",
-      );
-    }
+/**
+ * UI version — catches all errors and returns a user-friendly fallback string.
+ * Use this in Server/Client Components where graceful degradation is appropriate.
+ */
+export const fetchPageContent = async (title: string): Promise<string> => {
+  try {
+    return await fetchPageContentCore(title);
   } catch (error) {
     console.error("Error fetching page content:", error);
-    // throw error; // Re-throw the error to be caught by the calling function
-    return "This page does not exist. Check if the title of this article corresponds to the article's title on the WikiMethods page."; // Return a default message in user friendly interface
+    return "This page does not exist. Check if the title of this article corresponds to the article's title on the WikiMethods page.";
   }
 };
 
-// EXPLANATION
-// The fetchPageContent function fetches the content of a wiki page using the MediaWiki API.
-// 1. Check for data.parse and data.parse.text: Before accessing data.parse.text["*"], the code checks if data.parse and data.parse.text are defined.
-// 2. Error Handling: If data.parse or data.parse.text is not defined, an error is thrown with the message "Unexpected response structure".
-// 3. Adjust Relative URLs: The code adjusts relative URLs to be fully qualified URLs, ensuring that images and other resources are correctly linked.
-// This modification ensures that the code handles cases where the response structure is not as expected, preventing runtime errors.
+/**
+ * Sync version — throws on failure so the sync loop can record the error
+ * and avoid writing corrupted metadata to the database.
+ * Use this inside wikiSync.ts.
+ */
+export const fetchPageContentStrict = (title: string): Promise<string> =>
+  fetchPageContentCore(title);
 
 /**
  * Fetch MediaWiki categories for a specific page.
