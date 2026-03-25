@@ -100,15 +100,11 @@ export const updatePost = async (formData: FormData, id: string) => {
 };
 
 export const deletePost = async (id: string) => {
-  try {
-    const post = await prisma.post.delete({
-      where: { id },
-    });
-    revalidatePath("/posts");
-    redirect("/posts");
-  } catch (error) {
-    throw error;
-  }
+  const post = await prisma.post.delete({
+    where: { id },
+  });
+  revalidatePath("/posts");
+  redirect("/posts");
 };
 
 // syncWikiMethods
@@ -146,7 +142,5 @@ export const syncWikiMethods = async (): Promise<{
 export const getFilteredMethodsAction = async (
   filters: MethodFilters,
 ): Promise<MethodArticle[]> => {
-  const { getFilteredMethods } = await import("./wikiSync");
-
   return getFilteredMethods(filters);
 };
