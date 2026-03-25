@@ -4,7 +4,14 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime/client";
 import prisma from "./db";
-import type { Post } from "../../prisma/generated/prisma/client";
+// MethodArticle: Prisma-generated model type — needed as the explicit
+// return type of getFilteredMethodsAction.
+import type { Post, MethodArticle } from "../../prisma/generated/prisma/client";
+// syncWiki: triggers incremental DB sync from wikiSync service.
+// getFilteredMethods: queries DB with type-safe Prisma filter.
+// MethodFilters: the exported filter type from wikiSync — needed as the
+//       parameter type for getFilteredMethodsAction.
+import { syncWiki, getFilteredMethods, type MethodFilters } from "./wikiSync";
 
 export const createPost = async (formData: FormData) => {
   try {
@@ -43,7 +50,7 @@ export const createPost = async (formData: FormData) => {
     // Redirect to relevant wiki page if wikiArticle is present
     if (wikiArticle) {
       redirect(
-        `/wiki/${encodeURIComponent(wikiArticle)}?success=feedback-created`
+        `/wiki/${encodeURIComponent(wikiArticle)}?success=feedback-created`,
       );
     } else {
       redirect("/posts?success=created");
@@ -61,7 +68,7 @@ export const createPost = async (formData: FormData) => {
       const wikiArticle = formData.get("wikiArticle") as string | null;
       if (wikiArticle) {
         redirect(
-          `/wiki/${encodeURIComponent(wikiArticle)}?error=duplicate-title`
+          `/wiki/${encodeURIComponent(wikiArticle)}?error=duplicate-title`,
         );
       } else {
         redirect("/posts?error=duplicate-title");
@@ -102,4 +109,44 @@ export const deletePost = async (id: string) => {
   } catch (error) {
     throw error;
   }
+};
+
+// syncWikiMethods
+/**
+ * Server Action: Triggers wiki sync from admin UI.
+ * Can be called from a button in an admin panel.
+ * * Wraps syncWiki() and revalidates all paths that render MethodArticle data.
+ */
+export const syncWikiMethods = async (): Promise<{
+  synced: number;
+  skipped: number;
+  errors: string[];
+  success: boolean;
+  duration: number;
+}> => {
+  const startedAt = Date.now();
+  const result = await syncWiki();
+  const duration = Date.now() - startedAt;
+  const success = result.errors.length === 0;
+
+  // use the "layout" scope on "/wiki" to revalidate all nested routes,
+  // and revalidate "/methods" where the MethodBrowser lives.
+  revalidatePath("/methods");
+  revalidatePath("/wiki", "layout");
+
+  return { ...result, success, duration };
+};
+
+// ---- getFilteredMethodsAction ----
+/**
+ * Server Action: returns MethodArticle rows matching the given filter criteria.
+ * Called by MethodBrowserClient to query the DB instead of the MediaWiki API.
+ */
+
+export const getFilteredMethodsAction = async (
+  filters: MethodFilters,
+): Promise<MethodArticle[]> => {
+  const { getFilteredMethods } = await import("./wikiSync");
+
+  return getFilteredMethods(filters);
 };
