@@ -4,8 +4,7 @@ import { useState, useMemo } from "react";
 import Link from "next/link";
 import Card, { cardTagStyles } from "@/components/card/card";
 import Button from "@/components/buttons/button";
-import type { WikiEntry } from "@/lib/types";
-import { starterData, type MethodType } from "@/lib/starterData";
+import type { DesignCriteriaFields } from "@/lib/wikiMetadataExtractor";
 import styles from "./methodBrowser.module.css";
 
 type TabType = "type" | "reasoning" | "level" | "time";
@@ -42,8 +41,14 @@ const TABS: TabConfig[] = [
 const METHODS_PER_PAGE = 8;
 const MAX_HOMEPAGE_METHODS = 24;
 
+export type BrowseMethod = {
+  pageid: number;
+  title: string;
+  description: string | null;
+} & DesignCriteriaFields;
+
 type BrowserProps = {
-  methods: WikiEntry[];
+  methods: BrowseMethod[];
   dataFallback: boolean;
 };
 
@@ -58,61 +63,33 @@ export default function MethodBrowserClient({
   const [activeTab, setActiveTab] = useState<TabType>("type");
   const [visibleCount, setVisibleCount] = useState(METHODS_PER_PAGE);
 
-  // Enrich wiki entries with metadata from starterData for filtering
-  // This is client-side only for UI filtering purposes
-  const enrichedMethods = useMemo(
-    () =>
-      methods
-        .map((wikiEntry) => {
-          // Find matching method in starterData for metadata
-          const metadata = starterData.find(
-            (method) =>
-              method.method === wikiEntry.title ||
-              method.method === wikiEntry.title.replace(/_/g, " ")
-          );
+  // Get primary tag using TABS.categories as direct keys on BrowseMethod
+  const getPrimaryTag = (article: BrowseMethod, tabId: TabType): string => {
+    const tabConfig = TABS.find((tab) => tab.id === tabId)!;
+    const firstTrue = tabConfig.categories.find(
+      (cat) => article[cat as keyof BrowseMethod] === true,
+    );
 
-          return {
-            ...wikiEntry,
-            metadata: metadata || null,
-          };
-        })
-        // Only include methods that have metadata (exist in starterData)
-        .filter((entry) => entry.metadata !== null),
-    [methods]
-  );
+    return firstTrue
+      ? firstTrue.charAt(0).toUpperCase() + firstTrue.slice(1)
+      : "Unspecified";
+  };
 
-  // Get primary tag for a method based on active tab
-  const getPrimaryTag = useMemo(
-    () =>
-      (metadata: MethodType, dimension: TabType): string => {
-        const dimensionData = metadata[dimension];
-        const trueKeys = Object.entries(dimensionData)
-          .filter(([, value]) => value)
-          .map(([key]) => key);
-
-        return trueKeys[0]
-          ? trueKeys[0].charAt(0).toUpperCase() + trueKeys[0].slice(1)
-          : "Unspecified";
-      },
-    []
-  );
-
-  // Filter methods based on active tab dimension
-  const filteredMethods = useMemo(
-    () =>
-      enrichedMethods.filter((entry) => {
-        if (!entry.metadata) return false;
-
-        const dimensionData = entry.metadata[activeTab];
-        return Object.values(dimensionData).some((value) => value);
-      }),
-    [enrichedMethods, activeTab]
-  );
+  // Filter methods based on at least one true flag in the active tab's dimension
+  const filteredMethods = useMemo(() => {
+    const activeTabConfig = TABS.find((tab) => tab.id === activeTab)!;
+    // Alternative implementation: const activeTabConfig = TABS.find((tab) => tab.id === activeTab) ?? TABS[0];
+    return methods.filter((article) =>
+      activeTabConfig.categories.some(
+        (cat) => article[cat as keyof BrowseMethod] === true,
+      ),
+    );
+  }, [methods, activeTab]);
 
   // Get visible methods for current pagination state
   const visibleMethods = useMemo(
     () => filteredMethods.slice(0, visibleCount),
-    [filteredMethods, visibleCount]
+    [filteredMethods, visibleCount],
   );
 
   // Check if we've reached the maximum homepage display threshold
@@ -190,9 +167,7 @@ export default function MethodBrowserClient({
         aria-labelledby={`tab-${activeTab}`}
       >
         {visibleMethods.map((entry) => {
-          if (!entry.metadata) return null;
-
-          const tag = getPrimaryTag(entry.metadata, activeTab);
+          const tag = getPrimaryTag(entry, activeTab);
           const url = getMethodUrl(entry.title);
           const displayTitle = entry.title.replace(/_/g, " ");
 
@@ -210,7 +185,7 @@ export default function MethodBrowserClient({
             >
               <h3 className={styles.methodTitle}>{displayTitle}</h3>
               <p className={styles.methodDescription}>
-                {entry.metadata.description || "Explore this research method"}
+                {entry.description || "Explore this research method"}
               </p>
             </Card>
           );
