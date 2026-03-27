@@ -52,6 +52,17 @@ const fetchPageContentCore = async (title: string): Promise<string> => {
     /srcset="\/images\//g,
     `srcset="${BASE_URL}images/`,
   );
+  // Make all internal /index.php links absolute (covers "Edit section" links)
+  content = content.replace(
+    /href="\/index\.php/g,
+    `href="${BASE_URL}index.php`,
+  );
+  // Open edit-action links in a new browser tab
+  content = content.replace(
+    /(<a\b[^>]*href="https:\/\/sustainabilitymethods\.org\/index\.php\?[^"]*action=edit[^"]*")/gi,
+    '$1 target="_blank" rel="noopener noreferrer"',
+  );
+
   return content;
 };
 
