@@ -7,11 +7,14 @@ const MethodBrowser = async () => {
 
   try {
     const articles = await prisma.methodArticle.findMany({
-      where: { articleType: "METHOD" },
+      where: {
+        OR: [{ articleType: "METHOD" }, { articleType: "NORMATIVITY" }],
+      },
       select: {
         pageid: true,
         title: true,
         description: true,
+        normativity: true,
         quantitative: true,
         qualitative: true,
         deductive: true,
