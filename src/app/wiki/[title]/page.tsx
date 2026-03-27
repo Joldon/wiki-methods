@@ -25,12 +25,12 @@ export default async function WikiPage({
     queryParams.error === "duplicate-title"
       ? "A post with this title already exists. Please choose a different title."
       : queryParams.error === "failed"
-      ? "Failed to create feedback post. Please try again."
-      : undefined;
+        ? "Failed to create feedback post. Please try again."
+        : undefined;
 
   return (
     <div className={styles.container}>
-      <h1 className={styles.title}>{title.replace("_", " ")}</h1>
+      <h1 className={styles.title}>{title.replace(/_/g, " ")}</h1>
       {successMessage && (
         <div
           // Replace the below with proper css varibales in wiki.module.css
