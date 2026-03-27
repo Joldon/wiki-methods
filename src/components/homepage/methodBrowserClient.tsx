@@ -7,7 +7,7 @@ import Button from "@/components/buttons/button";
 import type { DesignCriteriaFields } from "@/lib/wikiMetadataExtractor";
 import styles from "./methodBrowser.module.css";
 
-type TabType = "type" | "reasoning" | "level" | "time";
+type TabType = "type" | "reasoning" | "level" | "time" | "normativity";
 
 type TabConfig = {
   id: TabType;
@@ -36,6 +36,11 @@ const TABS: TabConfig[] = [
     label: "View by Time",
     categories: ["past", "present", "future"],
   },
+  {
+    id: "normativity",
+    label: "Normativity",
+    categories: [], // Filtered via article.normativity flag, not dimension categories
+  },
 ];
 
 const METHODS_PER_PAGE = 8;
@@ -45,6 +50,7 @@ export type BrowseMethod = {
   pageid: number;
   title: string;
   description: string | null;
+  normativity: boolean;
 } & DesignCriteriaFields;
 
 type BrowserProps = {
@@ -65,6 +71,7 @@ export default function MethodBrowserClient({
 
   // Get primary tag using TABS.categories as direct keys on BrowseMethod
   const getPrimaryTag = (article: BrowseMethod, tabId: TabType): string => {
+    if (tabId === "normativity") return "Normativity";
     const tabConfig = TABS.find((tab) => tab.id === tabId)!;
     const firstTrue = tabConfig.categories.find(
       (cat) => article[cat as keyof BrowseMethod] === true,
@@ -77,6 +84,9 @@ export default function MethodBrowserClient({
 
   // Filter methods based on at least one true flag in the active tab's dimension
   const filteredMethods = useMemo(() => {
+    if (activeTab === "normativity") {
+      return methods.filter((article) => article.normativity === true);
+    }
     const activeTabConfig = TABS.find((tab) => tab.id === activeTab)!;
     // Alternative implementation: const activeTabConfig = TABS.find((tab) => tab.id === activeTab) ?? TABS[0];
     return methods.filter((article) =>
