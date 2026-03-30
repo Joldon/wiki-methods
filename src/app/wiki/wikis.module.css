@@ -51,3 +51,15 @@
   margin-top: 0;
   margin-bottom: 10px; /* Provides spacing between the title and other content */
 }
+
+.pageDescription {
+  color: var(--color-text-secondary);
+  margin-bottom: var(--spacing-md);
+  font-size: var(--font-size-sm);
+}
+
+.resultsCount {
+  margin: var(--spacing-sm) 0;
+  font-size: var(--font-size-xs);
+  color: var(--color-text-secondary);
+}
