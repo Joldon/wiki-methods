@@ -1,32 +1,62 @@
 "use client";
-import { categories } from "@/lib/starterData";
-import styles from "./wikiFilterPanel.module.css";
+
 import { useRouter, useSearchParams } from "next/navigation";
 import { useTransition } from "react";
-import { curveNatural } from "d3";
+import { categories, ARTICLE_TYPE_OPTIONS } from "@/lib/starterData";
+import styles from "./wikiFilterPanel.module.css";
 
-const WikiFilterPanel = () => {
+export default function WikiFilterPanel() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [isPending, startTransition] = useTransition();
 
+  const navigate = (params: URLSearchParams) =>
+    startTransition(() => {
+      const qs = params.toString();
+      router.push(qs ? `/wiki?${qs}` : "/wiki");
+    });
+
   const toggle = (key: string) => {
     const params = new URLSearchParams(searchParams.toString());
-    if (params.get(key) === "true") {
-      params.delete(key);
-    } else {
-      params.set(key, "true");
-    }
-    startTransition(() => {
-      router.push(`/wiki?${params.toString()}`);
-    });
+    params.get(key) === "true" ? params.delete(key) : params.set(key, "true");
+    navigate(params);
   };
 
-  const clearAll = () => startTransition(() => router.push("/wiki"));
+  const clearAll = () => navigate(new URLSearchParams());
+
+  const hasActiveTypes = ARTICLE_TYPE_OPTIONS.some(
+    ({ key }) => searchParams.get(key) === "true",
+  );
 
   const hasActiveFilters = searchParams.size > 0;
   return (
     <div className={styles.panel} aria-label="Filter articles">
+      {/* Article type — multi-select pills (OR semantics) */}
+      <div className={styles.group}>
+        <h4 className={styles.groupTitle}>Article Type</h4>
+        <div className={styles.pillRow}>
+          <button
+            onClick={hasActiveTypes ? clearAll : undefined}
+            className={`${styles.pill} ${!hasActiveTypes ? styles.pillActive : ""}`}
+            disabled={isPending || !hasActiveTypes}
+            type="button"
+          >
+            All Articles
+          </button>
+          {ARTICLE_TYPE_OPTIONS.map(({ key, label }) => (
+            <button
+              key={key}
+              onClick={() => toggle(key)}
+              className={`${styles.pill} ${searchParams.get(key) === "true" ? styles.pillActive : ""}`}
+              disabled={isPending}
+              type="button"
+            >
+              {label}
+            </button>
+          ))}
+        </div>
+      </div>
+      {/* Dimension criteria — multi-select checkboxes (AND semantics) */}
       {Object.entries(categories).map(([dimension, options]) => (
         <div key={dimension} className={styles.group}>
           <h4 className={styles.groupTitle}>
@@ -48,30 +78,16 @@ const WikiFilterPanel = () => {
         </div>
       ))}
 
-      {/* Normativity is an article-type toggle, not a dimension criterion */}
-      <div className={styles.group}>
-        <h4 className={styles.groupTitle}>Article Type</h4>
-        <label className={styles.label}>
-          <input
-            type="checkbox"
-            checked={searchParams.get("normativity") === "true"}
-            onChange={() => toggle("normativity")}
-            disabled={isPending}
-          />
-          Include Normativity
-        </label>
-      </div>
       {hasActiveFilters && (
         <button
           onClick={clearAll}
           className={styles.clearButton}
           disabled={isPending}
+          type="button"
         >
           Clear All Filters
         </button>
       )}
     </div>
   );
-};
-
-export default WikiFilterPanel;
+}
