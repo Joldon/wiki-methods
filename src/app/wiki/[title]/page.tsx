@@ -1,4 +1,3 @@
-import DOMPurify from "isomorphic-dompurify";
 import { fetchPageContent } from "@/lib/fetchData";
 import styles from "./wiki.module.css";
 import Link from "next/link";
@@ -6,6 +5,15 @@ import Link from "next/link";
 type Params = {
   title: string;
 };
+
+function sanitizeWikiHtml(html: string): string {
+  return html
+    .replace(/<script\b[^>]*>[\s\S]*?<\/script\s*>/gi, "")
+    .replace(/<(iframe|object|embed)\b[^>]*>[\s\S]*?<\/\1\s*>/gi, "")
+    .replace(/<(iframe|object|embed)\b[^>]*\/?>/gi, "")
+    .replace(/\s+on[a-z]\w*\s*=\s*(?:"[^"]*"|'[^']*'|[^\s>]+)/gi, "")
+    .replace(/(href|src)\s*=\s*["']\s*javascript:[^"']*/gi, '$1="#"');
+}
 
 export default async function WikiPage({
   params,
@@ -15,9 +23,10 @@ export default async function WikiPage({
   searchParams: Promise<{ error?: string; success?: string }>;
 }) {
   const { title } = await params;
+  const decodedTitle = decodeURIComponent(title);
   const queryParams = await searchParams;
-  const content = await fetchPageContent(title);
-  const sanitizedContent = DOMPurify.sanitize(content);
+  const content = await fetchPageContent(decodedTitle);
+  const sanitizedContent = sanitizeWikiHtml(content);
 
   const successMessage =
     queryParams.success === "feedback-created"
@@ -32,7 +41,7 @@ export default async function WikiPage({
 
   return (
     <div className={styles.container}>
-      <h1 className={styles.title}>{title.replace(/_/g, " ")}</h1>
+      <h1 className={styles.title}>{decodedTitle.replace(/_/g, " ")}</h1>
       {successMessage && (
         <div
           // Replace the below with proper css varibales in wiki.module.css
@@ -66,7 +75,7 @@ export default async function WikiPage({
 
       <div className={styles.feedbackContainer}>
         <Link
-          href={`/posts/new?wiki=${encodeURIComponent(title)}`}
+          href={`/posts/new?wiki=${encodeURIComponent(decodedTitle)}`}
           className={styles.feedbackButton}
         >
           Provide Feedback on this Article
