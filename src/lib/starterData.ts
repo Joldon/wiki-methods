@@ -379,16 +379,6 @@ export const categories = {
 // Each entry maps a URL param key → a human label + Prisma filter strategy.
 // "filterField" + "filterValue" describe how to query — interpreted server-side.
 // To add a new type: add one entry here, one case in wiki/page.tsx's TYPE_WHERE.
-export const ARTICLE_TYPE_OPTIONS = [
-  { key: "methods", label: "Methods" },
-  { key: "normativity", label: "Normativity" },
-  { key: "tools", label: "Hack & Tools" },
-  { key: "statistics", label: "Statistics" },
-  { key: "python", label: "Python" },
-  { key: "other", label: "Other" },
-] as const;
-
-export type ArticleTypeKey = (typeof ARTICLE_TYPE_OPTIONS)[number]["key"];
 
 export async function filterMethods(formData: FormData) {
   // Define the categories and keys for filters
