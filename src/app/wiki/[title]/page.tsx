@@ -11,8 +11,13 @@ function sanitizeWikiHtml(html: string): string {
     .replace(/<script\b[^>]*>[\s\S]*?<\/script\s*>/gi, "")
     .replace(/<(iframe|object|embed)\b[^>]*>[\s\S]*?<\/\1\s*>/gi, "")
     .replace(/<(iframe|object|embed)\b[^>]*\/?>/gi, "")
-    .replace(/\s+on[a-z]\w*\s*=\s*(?:"[^"]*"|'[^']*'|[^\s>]+)/gi, "")
-    .replace(/(href|src)\s*=\s*["']\s*javascript:[^"']*/gi, '$1="#"');
+    .replace(/<meta\b[^>]*http-equiv\s*=\s*["']?refresh["']?[^>]*>/gi, "")
+    .replace(
+      /(\s|(?<=<\w[^>]*))on[a-z]\w*\s*=\s*(?:"[^"]*"|'[^']*'|[^\s>]+)/gi,
+      "",
+    )
+    .replace(/(href|src|action)\s*=\s*["']\s*javascript:[^"']*/gi, '$1="#"')
+    .replace(/(href|src)\s*=\s*["']\s*data:text\/html[^"']*/gi, '$1="#"');
 }
 
 export default async function WikiPage({
