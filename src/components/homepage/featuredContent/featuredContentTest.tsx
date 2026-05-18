@@ -1,5 +1,5 @@
 import { getRandomFeaturedMethods } from "@/lib/featuredMethodsTest";
-import Card from "../card/card";
+import Card from "../../card/card";
 import styles from "./featuredContent.module.css";
 
 type FeaturedItem = {
@@ -73,15 +73,15 @@ function FeaturedCard({ item }: { item: FeaturedItem }) {
     item.gridSpan === "large"
       ? styles.spanLarge
       : item.gridSpan === "wide"
-      ? styles.spanWide
-      : "";
+        ? styles.spanWide
+        : "";
 
   const tagClass =
     item.tagStyle === "interactive"
       ? styles.tagInteractive
       : item.tagStyle === "beginner"
-      ? styles.tagBeginner
-      : "";
+        ? styles.tagBeginner
+        : "";
 
   return (
     <Card
