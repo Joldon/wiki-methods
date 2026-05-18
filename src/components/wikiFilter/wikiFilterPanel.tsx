@@ -2,7 +2,8 @@
 
 import { useRouter, useSearchParams } from "next/navigation";
 import { useTransition } from "react";
-import { categories, ARTICLE_TYPE_OPTIONS } from "@/lib/starterData";
+import { categories } from "@/lib/starterData";
+import { ARTICLE_TYPE_OPTIONS } from "@/lib/articleTypeFilters";
 import styles from "./wikiFilterPanel.module.css";
 
 export default function WikiFilterPanel() {
