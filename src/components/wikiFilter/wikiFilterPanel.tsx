@@ -24,6 +24,14 @@ export default function WikiFilterPanel() {
 
   const clearAll = () => navigate(new URLSearchParams());
 
+  const clearArticleTypes = () => {
+    const params = new URLSearchParams(searchParams.toString());
+    ARTICLE_TYPE_OPTIONS.map(({ key }) => key).forEach((key) => {
+      params.delete(key);
+    });
+    navigate(params);
+  };
+
   const hasActiveTypes = ARTICLE_TYPE_OPTIONS.some(
     ({ key }) => searchParams.get(key) === "true",
   );
@@ -36,7 +44,7 @@ export default function WikiFilterPanel() {
         <h4 className={styles.groupTitle}>Article Type</h4>
         <div className={styles.pillRow}>
           <button
-            onClick={hasActiveTypes ? clearAll : undefined}
+            onClick={hasActiveTypes ? clearArticleTypes : undefined}
             className={`${styles.pill} ${!hasActiveTypes ? styles.pillActive : ""}`}
             disabled={isPending || !hasActiveTypes}
             type="button"

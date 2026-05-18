@@ -1,5 +1,6 @@
 // src/lib/fetchData.ts
 
+import { title } from "process";
 import { WikiEntry, WikiContent } from "./types";
 
 export const API_URL = "https://sustainabilitymethods.org/api.php";
@@ -159,6 +160,13 @@ export const fetchAllPagesWithTimestamps = async (): Promise<
         params.set(key, value);
       });
     }
+
+    const parseParams = new URLSearchParams({
+      action: "parse",
+      page: title,
+      format: "json",
+      disableeditsection: "1",
+    });
     const response = await fetch(`${API_URL}?${params.toString()}`, {
       next: { revalidate: 7200 }, // Cache for 2 hours to reduce load on the API
     });

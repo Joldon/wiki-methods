@@ -1,4 +1,4 @@
-import type { MethodArticle, Prisma } from "@generated/prisma/browser";
+import type { MethodArticle, Prisma } from "@generated/prisma/client";
 import prisma from "./db";
 import { fetchPageContentStrict } from "./fetchData";
 import {

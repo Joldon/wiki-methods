@@ -10,7 +10,7 @@ import {
 } from "@/lib/starterData";
 import WikiFilterPanel from "@/components/wikiFilter/wikiFilterPanel";
 import { Suspense } from "react";
-import { Prisma } from "@generated/prisma/browser";
+import type { Prisma } from "@generated/prisma/client";
 
 type SearchParams = Promise<Record<string, string | string[] | undefined>>;
 

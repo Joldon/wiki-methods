@@ -1,3 +1,4 @@
+import DOMPurify from "isomorphic-dompurify";
 import { fetchPageContent } from "@/lib/fetchData";
 import styles from "./wiki.module.css";
 import Link from "next/link";
@@ -16,6 +17,7 @@ export default async function WikiPage({
   const { title } = await params;
   const queryParams = await searchParams;
   const content = await fetchPageContent(title);
+  const sanitizedContent = DOMPurify.sanitize(content);
 
   const successMessage =
     queryParams.success === "feedback-created"
@@ -73,7 +75,7 @@ export default async function WikiPage({
 
       <div
         className={styles.text}
-        dangerouslySetInnerHTML={{ __html: content }}
+        dangerouslySetInnerHTML={{ __html: sanitizedContent }}
       />
     </div>
   );
