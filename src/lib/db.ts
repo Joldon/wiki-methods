@@ -5,7 +5,8 @@ const prismaClientSingleton = () => {
   // PostgreSQL adapter with pooled connection URL
   // Use the same env var as in prisma.config.ts for consistency
   const adapter = new PrismaPg({
-    connectionString: process.env.POSTGRES_URL_NON_POOLING,
+    // connectionString: process.env.POSTGRES_URL_NON_POOLING,
+    connectionString: process.env.POSTGRES_PRISMA_URL, // Use pooled connection for app. Suggested by perplexity when fixing a bug.
   });
   return new PrismaClient({ adapter });
 };

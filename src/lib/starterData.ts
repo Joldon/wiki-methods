@@ -375,20 +375,28 @@ export const categories = {
   time: ["past", "present", "future"],
 };
 
+// Curated article type filters for /wiki page.
+// Each entry maps a URL param key → a human label + Prisma filter strategy.
+// "filterField" + "filterValue" describe how to query — interpreted server-side.
+// To add a new type: add one entry here, one case in wiki/page.tsx's TYPE_WHERE.
+
 export async function filterMethods(formData: FormData) {
   // Define the categories and keys for filters
 
   // Dynamically construct the filters object
-  const filters = Object.keys(categories).reduce((acc, category) => {
-    acc[category] = categories[category as keyof typeof categories].reduce(
-      (subAcc, key) => {
-        subAcc[key] = formData.get(key) === "on";
-        return subAcc;
-      },
-      {} as Record<string, boolean>
-    );
-    return acc;
-  }, {} as Record<string, Record<string, boolean>>);
+  const filters = Object.keys(categories).reduce(
+    (acc, category) => {
+      acc[category] = categories[category as keyof typeof categories].reduce(
+        (subAcc, key) => {
+          subAcc[key] = formData.get(key) === "on";
+          return subAcc;
+        },
+        {} as Record<string, boolean>,
+      );
+      return acc;
+    },
+    {} as Record<string, Record<string, boolean>>,
+  );
 
   // Filter the methods based on the constructed filters object
   const filteredMethods = starterData.filter((method: MethodType) => {

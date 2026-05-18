@@ -1,28 +1,40 @@
-import { WikiEntry } from "@/lib/types";
-import { fetchAllEntries } from "@/lib/fetchData";
-import { starterData } from "@/lib/starterData";
-import MethodBrowserClient from "./methodBrowserClient";
+import prisma from "@/lib/db";
+import MethodBrowserClient, { BrowseMethod } from "./methodBrowserClient";
 
 const MethodBrowser = async () => {
-  let wikiMethods: WikiEntry[] = [];
+  let methods: BrowseMethod[] = [];
   let dataFallback = false;
 
   try {
-    wikiMethods = await fetchAllEntries();
+    const articles = await prisma.methodArticle.findMany({
+      where: {
+        OR: [{ articleType: "METHOD" }, { articleType: "NORMATIVITY" }],
+      },
+      select: {
+        pageid: true,
+        title: true,
+        description: true,
+        normativity: true,
+        quantitative: true,
+        qualitative: true,
+        deductive: true,
+        inductive: true,
+        individual: true,
+        system: true,
+        global: true,
+        past: true,
+        present: true,
+        future: true,
+      },
+    });
+    // Shuffle into random order on each render
+    methods = [...articles].sort(() => Math.random() - 0.5);
   } catch (error) {
-    console.error("Failed to fetch wikientries, using fallback data", error);
+    console.error("Failed to fetch from database", error);
 
-    // Fallback to starterData if MediaWiki API fails
-    wikiMethods = starterData.map((method, index) => ({
-      pageid: index + 1,
-      ns: 0,
-      title: method.method,
-    }));
     dataFallback = true;
   }
-  return (
-    <MethodBrowserClient methods={wikiMethods} dataFallback={dataFallback} />
-  );
+  return <MethodBrowserClient methods={methods} dataFallback={dataFallback} />;
 };
 
 export default MethodBrowser;

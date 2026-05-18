@@ -128,6 +128,10 @@ export const createPost = async (formData: FormData) => {
 
 ## Key Libraries & Implementation Patterns
 
+When answering questions about frameworks, libraries, or APIs, first use context7 to fetch the latest documentation rather than relying only on training data.
+
+For any questions involving Next.js, React, Prisma, D3, databases, Docker, or web APIs, always consult the Context7 MCP server first to fetch the latest official documentation. Prefer Next.js 15 server components, server actions, TypeScript, functional patterns, and server‑first architecture. Avoid legacy patterns such as getInitialProps, class components, or deprecated APIs.
+
 - **Styling**: CSS Modules (`styles.className`) - component-scoped styling
 - **Database**: Prisma singleton (`@/lib/db.ts`) with PostgreSQL, auto-generated types
 - **External Content**: MediaWiki API integration with URL rewriting for images

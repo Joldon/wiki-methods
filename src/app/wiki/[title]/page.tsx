@@ -6,6 +6,20 @@ type Params = {
   title: string;
 };
 
+function sanitizeWikiHtml(html: string): string {
+  return html
+    .replace(/<script\b[^>]*>[\s\S]*?<\/script\s*>/gi, "")
+    .replace(/<(iframe|object|embed)\b[^>]*>[\s\S]*?<\/\1\s*>/gi, "")
+    .replace(/<(iframe|object|embed)\b[^>]*\/?>/gi, "")
+    .replace(/<meta\b[^>]*http-equiv\s*=\s*["']?refresh["']?[^>]*>/gi, "")
+    .replace(
+      /(\s|(?<=<\w[^>]*))on[a-z]\w*\s*=\s*(?:"[^"]*"|'[^']*'|[^\s>]+)/gi,
+      "",
+    )
+    .replace(/(href|src|action)\s*=\s*["']\s*javascript:[^"']*/gi, '$1="#"')
+    .replace(/(href|src)\s*=\s*["']\s*data:text\/html[^"']*/gi, '$1="#"');
+}
+
 export default async function WikiPage({
   params,
   searchParams,
@@ -14,8 +28,10 @@ export default async function WikiPage({
   searchParams: Promise<{ error?: string; success?: string }>;
 }) {
   const { title } = await params;
+  const decodedTitle = decodeURIComponent(title);
   const queryParams = await searchParams;
-  const content = await fetchPageContent(title);
+  const content = await fetchPageContent(decodedTitle);
+  const sanitizedContent = sanitizeWikiHtml(content);
 
   const successMessage =
     queryParams.success === "feedback-created"
@@ -25,12 +41,12 @@ export default async function WikiPage({
     queryParams.error === "duplicate-title"
       ? "A post with this title already exists. Please choose a different title."
       : queryParams.error === "failed"
-      ? "Failed to create feedback post. Please try again."
-      : undefined;
+        ? "Failed to create feedback post. Please try again."
+        : undefined;
 
   return (
     <div className={styles.container}>
-      <h1 className={styles.title}>{title.replace("_", " ")}</h1>
+      <h1 className={styles.title}>{decodedTitle.replace(/_/g, " ")}</h1>
       {successMessage && (
         <div
           // Replace the below with proper css varibales in wiki.module.css
@@ -64,7 +80,7 @@ export default async function WikiPage({
 
       <div className={styles.feedbackContainer}>
         <Link
-          href={`/posts/new?wiki=${encodeURIComponent(title)}`}
+          href={`/posts/new?wiki=${encodeURIComponent(decodedTitle)}`}
           className={styles.feedbackButton}
         >
           Provide Feedback on this Article
@@ -73,7 +89,7 @@ export default async function WikiPage({
 
       <div
         className={styles.text}
-        dangerouslySetInnerHTML={{ __html: content }}
+        dangerouslySetInnerHTML={{ __html: sanitizedContent }}
       />
     </div>
   );

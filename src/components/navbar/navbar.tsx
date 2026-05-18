@@ -4,9 +4,9 @@ import styles from "./navbar.module.css";
 
 const Navbar = async () => {
   return (
-    <nav className={styles.nav}>
+    <nav className={styles.nav} role="navigation" aria-label="Main navigation">
       <div className={styles.container}>
-        <Link href="/" className={styles.logo}>
+        <Link href="/" className={styles.logo} aria-label="Methods Wiki — go to homepage">
           Methods·Wiki
         </Link>
         <Links />

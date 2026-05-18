@@ -72,15 +72,15 @@
   border-radius: 2px;
 }
 
-.menuToggle.open .menuBar:nth-child(1) {
+.menuToggleOpen .menuBar:nth-child(1) {
   transform: rotate(45deg) translateY(7px);
 }
 
-.menuToggle.open .menuBar:nth-child(2) {
+.menuToggleOpen .menuBar:nth-child(2) {
   opacity: 0;
 }
 
-.menuToggle.open .menuBar:nth-child(3) {
+.menuToggleOpen .menuBar:nth-child(3) {
   transform: rotate(-45deg) translateY(-7px);
 }
 

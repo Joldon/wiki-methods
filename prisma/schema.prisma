@@ -3,26 +3,24 @@
 
 generator client {
   provider = "prisma-client"
-  output = "./generated/prisma"
-
+  output   = "./generated/prisma"
 }
 
 datasource db {
   provider = "postgresql"
-
 }
 
 model Post {
-  id        String   @id @default(cuid())
-  title     String
-  slug      String   @unique
-  content   String
+  id          String   @id @default(cuid())
+  title       String
+  slug        String   @unique
+  content     String
   wikiArticle String?
-  published Boolean  @default(false)
-  author    User?    @relation(fields: [authorId], references: [id])
-  authorId  String?
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt
+  published   Boolean  @default(false)
+  author      User?    @relation(fields: [authorId], references: [id])
+  authorId    String?
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt
 
   @@index(slug)
 }
@@ -36,4 +34,53 @@ model User {
   posts     Post[]
 
   @@map(name: "users")
+}
+
+// MethodArticle model — caches wiki metadata for filtering
+
+enum ArticleType {
+  METHOD
+  NORMATIVITY
+  OTHER
+}
+
+model MethodArticle {
+  id          String      @id @default(cuid())
+  title       String      @unique
+  pageid      Int         @unique
+  description String?
+  // Article classification
+  articleType ArticleType @default(OTHER)
+
+  // Categorization flags
+  quantitative Boolean @default(false)
+  qualitative  Boolean @default(false)
+  deductive    Boolean @default(false)
+  inductive    Boolean @default(false)
+  individual   Boolean @default(false)
+  system       Boolean @default(false)
+  global       Boolean @default(false)
+  past         Boolean @default(false)
+  present      Boolean @default(false)
+  future       Boolean @default(false)
+
+  // Normativity flag — articles in "Normativity of Methods" category
+  normativity Boolean @default(false)
+
+  // MediaWiki categories (stored as JSON array for reference)
+  wikiCategories String[] @default([])
+
+  // Sync tracking
+  lastSyncedAt          DateTime  @default(now())
+  wikiRevisionTimestamp DateTime?
+
+  createdAt DateTime @default(now()) @map("created-at")
+  updatedAt DateTime @updatedAt
+
+  @@index([articleType])
+  @@index([quantitative, qualitative])
+  @@index([deductive, inductive])
+  @@index([individual, system, global])
+  @@index([past, present, future])
+  @@index([normativity])
 }
