@@ -27,7 +27,7 @@ export default function WikiFilterPanel() {
 
   const clearArticleTypes = () => {
     const params = new URLSearchParams(searchParams.toString());
-    ARTICLE_TYPE_OPTIONS.map(({ key }) => key).forEach((key) => {
+    ARTICLE_TYPE_OPTIONS.forEach(({ key }) => {
       params.delete(key);
     });
     navigate(params);
