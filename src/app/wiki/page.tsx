@@ -3,11 +3,11 @@ import Link from "next/link";
 import prisma from "@/lib/db";
 import styles from "./wikis.module.css";
 import Image from "next/image";
+import { categories } from "@/lib/starterData";
 import {
-  categories,
   ARTICLE_TYPE_OPTIONS,
-  type ArticleTypeKey,
-} from "@/lib/starterData";
+  ARTICLE_TYPE_WHERE,
+} from "@/lib/articleTypeFilters";
 import WikiFilterPanel from "@/components/wikiFilter/wikiFilterPanel";
 import { Suspense } from "react";
 import type { Prisma } from "@generated/prisma/client";
@@ -16,17 +16,6 @@ type SearchParams = Promise<Record<string, string | string[] | undefined>>;
 
 // Flat set of all dimension criteria keys for validation
 const CRITERIA_KEYS = new Set(Object.values(categories).flat());
-
-// Maps each article-type URL param → its Prisma WHERE condition.
-// To add a new type: add an entry in ARTICLE_TYPE_OPTIONS + one case here.
-const TYPE_WHERE: Record<ArticleTypeKey, Prisma.MethodArticleWhereInput> = {
-  methods: { articleType: "METHOD" },
-  normativity: { normativity: true },
-  tools: { wikiCategories: { has: "Hacks, Habits & Tools" } },
-  statistics: { wikiCategories: { has: "Statistics" } },
-  python: { wikiCategories: { has: "Python" } },
-  other: { articleType: "OTHER" },
-};
 
 export default async function WikisPage({
   searchParams,
@@ -45,7 +34,7 @@ export default async function WikisPage({
   // Article type filters (OR semantics — show any of the selected types)
   const activeTypeFilters = ARTICLE_TYPE_OPTIONS.filter(
     ({ key }) => params[key] === "true",
-  ).map(({ key }) => TYPE_WHERE[key]);
+  ).map(({ key }) => ARTICLE_TYPE_WHERE[key]);
 
   const where: Prisma.MethodArticleWhereInput = {
     ...criteriaFilter,
