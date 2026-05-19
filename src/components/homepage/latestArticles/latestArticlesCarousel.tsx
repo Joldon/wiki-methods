@@ -40,7 +40,11 @@ const LatestArticlesCarousel = ({ articles }: Props) => {
             <h4 className={styles.cardTitle}>
               {article.title.replace(/_/g, " ")}
             </h4>
-            <time className={styles.cardDate} dateTime={article.timestamp}>
+            <time
+              className={styles.cardDate}
+              dateTime={article.timestamp}
+              suppressHydrationWarning
+            >
               {new Date(article.timestamp).toLocaleDateString("en-US", {
                 month: "short",
                 day: "numeric",
