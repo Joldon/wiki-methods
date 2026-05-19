@@ -1,6 +1,6 @@
 // src/lib/fetchData.ts
 
-import { WikiEntry, WikiContent } from "./types";
+import { WikiEntry, WikiContent, LatestArticle } from "./types";
 
 export const API_URL = "https://sustainabilitymethods.org/api.php";
 // const BASE_URL = "https://sustainabilitymethods.org/";
@@ -180,4 +180,38 @@ export const fetchAllPagesWithTimestamps = async (): Promise<
     continueToken = data.continue ?? null;
   } while (continueToken);
   return allPages;
+};
+
+export const fetchLatestArticles = async (
+  limit: number = 12,
+): Promise<LatestArticle[]> => {
+  try {
+    const params = new URLSearchParams({
+      action: "query",
+      list: "logevents",
+      letype: "create",
+      lenamespace: "0",
+      leprop: "title|timestamp|ids",
+      lelimit: String(limit),
+      format: "json",
+    });
+
+    const response = await fetch(`${API_URL}?${params}`, {
+      next: { revalidate: 7200 },
+    });
+    if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+
+    const data = await response.json();
+
+    return (data.query?.logevents ?? []).map(
+      (entry: { logid: number; title: string; timestamp: string }) => ({
+        logid: entry.logid,
+        title: entry.title,
+        timestamp: entry.timestamp,
+      }),
+    );
+  } catch (error) {
+    console.error("Error fetching latest articles:", error);
+    return [];
+  }
 };
