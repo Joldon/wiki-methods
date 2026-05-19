@@ -11,3 +11,9 @@ export interface WikiContent {
     };
   };
 }
+
+export type LatestArticle = {
+  logid: number;
+  title: string;
+  timestamp: string;
+};
