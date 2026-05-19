@@ -1,5 +1,5 @@
 import { getRandomFeaturedMethods } from "@/lib/featuredMethods";
-import Card, { cardTagStyles } from "../card/card";
+import Card, { cardTagStyles } from "@/components/card/card";
 import styles from "./featuredContent.module.css";
 
 type FeaturedItem = {
@@ -70,16 +70,16 @@ const FeaturedCard = ({ item }: { item: FeaturedItem }) => {
     item.gridSpan === "large"
       ? styles.spanLarge
       : item.gridSpan === "wide"
-      ? styles.spanWide
-      : "";
+        ? styles.spanWide
+        : "";
 
   // determine tag class using centralized card tag styles
   const tagClass =
     item.tagStyle === "interactive"
       ? `${cardTagStyles.tag} ${cardTagStyles.tagSecondary}`
       : item.tagStyle === "beginner"
-      ? `${cardTagStyles.tag} ${cardTagStyles.tagAccent}`
-      : cardTagStyles.tag;
+        ? `${cardTagStyles.tag} ${cardTagStyles.tagAccent}`
+        : cardTagStyles.tag;
 
   return (
     <Card
