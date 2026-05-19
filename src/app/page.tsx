@@ -7,13 +7,13 @@ import MethodBrowser from "@/components/homepage/methodBrowser/methodBrowser";
 
 export default async function HomePage() {
   return (
-    <main>
+    <>
       <Hero />
       <ValueProposition />
       <FeaturedContent />
       <LatestArticles />
       {/* <FeaturedContentTest /> */}
       <MethodBrowser />
-    </main>
+    </>
   );
 }
