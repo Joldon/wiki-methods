@@ -4,6 +4,7 @@ import ValueProposition from "@/components/homepage/valueProposition/valuePropos
 import LatestArticles from "@/components/homepage/latestArticles/latestArticles";
 import FeaturedContentTest from "@/components/homepage/featuredContent/featuredContentTest";
 import MethodBrowser from "@/components/homepage/methodBrowser/methodBrowser";
+import TrustIndicators from "@/components/homepage/featuredContent/trustIndicators/trustIndicators";
 
 export default async function HomePage() {
   return (
@@ -14,6 +15,7 @@ export default async function HomePage() {
       <LatestArticles />
       {/* <FeaturedContentTest /> */}
       <MethodBrowser />
+      <TrustIndicators />
     </>
   );
 }
