@@ -17,3 +17,10 @@ export type LatestArticle = {
   title: string;
   timestamp: string;
 };
+
+export type WikiSiteStats = {
+  articles: number;
+  users: number;
+  edits: number;
+  activeusers: number;
+};
