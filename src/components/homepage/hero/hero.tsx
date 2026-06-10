@@ -1,6 +1,6 @@
 import Link from "next/link";
 import styles from "./hero.module.css";
-import Button from "../buttons/button";
+import Button from "@/components/buttons/button";
 
 const Hero = () => {
   return (

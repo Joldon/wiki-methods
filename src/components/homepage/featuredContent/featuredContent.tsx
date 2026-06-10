@@ -1,25 +1,25 @@
-import { getRandomFeaturedMethods } from "@/lib/featuredMethodsTest";
-import Card from "../card/card";
+import { getRandomFeaturedMethods } from "@/lib/featuredMethods";
+import Card, { cardTagStyles } from "@/components/card/card";
 import styles from "./featuredContent.module.css";
 
 type FeaturedItem = {
   id: string;
   title: string;
-  description: string;
+  description?: string;
   href: string;
   tag: string;
-  tagStyle?: "interactive" | "beginner" | "default";
+  tagStyle?: "default" | "interactive" | "beginner";
   gridSpan?: "large" | "wide" | "default";
   variant?: "default" | "featured";
 };
 
-// Static featured items configuration
-const STATIC_ITEMS: FeaturedItem[] = [
+// Static items configuration
+const STATIC_ITEMS = [
   {
     id: "ethnography-landscape",
     title: "Ethnography Landscape",
     description:
-      "Explore the interconnected world of ethnographic research methods.",
+      "Explore the interconnected world of ethnographic methods through our interactive force-directed graph visualization.",
     href: "/landscapes/ethnography-landscape",
     tag: "Interactive",
     tagStyle: "interactive",
@@ -36,13 +36,11 @@ const STATIC_ITEMS: FeaturedItem[] = [
     tagStyle: "beginner",
     gridSpan: "wide",
   },
-];
+] as const;
 
-// Server Component - fetches real wiki articles from MediaWiki API
-export default async function FeaturedContent() {
-  // Fetch 4 random wiki articles from MediaWiki (or fallback to starterData)
-  const dynamicMethods = await getRandomFeaturedMethods(4);
-
+const FeaturedContent = () => {
+  // Get 4 random methods dynamically
+  const randomMethods = getRandomFeaturedMethods(4);
   return (
     <section className={styles.featured}>
       <div className={styles.container}>
@@ -52,36 +50,36 @@ export default async function FeaturedContent() {
         </div>
 
         <div className={styles.bentoGrid}>
-          {/* Static featured items */}
           {STATIC_ITEMS.map((item) => (
             <FeaturedCard key={item.id} item={item} />
           ))}
-
-          {/* Dynamic wiki articles from MediaWiki API */}
-          {dynamicMethods.map((item) => (
+          {/* Render Dynamic Random Methods */}
+          {randomMethods.map((item) => (
             <FeaturedCard key={item.id} item={item} />
           ))}
         </div>
       </div>
     </section>
   );
-}
+};
 
-// Unified card component
-function FeaturedCard({ item }: { item: FeaturedItem }) {
+// Unified Card Component
+const FeaturedCard = ({ item }: { item: FeaturedItem }) => {
+  // Determine grid class based on span config
   const gridClass =
     item.gridSpan === "large"
       ? styles.spanLarge
       : item.gridSpan === "wide"
-      ? styles.spanWide
-      : "";
+        ? styles.spanWide
+        : "";
 
+  // determine tag class using centralized card tag styles
   const tagClass =
     item.tagStyle === "interactive"
-      ? styles.tagInteractive
+      ? `${cardTagStyles.tag} ${cardTagStyles.tagSecondary}`
       : item.tagStyle === "beginner"
-      ? styles.tagBeginner
-      : "";
+        ? `${cardTagStyles.tag} ${cardTagStyles.tagAccent}`
+        : cardTagStyles.tag;
 
   return (
     <Card
@@ -89,7 +87,7 @@ function FeaturedCard({ item }: { item: FeaturedItem }) {
       className={gridClass}
       href={item.href}
       interactive
-      header={<span className={`${styles.tag} ${tagClass}`}>{item.tag}</span>}
+      header={<span className={tagClass}>{item.tag}</span>}
     >
       <div className={styles.cardContent}>
         <h3
@@ -99,8 +97,12 @@ function FeaturedCard({ item }: { item: FeaturedItem }) {
         >
           {item.title}
         </h3>
-        <p className={styles.cardDescription}>{item.description}</p>
+        {item.description && (
+          <p className={styles.cardDescription}>{item.description}</p>
+        )}
       </div>
     </Card>
   );
-}
+};
+
+export default FeaturedContent;

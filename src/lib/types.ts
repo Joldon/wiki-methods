@@ -11,3 +11,16 @@ export interface WikiContent {
     };
   };
 }
+
+export type LatestArticle = {
+  logid: number;
+  title: string;
+  timestamp: string;
+};
+
+export type WikiSiteStats = {
+  articles: number;
+  users: number;
+  edits: number;
+  activeusers: number;
+};

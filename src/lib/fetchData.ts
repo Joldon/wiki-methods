@@ -1,6 +1,6 @@
 // src/lib/fetchData.ts
 
-import { WikiEntry, WikiContent } from "./types";
+import { WikiEntry, WikiContent, LatestArticle, WikiSiteStats } from "./types";
 
 export const API_URL = "https://sustainabilitymethods.org/api.php";
 // const BASE_URL = "https://sustainabilitymethods.org/";
@@ -180,4 +180,74 @@ export const fetchAllPagesWithTimestamps = async (): Promise<
     continueToken = data.continue ?? null;
   } while (continueToken);
   return allPages;
+};
+
+export const fetchLatestArticles = async (
+  limit: number = 12,
+): Promise<LatestArticle[]> => {
+  try {
+    const params = new URLSearchParams({
+      action: "query",
+      list: "logevents",
+      letype: "create",
+      lenamespace: "0",
+      leprop: "title|timestamp|ids",
+      lelimit: String(limit),
+      format: "json",
+    });
+
+    const response = await fetch(`${API_URL}?${params}`, {
+      next: { revalidate: 7200 },
+    });
+    if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+
+    const data = await response.json();
+
+    return (data.query?.logevents ?? []).map(
+      (entry: { logid: number; title: string; timestamp: string }) => ({
+        logid: entry.logid,
+        title: entry.title,
+        timestamp: entry.timestamp,
+      }),
+    );
+  } catch (error) {
+    console.error("Error fetching latest articles:", error);
+    return [];
+  }
+};
+
+/**
+ * Fetches aggregate statistics from the MediaWiki siteinfo API.
+ * Returns total articles, registered users, all-time edits, and active users.
+ * Cached for 24 hours — this data changes very slowly.
+ */
+export const fetchWikiSiteStats = async (): Promise<WikiSiteStats> => {
+  const fallback: WikiSiteStats = {
+    articles: 0,
+    users: 0,
+    edits: 0,
+    activeusers: 0,
+  };
+
+  try {
+    const response = await fetch(
+      `${API_URL}?action=query&meta=siteinfo&siprop=statistics&format=json`,
+      { next: { revalidate: 86400 } },
+    );
+    if (!response.ok) return fallback;
+
+    const data = await response.json();
+    const stats = data.query?.statistics;
+    if (!stats) return fallback;
+
+    return {
+      articles: stats.articles ?? 0,
+      users: stats.users ?? 0,
+      edits: stats.edits ?? 0,
+      activeusers: stats.activeusers ?? 0,
+    };
+  } catch (error) {
+    console.error("Error fetching wiki site stats:", error);
+    return fallback;
+  }
 };
