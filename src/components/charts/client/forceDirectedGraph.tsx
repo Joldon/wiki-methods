@@ -62,16 +62,27 @@ const ForceDirectedGraph: React.FC<ForceDirectedGraphProps> = ({
     // The old version defined a function that returned another function but
     // never called either of them. This version directly clamps node positions.
     const applyBoundaryForce = () => {
-      for (const node of nodes) {
+      // for (const node of nodes) {
+      //   node.x = Math.max(
+      //     NODE_RADIUS,
+      //     Math.min(innerWidth - NODE_RADIUS, node.x as number),
+      //   );
+      //   node.y = Math.max(
+      //     NODE_RADIUS,
+      //     Math.min(innerHeight - NODE_RADIUS, node.y as number),
+      //   );
+      // }
+      nodes.forEach((node) => {
+        if (node.x == null || node.y == null) return;
         node.x = Math.max(
           NODE_RADIUS,
-          Math.min(innerWidth - NODE_RADIUS, node.x as number),
+          Math.min(innerWidth - NODE_RADIUS, node.x),
         );
         node.y = Math.max(
           NODE_RADIUS,
-          Math.min(innerHeight - NODE_RADIUS, node.y as number),
+          Math.min(innerHeight - NODE_RADIUS, node.y),
         );
-      }
+      });
     };
 
     const simulation = d3
@@ -181,7 +192,10 @@ const ForceDirectedGraph: React.FC<ForceDirectedGraphProps> = ({
 
     function ticked() {
       const clamp = (coord: number | undefined, max: number) =>
-        Math.max(0, Math.min(max, coord ?? 0));
+        Math.max(
+          NODE_RADIUS,
+          Math.min(max - NODE_RADIUS, coord ?? NODE_RADIUS),
+        );
       link
         .attr("x1", (d: Link) => clamp((d.source as Node).x, innerWidth)) //  tells TypeScript that x/y will definitely have values
         .attr("y1", (d: Link) => clamp((d.source as Node).y, innerHeight))
