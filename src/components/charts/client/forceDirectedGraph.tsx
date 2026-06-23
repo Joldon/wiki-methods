@@ -37,8 +37,6 @@ const ForceDirectedGraph: React.FC<ForceDirectedGraphProps> = ({
     y: 0,
   });
 
-  // const [isClient, setIsClient] = useState(false);
-
   const { refs, floatingStyles } = useFloating({
     placement: "right",
     middleware: [offset(10), flip(), shift()],
@@ -46,7 +44,6 @@ const ForceDirectedGraph: React.FC<ForceDirectedGraphProps> = ({
 
   // Remove client-side detection that causes hydration errors
   useEffect(() => {
-    // if (!svgRef.current || !isClient) return;
     if (!svgRef.current) return;
 
     const color = d3.scaleOrdinal(d3.schemeCategory10);
@@ -76,22 +73,6 @@ const ForceDirectedGraph: React.FC<ForceDirectedGraphProps> = ({
         );
       }
     };
-
-    const nodeRadius = 8; // Match the radius used for node circles
-    // const boundaryForce = () => {
-    //   for (const node of nodes) {
-    //     if (!node.x || !node.y) continue;
-    //     const minX = nodeRadius;
-    //     const maxX = innerWidth - nodeRadius;
-    //     const minY = nodeRadius;
-    //     const maxY = innerHeight - nodeRadius;
-
-    //     if (node.x < minX) node.x = minX;
-    //     if (node.x > maxX) node.x = maxX;
-    //     if (node.y < minY) node.y = minY;
-    //     if (node.y > maxY) node.y = maxY;
-    //   }
-    // };
 
     const simulation = d3
       .forceSimulation(nodes)
@@ -141,23 +122,34 @@ const ForceDirectedGraph: React.FC<ForceDirectedGraphProps> = ({
     // To make this more maintainable :
     const getNodeColor = (node: Node): string =>
       color(node.group.toString()) as string;
-    const node = svg
+    // FIX #3 continued — drag now uses proper D3 generics, no `any`:
+    const dragBehavior = d3
+      .drag<SVGCircleElement, Node>()
+      .on("start", (event: d3.D3DragEvent<SVGCircleElement, Node, Node>) => {
+        if (!event.active) simulation.alphaTarget(0.3).restart();
+        event.subject.fx = event.subject.x;
+        event.subject.fy = event.subject.y;
+      })
+      .on("drag", (event: d3.D3DragEvent<SVGCircleElement, Node, Node>) => {
+        event.subject.fx = event.x;
+        event.subject.fy = event.y;
+      })
+      .on("end", (event: d3.D3DragEvent<SVGCircleElement, Node, Node>) => {
+        if (!event.active) simulation.alphaTarget(0);
+        event.subject.fx = null;
+        event.subject.fy = null;
+      });
+
+    const node = g
       .append("g")
-      .selectAll("circle")
+      .selectAll<SVGCircleElement, Node>("circle")
       .data(nodes)
-      .enter()
-      .append("circle")
-      .attr("r", 8)
+      .join("circle")
+      .attr("r", NODE_RADIUS)
       // .attr("fill", (d: Node) => color(d.group.toString()) as string)
       .attr("fill", getNodeColor)
-      .call(
-        d3
-          .drag<SVGCircleElement, Node>()
-          .on("start", dragstarted)
-          .on("drag", dragged)
-          .on("end", dragended),
-      )
-      .on("mouseover", (event, d: Node) => {
+      .call(dragBehavior)
+      .on("mouseover", (event: MouseEvent, d: Node) => {
         setTooltipData({
           show: true,
           content: `${d.id} (${d.group})`,
@@ -173,73 +165,41 @@ const ForceDirectedGraph: React.FC<ForceDirectedGraphProps> = ({
     // the above line shows a title(id) and group name on hover
 
     // Add node labels
-    const labels = svg
+    const labels = g
       .append("g")
       .selectAll("text")
       .data(nodes)
-      .enter()
-      .append("text")
+      .join("text")
       .attr("dy", -10)
       .attr("text-anchor", "middle")
       .style("fill", "var(--color-text-primary)")
       .style("font-size", "12px")
       .style("font-weight", "500")
+      .style("pointer-events", "none") // labels don't interfere with node mouse events
+
       .text((d) => d.id.toString());
 
     function ticked() {
-      const getCoord = (coord: number | undefined, max: number) => {
-        const val = coord ?? 0;
-        return Math.max(0, Math.min(max, val));
-      };
+      const clamp = (coord: number | undefined, max: number) =>
+        Math.max(0, Math.min(max, coord ?? 0));
       link
-        .attr("x1", (d: Link) => getCoord((d.source as Node).x, innerWidth)) //  tells TypeScript that x/y will definitely have values
-        .attr("y1", (d: Link) => getCoord((d.source as Node).y, innerHeight))
-        .attr("x2", (d: Link) => getCoord((d.target as Node).x, innerWidth))
-        .attr("y2", (d: Link) => getCoord((d.target as Node).y, innerHeight));
+        .attr("x1", (d: Link) => clamp((d.source as Node).x, innerWidth)) //  tells TypeScript that x/y will definitely have values
+        .attr("y1", (d: Link) => clamp((d.source as Node).y, innerHeight))
+        .attr("x2", (d: Link) => clamp((d.target as Node).x, innerWidth))
+        .attr("y2", (d: Link) => clamp((d.target as Node).y, innerHeight));
 
       node
-        .attr("cx", (d: Node) => getCoord(d.x, innerWidth))
-        .attr("cy", (d: Node) => getCoord(d.y, innerHeight));
+        .attr("cx", (d: Node) => clamp(d.x, innerWidth))
+        .attr("cy", (d: Node) => clamp(d.y, innerHeight));
       labels
-        .attr("x", (d: Node) => getCoord(d.x, innerWidth))
-        .attr("y", (d: Node) => getCoord(d.y, innerHeight));
-    }
-
-    function dragstarted(event: d3.D3DragEvent<SVGCircleElement, Node, Node>) {
-      if (!event.active) simulation.alphaTarget(0.3).restart();
-      event.subject.fx = event.subject.x;
-      event.subject.fy = event.subject.y;
-    }
-
-    function dragged(event: d3.D3DragEvent<SVGCircleElement, Node, Node>) {
-      event.subject.fx = event.x;
-      event.subject.fy = event.y;
-    }
-
-    function dragended(event: d3.D3DragEvent<SVGCircleElement, Node, Node>) {
-      if (!event.active) simulation.alphaTarget(0);
-      event.subject.fx = null;
-      event.subject.fy = null;
+        .attr("x", (d: Node) => clamp(d.x, innerWidth))
+        .attr("y", (d: Node) => clamp(d.y, innerHeight));
     }
 
     return () => {
       simulation.stop();
     };
-  }, [
-    nodes,
-    links,
-    width,
-    height,
-    margin.left,
-    margin.top,
-    innerWidth,
-    innerHeight,
-    // isClient,
-  ]);
-
-  // if (!isClient) {
-  //   return null;
-  // }
+  }, [nodes, links, width, height, innerWidth, innerHeight]);
 
   return (
     <div style={{ position: "relative" }}>
