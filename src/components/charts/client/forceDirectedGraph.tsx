@@ -11,7 +11,8 @@ import {
 } from "@floating-ui/react";
 import type { Node, Link, ForceDirectedGraphProps } from "../chartTypes";
 
-// types moved into types.ts file here in this folder
+const NODE_RADIUS = 8;
+const MARGIN = { top: 70, right: 70, bottom: 70, left: 70 };
 
 const ForceDirectedGraph: React.FC<ForceDirectedGraphProps> = ({
   nodes,
@@ -19,11 +20,9 @@ const ForceDirectedGraph: React.FC<ForceDirectedGraphProps> = ({
   width = 928,
   height = 600,
 }) => {
-  // add margin to prevent nodes from going off-screen
-  const margin = { top: 70, right: 70, bottom: 70, left: 70 };
   //adjust the dimensions to account for margins
-  const innerWidth = width - margin.left - margin.right;
-  const innerHeight = height - margin.top - margin.bottom;
+  const innerWidth = width - MARGIN.left - MARGIN.right;
+  const innerHeight = height - MARGIN.top - MARGIN.bottom;
 
   const svgRef = useRef<SVGSVGElement | null>(null);
   const [tooltipData, setTooltipData] = useState<{
@@ -60,16 +59,22 @@ const ForceDirectedGraph: React.FC<ForceDirectedGraphProps> = ({
     // Create a container group that respects the margins
     const g = svg
       .append("g")
-      .attr("transform", `translate(${margin.left}, ${margin.top})`);
+      .attr("transform", `translate(${MARGIN.left}, ${MARGIN.top})`);
 
-    // Custom force to keep nodes within bounds
-    const boundaryForce = () => {
-      const force = () => {
-        for (const node of nodes) {
-          node.x = Math.max(0, Math.min(innerWidth, node.x as number));
-          node.y = Math.max(0, Math.min(innerHeight, node.y as number));
-        }
-      };
+    // FIX #2 (boundaryForce did nothing):
+    // The old version defined a function that returned another function but
+    // never called either of them. This version directly clamps node positions.
+    const applyBoundaryForce = () => {
+      for (const node of nodes) {
+        node.x = Math.max(
+          NODE_RADIUS,
+          Math.min(innerWidth - NODE_RADIUS, node.x as number),
+        );
+        node.y = Math.max(
+          NODE_RADIUS,
+          Math.min(innerHeight - NODE_RADIUS, node.y as number),
+        );
+      }
     };
 
     const nodeRadius = 8; // Match the radius used for node circles
@@ -94,9 +99,9 @@ const ForceDirectedGraph: React.FC<ForceDirectedGraphProps> = ({
         "link",
         // d3.forceLink(links).id((d: any) => d.id)
         d3
-          .forceLink(links)
-          .id((d) => (d as Node).id)
-          .distance(120)
+          .forceLink<Node, Link>(links)
+          .id((d) => d.id.toString())
+          .distance(120),
         // looks as better solution
       )
       // .force("charge", d3.forceManyBody().strength(-300))
@@ -109,33 +114,33 @@ const ForceDirectedGraph: React.FC<ForceDirectedGraphProps> = ({
       .force("charge", d3.forceManyBody().strength(-300))
       .force(
         "center",
-        d3.forceCenter(innerWidth / 2, innerHeight / 2).strength(0.1)
+        d3.forceCenter(innerWidth / 2, innerHeight / 2).strength(0.1),
       )
       // add forces to push toward the center more strongly
       .force("x", d3.forceX(innerWidth / 2).strength(0.1))
       .force("y", d3.forceY(innerHeight / 2).strength(0.1))
       // add collision detection to prevent nodes from overlapping
-      .force("collision", d3.forceCollide().radius(nodeRadius * 1.5))
+      .force("collision", d3.forceCollide().radius(NODE_RADIUS * 1.5))
       .on("tick", () => {
-        boundaryForce();
+        applyBoundaryForce();
         ticked();
       });
     // Add links
-    const link = svg
+    // FIX #3 (used old .enter().append() API):
+    // Replaced with .join() — the modern D3 v5+ equivalent that handles
+    // enter, update, and exit in a single call, matching directedTree.tsx.
+    const link = g
       .append("g")
       .attr("stroke", "#999")
       .attr("stroke-opacity", 0.6)
       .selectAll("line")
       .data(links)
-      .enter()
-      .append("line")
-      .attr("stroke-width", (d: Link) => Math.sqrt(d.value));
+      .join("line")
+      .attr("stroke-width", (d: Link) => Math.sqrt(d.value as number));
 
     // To make this more maintainable :
-    const getNodeColor = (node: Node): string => {
-      return color(node.group.toString()) as string;
-    };
-
+    const getNodeColor = (node: Node): string =>
+      color(node.group.toString()) as string;
     const node = svg
       .append("g")
       .selectAll("circle")
@@ -150,7 +155,7 @@ const ForceDirectedGraph: React.FC<ForceDirectedGraphProps> = ({
           .drag<SVGCircleElement, Node>()
           .on("start", dragstarted)
           .on("drag", dragged)
-          .on("end", dragended)
+          .on("end", dragended),
       )
       .on("mouseover", (event, d: Node) => {
         setTooltipData({
