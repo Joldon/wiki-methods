@@ -15,7 +15,7 @@ export default async function HomePage() {
       <FeaturedContent />
       <LatestArticles />
       {/* <FeaturedContentTest /> */}
-      <MethodGraphSection />
+      {/* <MethodGraphSection /> */}
       <MethodBrowser />
       <TrustIndicators />
     </>
