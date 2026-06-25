@@ -7,6 +7,18 @@ type Indicator = {
   label: string;
 };
 
+const getTrustIndicatorCounts = async (): Promise<
+  [number, number, number, number]
+> =>
+  Promise.all([
+    prisma.methodArticle.count({ where: { articleType: "METHOD" } }),
+    prisma.methodArticle.count({
+      where: { wikiCategories: { has: "Hacks, Habits & Tools" } },
+    }),
+    prisma.methodArticle.count({ where: { normativity: true } }),
+    prisma.methodArticle.count({ where: { qualitative: true } }),
+  ]);
+
 const TrustIndicators = async () => {
   // const [
   //   wikiStats,
@@ -32,16 +44,25 @@ const TrustIndicators = async () => {
 
   try {
     [methodsCount, toolsCount, normativityCount, qualitativeCount] =
-      await Promise.all([
-        prisma.methodArticle.count({ where: { articleType: "METHOD" } }),
-        prisma.methodArticle.count({
-          where: { wikiCategories: { has: "Hacks, Habits & Tools" } },
-        }),
-        prisma.methodArticle.count({ where: { normativity: true } }),
-        prisma.methodArticle.count({ where: { qualitative: true } }),
-      ]);
+      await getTrustIndicatorCounts();
   } catch (error) {
-    console.error("Failed to fetch trust indicators from database", error);
+    const isConnectionTermination =
+      error instanceof Error &&
+      error.message.toLowerCase().includes("connection terminated");
+
+    if (isConnectionTermination) {
+      try {
+        [methodsCount, toolsCount, normativityCount, qualitativeCount] =
+          await getTrustIndicatorCounts();
+      } catch (retryError) {
+        console.warn(
+          "Failed to fetch trust indicators from database after retry",
+          retryError,
+        );
+      }
+    } else {
+      console.warn("Failed to fetch trust indicators from database", error);
+    }
   }
 
   const indicators: Indicator[] = [
