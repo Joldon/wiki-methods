@@ -7,15 +7,10 @@ type Indicator = {
   label: string;
 };
 
-const TrustIndicators = async () => {
-  const [
-    wikiStats,
-    methodsCount,
-    toolsCount,
-    normativityCount,
-    qualitativeCount,
-  ] = await Promise.all([
-    fetchWikiSiteStats(),
+const getTrustIndicatorCounts = async (): Promise<
+  [number, number, number, number]
+> =>
+  Promise.all([
     prisma.methodArticle.count({ where: { articleType: "METHOD" } }),
     prisma.methodArticle.count({
       where: { wikiCategories: { has: "Hacks, Habits & Tools" } },
@@ -23,6 +18,52 @@ const TrustIndicators = async () => {
     prisma.methodArticle.count({ where: { normativity: true } }),
     prisma.methodArticle.count({ where: { qualitative: true } }),
   ]);
+
+const TrustIndicators = async () => {
+  // const [
+  //   wikiStats,
+  //   methodsCount,
+  //   toolsCount,
+  //   normativityCount,
+  //   qualitativeCount,
+  // ] = await Promise.all([
+  //   fetchWikiSiteStats(),
+  //   prisma.methodArticle.count({ where: { articleType: "METHOD" } }),
+  //   prisma.methodArticle.count({
+  //     where: { wikiCategories: { has: "Hacks, Habits & Tools" } },
+  //   }),
+  //   prisma.methodArticle.count({ where: { normativity: true } }),
+  //   prisma.methodArticle.count({ where: { qualitative: true } }),
+  // ]);
+
+  const wikiStats = await fetchWikiSiteStats();
+  let methodsCount = 0;
+  let toolsCount = 0;
+  let normativityCount = 0;
+  let qualitativeCount = 0;
+
+  try {
+    [methodsCount, toolsCount, normativityCount, qualitativeCount] =
+      await getTrustIndicatorCounts();
+  } catch (error) {
+    const isConnectionTermination =
+      error instanceof Error &&
+      error.message.toLowerCase().includes("connection terminated");
+
+    if (isConnectionTermination) {
+      try {
+        [methodsCount, toolsCount, normativityCount, qualitativeCount] =
+          await getTrustIndicatorCounts();
+      } catch (retryError) {
+        console.warn(
+          "Failed to fetch trust indicators from database after retry",
+          retryError,
+        );
+      }
+    } else {
+      console.warn("Failed to fetch trust indicators from database", error);
+    }
+  }
 
   const indicators: Indicator[] = [
     { value: wikiStats.articles, label: "Total Articles" },

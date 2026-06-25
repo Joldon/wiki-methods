@@ -79,7 +79,7 @@ export type ChartWrapperProps<T extends object> = {
 
 // Type guards for runtime type checking - simplified and more readable
 export const isForceDirectedGraphProps = (
-  props: unknown
+  props: unknown,
 ): props is ForceDirectedGraphProps => {
   return (
     typeof props === "object" &&
@@ -90,7 +90,7 @@ export const isForceDirectedGraphProps = (
 };
 
 export const isForceDirectedTreeProps = (
-  props: unknown
+  props: unknown,
 ): props is ForceDirectedTreeProps => {
   return (
     typeof props === "object" &&
@@ -98,6 +98,34 @@ export const isForceDirectedTreeProps = (
     "data" in props &&
     typeof (props as ForceDirectedTreeProps).data === "object"
   );
+};
+
+export type MethodGraphNodeType = "category" | "criteria" | "article";
+export type CriteriaAxis = "type" | "reasoning" | "level" | "time";
+
+export type MethodGraphNode = Node & {
+  nodeType: MethodGraphNodeType;
+  label: string;
+  size: number;
+  articleType?: string;
+  axis?: CriteriaAxis;
+  pageid?: number;
+  description?: string | null;
+};
+
+export type MethodGraphLink = Link & {
+  linkType: "category" | "criteria";
+  axis?: CriteriaAxis;
+};
+
+export type MethodGraphData = {
+  nodes: MethodGraphNode[];
+  links: MethodGraphLink[];
+};
+
+export type MethodGraphProps = BaseChartProps & {
+  nodes: MethodGraphNode[];
+  links: MethodGraphLink[];
 };
 
 // For other types, you can create similar generic guards or extend this pattern.
